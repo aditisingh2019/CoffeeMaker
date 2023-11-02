@@ -52,7 +52,6 @@ public class APIRecipeTest {
     @BeforeEach
     public void setup () {
         mvc = MockMvcBuilders.webAppContextSetup( context ).build();
-
         service.deleteAll();
     }
 
