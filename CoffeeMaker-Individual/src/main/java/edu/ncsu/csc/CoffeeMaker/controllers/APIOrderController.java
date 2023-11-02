@@ -74,10 +74,7 @@ public class APIOrderController extends APIController {
     @PostMapping ( BASE_PATH + "/orders" )
     public ResponseEntity createOrder ( @RequestBody final Order order ) {
 
-        final Order o = new Order();
-        // for ( final Recipe r : order.getRecipes() ) {
-        // o.addRecipe( r );
-        // }
+        final Order o = new Order( order.getRecipes(), order.getPayment() );
 
         service.save( o );
 

@@ -5,8 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import edu.ncsu.csc.CoffeeMaker.common.TestUtils;
@@ -81,6 +80,72 @@ public class APIOrderTest {
                 .content( TestUtils.asJsonString( order1 ) ) );
 
         Assertions.assertEquals( 1, (int) service.count() );
+
+    }
+
+    @Test
+    @Transactional
+    public void creatingOrderManyRecipes () throws Exception {
+
+        final Recipe teamCoffee = new Recipe();
+
+        teamCoffee.setName( "Coffee" );
+        teamCoffee.setPrice( 3 );
+        final Ingredient coffee = new Ingredient( "Coffee", 2 );
+
+        final Ingredient milk = new Ingredient( "Milk", 1 );
+
+        final Ingredient pumpkinSpice = new Ingredient( "Pumpkin Spice", 1 );
+
+        final Ingredient sugar = new Ingredient( "Sugar", 1 );
+        teamCoffee.addIngredient( sugar );
+        teamCoffee.addIngredient( milk );
+        teamCoffee.addIngredient( pumpkinSpice );
+        teamCoffee.addIngredient( coffee );
+
+        final Recipe vanilla = new Recipe();
+        vanilla.setName( "Coffee" );
+        vanilla.setPrice( 4 );
+        final Ingredient coffee2 = new Ingredient( "Coffee", 2 );
+
+        final Ingredient milk2 = new Ingredient( "Milk", 1 );
+
+        final Ingredient pumpkinSpice2 = new Ingredient( "Pumpkin Spice", 1 );
+
+        final Ingredient sugar2 = new Ingredient( "Sugar", 1 );
+
+        final Ingredient syrup2 = new Ingredient( "Syrup", 1 );
+        vanilla.addIngredient( sugar2 );
+        vanilla.addIngredient( milk2 );
+        vanilla.addIngredient( syrup2 );
+        vanilla.addIngredient( coffee2 );
+
+        final Recipe pumpkinSpiceCoffee = new Recipe();
+        pumpkinSpiceCoffee.setName( "Pumpkin Spice Coffee" );
+        pumpkinSpiceCoffee.setPrice( 4 );
+        pumpkinSpiceCoffee.addIngredient( milk2 );
+        pumpkinSpiceCoffee.addIngredient( syrup2 );
+        pumpkinSpiceCoffee.addIngredient( coffee2 );
+        pumpkinSpiceCoffee.addIngredient( pumpkinSpice2 );
+
+        final List<Recipe> recipes = new ArrayList<Recipe>();
+        recipes.add( teamCoffee );
+        recipes.add( vanilla );
+        recipes.add( pumpkinSpiceCoffee );
+
+        final Order bigOrder = new Order( recipes, 20 );
+        mvc.perform( post( "/api/v1/orders" ).contentType( MediaType.APPLICATION_JSON )
+                .content( TestUtils.asJsonString( bigOrder ) ) );
+
+        Assertions.assertEquals( 1, (int) service.count() );
+        Assertions.assertEquals( 3, service.findAll().get( 0 ).getRecipes().size() );
+        Assertions.assertTrue( service.findAll().toString().contains( "Coffee" ) );
+        try {
+            new Order( recipes, 10 );
+        }
+        catch ( final IllegalArgumentException e ) {
+            Assertions.assertEquals( e.getMessage(), "Payment is not sufficient" );
+        }
 
     }
 
