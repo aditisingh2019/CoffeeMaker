@@ -26,6 +26,21 @@ public class MappingController {
     public String index ( final Model model ) {
         return "index";
     }
+    
+    
+    /**
+     * On a GET request to /staff, the StaffController will return
+     * /src/main/resources/templates/staff.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/staff", "/staff.html" } )
+    public String staffPage ( final Model model ) {
+        return "staff";
+    }
+
 
     /**
      * On a GET request to /recipe, the RecipeController will return
@@ -80,7 +95,38 @@ public class MappingController {
     public String inventoryForm ( final Model model ) {
         return "inventory";
     }
+    
+    /**
+     * On a GET request to /vieworder, the EditRecipeController will return
+     * /src/main/resources/templates/editrecipe.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/vieworder", "/vieworder.html" } )
+    public String viewOrderPage ( final Model model ) {
+        return "vieworder";
+    }
 
+    
+    
+    
+    
+    /**
+     * On a GET request to /staff, the CustomerController will return
+     * /src/main/resources/templates/staff.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/customer", "/customer.html" } )
+    public String customerPage ( final Model model ) {
+        return "customer";
+    }
+    
+    
     /**
      * On a GET request to /makecoffee, the MakeCoffeeController will return
      * /src/main/resources/templates/makecoffee.html.
@@ -92,6 +138,20 @@ public class MappingController {
     @GetMapping ( { "/makecoffee", "/makecoffee.html" } )
     public String makeCoffeeForm ( final Model model ) {
         return "makecoffee";
+    }
+    
+    
+    /**
+     * On a GET request to /orderstatus, the MakeCoffeeController will return
+     * /src/main/resources/templates/makecoffee.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/orderstatus", "/orderstatus.html" } )
+    public String orderstatusPage ( final Model model ) {
+        return "orderstatus";
     }
 
 }
