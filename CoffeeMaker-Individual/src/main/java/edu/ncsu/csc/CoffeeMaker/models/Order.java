@@ -34,20 +34,20 @@ public class Order extends DomainObject {
     private final List<Recipe> recipes;
 
     /** Payment */
-    private final Integer      payment;
+    private Integer            payment;
 
     /** Order price */
     @Min ( 0 )
     private Integer            price;
 
     /** Order status */
-    private final String       status;
+    private String             status;
 
     /**
      * Creates a default order for the coffee maker.
      */
     public Order () {
-        this.status = "placed";
+        this.status = "Placed";
         this.recipes = new ArrayList<Recipe>();
         this.price = 0;
         this.payment = 0;
@@ -55,7 +55,7 @@ public class Order extends DomainObject {
 
     public Order ( final List<Recipe> recipes, final Integer payment ) {
 
-        this.status = "placed";
+        this.status = "Placed";
         this.recipes = recipes;
         this.price = 0;
 
@@ -138,12 +138,39 @@ public class Order extends DomainObject {
         return payment;
     }
 
+    public void setPayment ( final Integer payment ) {
+        this.payment = payment;
+
+    }
+
     public Integer getPrice () {
         return price;
     }
 
-    public String getStatus () {
+    public void setPrice ( final Integer price ) {
+        this.price = price;
+
+    }
+
+    public String viewOrderStatus () {
         return status;
+    }
+
+    public void setStatus ( final String status ) {
+        this.status = status;
+
+    }
+
+    public void fulfillOrder () {
+        status = "In Progress";
+    }
+
+    public void notifyCustomer () {
+        status = "Complete";
+    }
+
+    public void cancelOrder () {
+        status = "Cancelled";
     }
 
     @Override
