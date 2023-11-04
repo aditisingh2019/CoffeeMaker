@@ -56,7 +56,7 @@ public class APIUserController extends APIController {
      *            user name
      * @return response to the request
      */
-    @GetMapping ( BASE_PATH + "/users/{id}" )
+    @GetMapping ( BASE_PATH + "/users/{id}/orders" )
     public ResponseEntity getUserOrders ( @PathVariable ( "id" ) final Long id ) {
         final User user = service.findById( id );
         return null == user
