@@ -93,7 +93,7 @@ public class APIOrderController extends APIController {
      */
     @PutMapping ( BASE_PATH + "/orders/{id}" )
     public ResponseEntity updateOrder ( @PathVariable ( "id" ) final Long id ) {
-        final Order order = service.findById( id );
+        // final Order order = service.findById( id );
         // To-do
         return null;
     }
