@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class User {
+public class User extends DomainObject {
     /** User id */
     @Id
     @GeneratedValue
@@ -20,27 +20,44 @@ public class User {
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private final List<Order> orders;
 
+    /** User's username for authentication. */
     public String             userName;
+    /** User's password for authentication. */
     public String             passwordHash;
+    /** User's type for permissions. */
     public String             userType;
 
-    // Constructor
+    /**
+     * Constructs an instance of a User.
+     *
+     * @param id
+     *            the id of the User
+     * @param userName
+     *            the username of the User
+     * @param passwordHash
+     *            the password of the USer
+     */
     public User ( final long id, final String userName, final String passwordHash ) {
-        this.id = id;
-        this.userName = userName;
-        this.passwordHash = passwordHash;
-        this.userType = "None";
+        setId( id );
+        setUserName( userName );
+        setPasswordHash( passwordHash );
+        setUserType( "None" );
         this.orders = new ArrayList<Order>();
     }
 
     /**
+     * Returns the User's id.
+     *
      * @return the id
      */
+    @Override
     public Long getId () {
         return id;
     }
 
     /**
+     * Sets the User's id.
+     *
      * @param id
      *            the id to set
      */
@@ -49,6 +66,8 @@ public class User {
     }
 
     /**
+     * Returns the User's username.
+     *
      * @return the userName
      */
     public String getUserName () {
@@ -56,6 +75,8 @@ public class User {
     }
 
     /**
+     * Sets the User's username.
+     *
      * @param userName
      *            the userName to set
      */
@@ -64,6 +85,8 @@ public class User {
     }
 
     /**
+     * Returns the User's password.
+     *
      * @return the passwordHash
      */
     public String getPasswordHash () {
@@ -71,6 +94,8 @@ public class User {
     }
 
     /**
+     * Sets the User's password.
+     *
      * @param passwordHash
      *            the passwordHash to set
      */
@@ -78,37 +103,88 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    // dummy
+    /**
+     * Authenticates the User.
+     *
+     * @param userName
+     *            the username of the user to authenticate
+     * @param password
+     *            the password of the password to authenticate
+     * @return true if the user is valid
+     */
     public boolean authenticate ( final String userName, final String password ) {
         return false;
     }
 
+    /**
+     * Resets the User's password.
+     *
+     * @param newPassword
+     *            the new password to set this user to
+     */
     public void resetPassword ( final String newPassword ) {
-        this.passwordHash = newPassword;
+        setPasswordHash( newPassword );
     }
 
+    /**
+     * Updates the User's profile.
+     *
+     * @param userName
+     *            the new username to update the user's profile
+     * @param newPassword
+     *            the new password to update the user's profile
+     */
     public void updateProfile ( final String userName, final String newPassword ) {
         this.userName = userName;
         this.passwordHash = newPassword;
     }
 
-    public void setUerType ( final String type ) {
+    /**
+     * Sets the type of the User.
+     *
+     * @param type
+     *            the type to set
+     */
+    public void setUserType ( final String type ) {
         this.userType = type;
     }
 
+    /**
+     * Returns the User's type.
+     *
+     * @return the user type
+     */
     public String getUserType () {
         return this.userType;
     }
 
+    /**
+     * Returns the list of orders.
+     *
+     * @return the orders
+     */
     public List<Order> getOrders () {
         return this.orders;
     }
 
+    /**
+     * Places an order.
+     *
+     * @param order
+     *            the order to place
+     * @return true if the order is successfully placed
+     */
     public boolean placeOrder ( final Order order ) {
         orders.add( order );
         return true;
     }
 
+    /**
+     * Deletes an order from the list of orders.
+     *
+     * @param order
+     *            the order to delete
+     */
     public void deleteOrder ( final Order order ) {
         orders.remove( order );
     }

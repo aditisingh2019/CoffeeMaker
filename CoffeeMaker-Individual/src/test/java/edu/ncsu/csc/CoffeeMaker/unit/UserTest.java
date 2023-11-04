@@ -81,7 +81,7 @@ public class UserTest {
     @Test
     public void testUserType () {
         assertEquals( "None", user.getUserType() );
-        user.setUerType( "Admin" );
+        user.setUserType( "Admin" );
         assertEquals( "Admin", user.getUserType() );
     }
 

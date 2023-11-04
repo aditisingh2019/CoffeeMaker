@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import edu.ncsu.csc.CoffeeMaker.models.Order;
 
 /**
- * RecipeRepository is used to provide CRUD operations for the Recipe model.
+ * OrderRepository is used to provide CRUD operations for the ORder model.
  * Spring will generate appropriate code with JPA.
  *
  * @author Kai Presler-Marshall
@@ -20,8 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      * make this happen.
      *
      * @param i
-     *            Name of the recipe
-     * @return ORder Found order, null if none.
+     *            Name of the order
+     * @return Order Found order, null if none.
      */
 
     @Override

@@ -47,37 +47,25 @@ public class Order extends DomainObject {
      * Creates a default order for the coffee maker.
      */
     public Order () {
-        this.status = "Placed";
+        setStatus( "Placed" );
         this.recipes = new ArrayList<Recipe>();
-        this.price = 0;
-        this.payment = 0;
+        setPrice();
+        setPayment( 0 );
     }
 
     public Order ( final List<Recipe> recipes, final Integer payment ) {
-
-        this.status = "Placed";
+        setStatus( "Placed" );
         this.recipes = recipes;
-        this.price = 0;
-
-        for ( final Recipe r : recipes ) {
-            this.price += r.getPrice();
-        }
-
-        if ( !checkPaymentValidity( payment ) ) {
-            throw new IllegalArgumentException( "Payment is not sufficient" );
-        }
-
-        this.payment = payment;
+        setPrice();
+        setPayment( payment );
 
     }
 
     public boolean checkPaymentValidity ( final Integer payment ) {
-
-        if ( payment < this.price ) {
+        if ( payment < getPrice() ) {
             return false;
         }
         return true;
-
     }
 
     @Override
@@ -94,15 +82,12 @@ public class Order extends DomainObject {
     }
 
     public boolean deleteOneRecipe ( final Recipe recipe ) {
-
         for ( final Recipe r : recipes ) {
             if ( r.equals( recipe ) ) {
                 recipes.remove( r );
                 return true;
             }
-
         }
-
         return false;
 
     }
@@ -113,11 +98,9 @@ public class Order extends DomainObject {
         }
         while ( recipes.toString().contains( recipe.getName() ) ) {
             for ( int i = 0; i < recipes.size(); i++ ) {
-
                 if ( recipes.get( i ).getName().equals( recipe.getName() ) ) {
                     recipes.remove( i );
                 }
-
             }
         }
 
@@ -127,7 +110,6 @@ public class Order extends DomainObject {
         for ( int i = 0; i < quantity; i++ ) {
             recipes.add( recipe );
         }
-
     }
 
     public void addRecipe ( final Recipe recipe ) {
@@ -139,6 +121,9 @@ public class Order extends DomainObject {
     }
 
     public void setPayment ( final Integer payment ) {
+        if ( !checkPaymentValidity( payment ) ) {
+            throw new IllegalArgumentException( "Payment is not sufficient" );
+        }
         this.payment = payment;
 
     }
@@ -147,12 +132,16 @@ public class Order extends DomainObject {
         return price;
     }
 
-    public void setPrice ( final Integer price ) {
-        this.price = price;
+    public void setPrice () {
+        int orderPrice = 0;
+        for ( final Recipe r : recipes ) {
+            orderPrice += r.getPrice();
+        }
+        this.price = orderPrice;
 
     }
 
-    public String viewOrderStatus () {
+    public String getStatus () {
         return status;
     }
 
@@ -162,23 +151,21 @@ public class Order extends DomainObject {
     }
 
     public void fulfillOrder () {
-        status = "In Progress";
+        setStatus( "In Progress" );
     }
 
     public void notifyCustomer () {
-        status = "Complete";
+        setStatus( "Complete" );
     }
 
     public void cancelOrder () {
-        status = "Cancelled";
+        setStatus( "Cancelled" );
     }
 
     @Override
     public String toString () {
-
         return "Order [id=" + id + ", recipes=" + recipes + ", payment=" + payment + ", price=" + price + ", status="
                 + status + "]";
-
     }
 
     @Override
