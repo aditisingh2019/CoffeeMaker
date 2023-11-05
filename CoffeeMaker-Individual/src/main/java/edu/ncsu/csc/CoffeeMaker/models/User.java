@@ -10,13 +10,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * User for the coffee maker. User is tied to the database using Hibernate
+ * libraries. See UserRepository and UserService for the other two pieces used
+ * for database support.
+ *
+ * @author Kai Presler-Marshall
+ * @author Aditi Singh
+ */
 @Entity
 public class User extends DomainObject {
-    /** User id */
+    /** User's id. */
     @Id
     @GeneratedValue
     public Long               id;
-    /** OrdersList */
+    /** List of User's orders. */
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private final List<Order> orders;
 

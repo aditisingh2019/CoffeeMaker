@@ -13,10 +13,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
-/***
- * Recipe for the coffee maker.Recipe is tied to the database using Hibernate
- * libraries.See RecipeRepository and RecipeService for the other two
- * pieces*used for database support.**
+/**
+ * Order for the coffee maker. Order is tied to the database using Hibernate
+ * libraries.See OrderRepository and Order Service for the other two pieces used
+ * for database support.**
  *
  * @author Kai Presler-Marshall
  */
@@ -24,23 +24,23 @@ import javax.validation.constraints.Min;
 @Table ( name = "`order`" )
 public class Order extends DomainObject {
 
-    /** Order id */
+    /** Order id. */
     @Id
     @GeneratedValue
     private Long               id;
 
-    /** Recipes and associated amounts */
+    /** List of recipes in the order. */
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private final List<Recipe> recipes;
 
-    /** Payment */
+    /** Order's payment. */
     private Integer            payment;
 
-    /** Order price */
+    /** Order's price. */
     @Min ( 0 )
     private Integer            price;
 
-    /** Order status */
+    /** Order's status. */
     private String             status;
 
     /**
@@ -53,6 +53,14 @@ public class Order extends DomainObject {
         setPayment( 0 );
     }
 
+    /**
+     * Constructs an instance of an Order with specific parameters
+     *
+     * @param recipes
+     *            the list of recipes in the order
+     * @param payment
+     *            the payment for the order
+     */
     public Order ( final List<Recipe> recipes, final Integer payment ) {
         setStatus( "Placed" );
         this.recipes = recipes;

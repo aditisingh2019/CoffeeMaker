@@ -19,6 +19,7 @@ import edu.ncsu.csc.CoffeeMaker.services.UserService;
  *
  * @author Kai Presler-Marshall
  * @author Michelle Lemons
+ * @author Aditi Singh
  *
  */
 @SuppressWarnings ( { "unchecked", "rawtypes" } )
@@ -36,8 +37,8 @@ public class APIUserController extends APIController {
      * REST API method to provide GET access to a specific users, as indicated
      * by the path variable provided (the name of the user desired)
      *
-     * @param name
-     *            user name
+     * @param id
+     *            user id
      * @return response to the request
      */
     @GetMapping ( BASE_PATH + "/users/{id}" )
@@ -52,8 +53,8 @@ public class APIUserController extends APIController {
      * REST API method to provide GET access to a specific user's orders, as
      * indicated by the path variable provided (the name of the user desired)
      *
-     * @param name
-     *            user name
+     * @param id
+     *            user id
      * @return response to the request
      */
     @GetMapping ( BASE_PATH + "/users/{id}/orders" )

@@ -176,22 +176,25 @@ public class Inventory extends DomainObject {
     /**
      * Returns true if there are enough ingredients to make the beverage.
      *
-     * @param r
-     *            recipe to check if there are enough ingredients
+     * @param o
+     *            order to check if there are enough ingredients
      * @return true if enough ingredients to make the beverage
      */
-    public boolean enoughIngredients ( final Recipe r ) {
+    public boolean enoughIngredients ( final Order o ) {
 
-        for ( final Ingredient ingr : r.getIngredients() ) {
-            if ( !this.getAllIngredients().contains( ingr.getName() ) ) {
-                return false;
-            }
+        for ( final Recipe r : o.getRecipes() ) {
+            for ( final Ingredient ingr : r.getIngredients() ) {
+                if ( !this.getAllIngredients().contains( ingr.getName() ) ) {
+                    return false;
+                }
 
-            System.out.println( "Ingredient amount is:  " + ingr.getAmount().toString() + "Other ingredient amount is: "
-                    + this.ingredients.get( getIngredientIndex( ingr.getName() ) ).getAmount().toString() );
-            if ( this.ingredients.get( getIngredientIndex( ingr.getName() ) ).getAmount().intValue() < ingr
-                    .getAmount() ) {
-                return false;
+                System.out.println(
+                        "Ingredient amount is:  " + ingr.getAmount().toString() + "Other ingredient amount is: "
+                                + this.ingredients.get( getIngredientIndex( ingr.getName() ) ).getAmount().toString() );
+                if ( this.ingredients.get( getIngredientIndex( ingr.getName() ) ).getAmount().intValue() < ingr
+                        .getAmount() ) {
+                    return false;
+                }
             }
         }
         return true;
@@ -199,21 +202,22 @@ public class Inventory extends DomainObject {
     }
 
     /**
-     * Removes the ingredients used to make the specified recipe. Assumes that
+     * Removes the ingredients used to make the specified order. Assumes that
      * the user has checked that there are enough ingredients to make
      *
-     * @param r
-     *            recipe to make
-     * @return true if recipe is made.
+     * @param o
+     *            order to make
+     * @return true if order is made.
      */
-    public boolean useIngredients ( final Recipe r ) {
+    public boolean useIngredients ( final Order o ) {
 
-        if ( enoughIngredients( r ) ) {
-            for ( final Ingredient ingr : r.getIngredients() ) {
-                final int idx = getIngredientIndex( ingr.getName() );
-                this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
+        if ( enoughIngredients( o ) ) {
+            for ( final Recipe r : o.getRecipes() ) {
+                for ( final Ingredient ingr : r.getIngredients() ) {
+                    final int idx = getIngredientIndex( ingr.getName() );
+                    this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
+                }
             }
-
             return true;
         }
         else {

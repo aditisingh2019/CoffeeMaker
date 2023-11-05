@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.ncsu.csc.CoffeeMaker.TestConfig;
 import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.models.Inventory;
+import edu.ncsu.csc.CoffeeMaker.models.Order;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
 import edu.ncsu.csc.CoffeeMaker.services.InventoryService;
 
@@ -57,7 +58,9 @@ public class InventoryTest {
 
         recipe.setPrice( 5 );
 
-        i.useIngredients( recipe );
+        final Order o = new Order();
+        o.addRecipe( recipe );
+        i.useIngredients( o );
 
         /*
          * Make sure that all of the inventory fields are now properly updated
@@ -239,7 +242,10 @@ public class InventoryTest {
 
         recipe.setPrice( 5 );
 
-        Assertions.assertTrue( ivt.enoughIngredients( recipe ) );
+        Order o = new Order();
+        o.addRecipe( recipe );
+
+        Assertions.assertTrue( ivt.enoughIngredients( o ) );
 
         final Recipe recipeNotEnoughCoffee = new Recipe();
         recipeNotEnoughCoffee.setName( "Coffee" );
@@ -254,7 +260,9 @@ public class InventoryTest {
         recipeNotEnoughCoffee.addIngredient( chocolate2 );
 
         recipeNotEnoughCoffee.setPrice( 5 );
-        Assertions.assertFalse( ivt.enoughIngredients( recipeNotEnoughCoffee ) );
+        o = new Order();
+        o.addRecipe( recipeNotEnoughCoffee );
+        Assertions.assertFalse( ivt.enoughIngredients( o ) );
 
         final Recipe recipeNotEnoughMilk = new Recipe();
 
@@ -269,7 +277,9 @@ public class InventoryTest {
         recipeNotEnoughMilk.setName( "Milk Heavy" );
 
         recipe.setPrice( 5 );
-        Assertions.assertFalse( ivt.enoughIngredients( recipeNotEnoughMilk ) );
+        o = new Order();
+        o.addRecipe( recipeNotEnoughMilk );
+        Assertions.assertFalse( ivt.enoughIngredients( o ) );
 
         final Recipe recipeNotEnoughSugar = new Recipe();
 
@@ -284,8 +294,10 @@ public class InventoryTest {
 
         recipeNotEnoughSugar.setName( "Sugar Heavy" );
 
-        recipe.setPrice( 5 );
-        Assertions.assertFalse( ivt.enoughIngredients( recipeNotEnoughSugar ) );
+        recipeNotEnoughSugar.setPrice( 5 );
+        o = new Order();
+        o.addRecipe( recipeNotEnoughSugar );
+        Assertions.assertFalse( ivt.enoughIngredients( o ) );
 
         final Recipe recipeNotEnoughChocolate = new Recipe();
         recipeNotEnoughChocolate.setName( "Chocolate Heavy" );
@@ -298,8 +310,11 @@ public class InventoryTest {
         recipeNotEnoughChocolate.addIngredient( sugar5 );
         recipeNotEnoughChocolate.addIngredient( chocolate5 );
 
-        recipe.setPrice( 5 );
-        Assertions.assertFalse( ivt.enoughIngredients( recipeNotEnoughChocolate ) );
+        recipeNotEnoughChocolate.setPrice( 5 );
+
+        o = new Order();
+        o.addRecipe( recipeNotEnoughChocolate );
+        Assertions.assertFalse( ivt.enoughIngredients( o ) );
 
     }
 
