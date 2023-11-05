@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ncsu.csc.CoffeeMaker.models.Inventory;
+import edu.ncsu.csc.CoffeeMaker.models.Order;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
 import edu.ncsu.csc.CoffeeMaker.services.InventoryService;
 import edu.ncsu.csc.CoffeeMaker.services.RecipeService;
@@ -91,7 +92,9 @@ public class APICoffeeController extends APIController {
             throw new IllegalArgumentException( "Recipe not found" );
         }
         else if ( toPurchase.getPrice() <= amtPaid ) {
-            if ( inventory.useIngredients( toPurchase ) ) {
+            final Order o = new Order();
+            o.addRecipe( toPurchase );
+            if ( inventory.useIngredients( o ) ) {
                 inventoryService.save( inventory );
                 change = amtPaid - toPurchase.getPrice();
                 return change;

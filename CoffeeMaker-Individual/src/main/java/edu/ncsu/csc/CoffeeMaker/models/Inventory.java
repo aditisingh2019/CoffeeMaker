@@ -1,7 +1,9 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,13 +25,13 @@ public class Inventory extends DomainObject {
     /** id for inventory entry */
     @Id
     @GeneratedValue
-    private Long                   id;
+    private Long             id;
 
     /** List of Ingredients for the Inventory */
 
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
 
-    private final List<Ingredient> ingredients;
+    private List<Ingredient> ingredients;
 
     /**
      * Empty constructor for Hibernate
@@ -57,7 +59,7 @@ public class Inventory extends DomainObject {
      * @param id
      *            the ID
      */
-    public void setId ( final Long id ) {
+    public void setId ( Long id ) {
         this.id = id;
     }
 
@@ -67,9 +69,9 @@ public class Inventory extends DomainObject {
      * @return arrayList of all ingredient names in the ingredient list
      */
     public ArrayList<String> getAllIngredients () {
-        final ArrayList<String> ingrNames = new ArrayList<String>();
+        ArrayList<String> ingrNames = new ArrayList<String>();
 
-        for ( final Ingredient i : this.ingredients ) {
+        for ( Ingredient i : this.ingredients ) {
             ingrNames.add( i.getName() );
         }
         return ingrNames;
@@ -85,7 +87,7 @@ public class Inventory extends DomainObject {
      * @param amount
      *            int updated amount to add to amount field
      */
-    public void updateInventory ( final String name, final int amount ) {
+    public void updateInventory ( String name, int amount ) {
         if ( amount < 0 ) {
             throw new IllegalArgumentException( "Amount cannot be negative" );
         }
@@ -111,7 +113,7 @@ public class Inventory extends DomainObject {
      * @param ingr
      *            ingredient to add to the inventory
      */
-    public void addIngredient ( final Ingredient ingr ) {
+    public void addIngredient ( Ingredient ingr ) {
         if ( ingr.getAmount() < 0 ) {
             throw new IllegalArgumentException( "Amount cannot be negative" );
         }
@@ -146,9 +148,9 @@ public class Inventory extends DomainObject {
      * @return count returns the index of the Ingredient in the list. Else -1
      *         for not found
      */
-    public int getIngredientIndex ( final String name ) {
+    public int getIngredientIndex ( String name ) {
         int count = 0;
-        for ( final Ingredient i : this.ingredients ) {
+        for ( Ingredient i : this.ingredients ) {
             if ( i.getName().equals( name ) ) {
                 return count;
             }
@@ -164,8 +166,8 @@ public class Inventory extends DomainObject {
      *            String name of the Ingredient
      * @return amount amount for the Ingredient found in the list
      */
-    public int getIngredientAmount ( final String name ) {
-        for ( final Ingredient i : this.ingredients ) {
+    public int getIngredientAmount ( String name ) {
+        for ( Ingredient i : this.ingredients ) {
             if ( i.getName().equals( name ) ) {
                 return i.getAmount();
             }
@@ -176,21 +178,32 @@ public class Inventory extends DomainObject {
     /**
      * Returns true if there are enough ingredients to make the beverage.
      *
-     * @param r
-     *            recipe to check if there are enough ingredients
+     * @param o
+     *            order to check if there are enough ingredients
      * @return true if enough ingredients to make the beverage
      */
-    public boolean enoughIngredients ( final Recipe r ) {
-
-        for ( final Ingredient ingr : r.getIngredients() ) {
-            if ( !this.getAllIngredients().contains( ingr.getName() ) ) {
-                return false;
+    public boolean enoughIngredients ( Order o ) {
+        HashMap<String, Integer> orderIngredients = new HashMap<String, Integer>();
+        for ( Recipe r : o.getRecipes() ) {
+            for ( Ingredient i : r.getIngredients() ) {
+                if ( !this.getAllIngredients().contains( i.getName() ) ) {
+                    return false;
+                }
+                if ( orderIngredients.get( i.getName() ) == null ) {
+                    orderIngredients.put( i.getName(), i.getAmount() );
+                }
+                else {
+                    orderIngredients.replace( i.getName(),
+                            ( orderIngredients.get( i.getName() ).intValue() + i.getAmount() ) );
+                }
             }
+        }
 
-            System.out.println( "Ingredient amount is:  " + ingr.getAmount().toString() + "Other ingredient amount is: "
-                    + this.ingredients.get( getIngredientIndex( ingr.getName() ) ).getAmount().toString() );
-            if ( this.ingredients.get( getIngredientIndex( ingr.getName() ) ).getAmount().intValue() < ingr
-                    .getAmount() ) {
+        for ( Entry<String, Integer> e : orderIngredients.entrySet() ) {
+            System.out.println( "Ingredient amount is:  " + e.getValue().toString() + "Other ingredient amount is: "
+                    + this.ingredients.get( getIngredientIndex( e.getKey() ) ).getAmount().toString() );
+            if ( this.ingredients.get( getIngredientIndex( e.getKey() ) ).getAmount().intValue() < e.getValue()
+                    .intValue() ) {
                 return false;
             }
         }
@@ -199,21 +212,22 @@ public class Inventory extends DomainObject {
     }
 
     /**
-     * Removes the ingredients used to make the specified recipe. Assumes that
+     * Removes the ingredients used to make the specified order. Assumes that
      * the user has checked that there are enough ingredients to make
      *
-     * @param r
-     *            recipe to make
-     * @return true if recipe is made.
+     * @param o
+     *            order to make
+     * @return true if order is made.
      */
-    public boolean useIngredients ( final Recipe r ) {
+    public boolean useIngredients ( Order o ) {
 
-        if ( enoughIngredients( r ) ) {
-            for ( final Ingredient ingr : r.getIngredients() ) {
-                final int idx = getIngredientIndex( ingr.getName() );
-                this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
+        if ( enoughIngredients( o ) ) {
+            for ( Recipe r : o.getRecipes() ) {
+                for ( Ingredient ingr : r.getIngredients() ) {
+                    int idx = getIngredientIndex( ingr.getName() );
+                    this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
+                }
             }
-
             return true;
         }
         else {
@@ -228,8 +242,8 @@ public class Inventory extends DomainObject {
      */
     @Override
     public String toString () {
-        final StringBuffer buf = new StringBuffer();
-        for ( final Ingredient ingr : this.ingredients ) {
+        StringBuffer buf = new StringBuffer();
+        for ( Ingredient ingr : this.ingredients ) {
             buf.append( ingr.getName() + ": " + ingr.getAmount().toString() + "\n" );
         }
         return buf.toString();
@@ -244,7 +258,7 @@ public class Inventory extends DomainObject {
      * @param amt
      *            amount of the Ingredient to be assigned
      */
-    public void setInventory ( final String name, final int amt ) {
+    public void setInventory ( String name, int amt ) {
         for ( int i = 0; i < this.ingredients.size(); i++ ) {
             if ( this.ingredients.get( i ).getName().equals( name ) ) {
 

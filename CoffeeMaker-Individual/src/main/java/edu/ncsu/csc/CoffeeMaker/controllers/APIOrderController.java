@@ -5,24 +5,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ncsu.csc.CoffeeMaker.models.Inventory;
 import edu.ncsu.csc.CoffeeMaker.models.Order;
+import edu.ncsu.csc.CoffeeMaker.services.InventoryService;
 import edu.ncsu.csc.CoffeeMaker.services.OrderService;
 
 /**
  * This is the controller that holds the REST endpoints that handle CRUD
- * operations for Recipes.
+ * operations for Orders.
  *
  * Spring will automatically convert all of the ResponseEntity and List results
  * to JSON
  *
  * @author Kai Presler-Marshall
  * @author Michelle Lemons
+ * @author Aditi Singh
  *
  */
 @SuppressWarnings ( { "unchecked", "rawtypes" } )
@@ -30,11 +35,18 @@ import edu.ncsu.csc.CoffeeMaker.services.OrderService;
 public class APIOrderController extends APIController {
 
     /**
-     * RecipeService object, to be autowired in by Spring to allow for
-     * manipulating the Recipe model
+     * OrderService object, to be autowired in by Spring to allow for
+     * manipulating the Order model
      */
     @Autowired
-    private OrderService service;
+    private OrderService     service;
+
+    /**
+     * InventoryService object, to be autowired in by Spring to allow for
+     * manipulating the Inventory model
+     */
+    @Autowired
+    private InventoryService inventoryService;
 
     /**
      * REST API method to provide GET access to all orders in the system
@@ -50,8 +62,8 @@ public class APIOrderController extends APIController {
      * REST API method to provide GET access to a specific orders, as indicated
      * by the path variable provided (the name of the recipe desired)
      *
-     * @param name
-     *            recipe name
+     * @param id
+     *            order id
      * @return response to the request
      */
     @GetMapping ( BASE_PATH + "/orders/{id}" )
@@ -67,18 +79,65 @@ public class APIOrderController extends APIController {
      * Inventory, by making a PUT request to the API endpoint and indicating the
      * order to be updated (as a path variable)
      *
-     * @param o
+     * @param order
      *            The order we need to add
      * @return Success if the order could be added
      */
     @PostMapping ( BASE_PATH + "/orders" )
-    public ResponseEntity createOrder ( @RequestBody final Order order ) {
+    public ResponseEntity placeOrder ( @RequestBody final Order order ) {
 
         final Order o = new Order( order.getRecipes(), order.getPayment() );
 
         service.save( o );
 
-        return new ResponseEntity( successResponse( o.getId() + " successfully created" ), HttpStatus.OK );
+        return new ResponseEntity( successResponse( o.getId() + " successfully placed" ), HttpStatus.OK );
+    }
+
+    /**
+     * REST API method to provide PUT access to a specific orders, as indicated
+     * by the path variable provided (the id of the order desired)
+     *
+     * @param id
+     *            order id
+     * @return response to the request
+     */
+    @PutMapping ( BASE_PATH + "/orders/{id}" )
+    public ResponseEntity createOrder ( @PathVariable ( "id" ) final Long id ) {
+        final Order order = service.findById( id );
+        if ( order == null ) {
+            return new ResponseEntity( errorResponse( "No order selected" ), HttpStatus.NOT_FOUND );
+        }
+
+        final Inventory inventory = inventoryService.getInventory();
+        if ( inventory.enoughIngredients( order ) ) {
+            inventory.useIngredients( order );
+            inventoryService.save( inventory );
+            order.setStatus( "Created" );
+            service.save( order );
+            return new ResponseEntity<String>( order.getId() + " successfully created", HttpStatus.OK );
+        }
+        order.setStatus( "Cancelled" );
+        service.save( order );
+        return new ResponseEntity( "Not enough inventory. " + order.getId() + " cancelled.", HttpStatus.CONFLICT );
+    }
+
+    /**
+     * REST API method to provide PUT access to a specific orders, as indicated
+     * by the path variable provided (the name of the recipe desired)
+     *
+     * @param id
+     *            order id
+     * @return response to the request
+     */
+    @DeleteMapping ( BASE_PATH + "/orders/{id}" )
+    public ResponseEntity deleteOrder ( @PathVariable ( "id" ) final Long id ) {
+        final Order order = service.findById( id );
+        if ( null == order ) {
+            return new ResponseEntity( errorResponse( "No order found for id " + id ), HttpStatus.NOT_FOUND );
+        }
+        service.delete( order );
+
+        return new ResponseEntity( successResponse( id + " was deleted successfully" ), HttpStatus.OK );
     }
 
 }

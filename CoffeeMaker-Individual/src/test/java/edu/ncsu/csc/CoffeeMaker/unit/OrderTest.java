@@ -93,7 +93,7 @@ public class OrderTest {
         recipes.add( recipe2 );
         final Order newOrder = new Order( recipes, 100 ); // Assuming payment of
                                                           // 100
-        assertEquals( "Placed", newOrder.viewOrderStatus() );
+        assertEquals( "Placed", newOrder.getStatus() );
         assertEquals( 2, newOrder.getRecipes().size() );
         assertEquals( 80, newOrder.getPrice().intValue() ); // Assuming recipe
                                                             // prices are 50 and
@@ -150,21 +150,14 @@ public class OrderTest {
     public void testCancelOrder () {
         final Order order = new Order();
         order.cancelOrder();
-        assertEquals( "Cancelled", order.viewOrderStatus() );
+        assertEquals( "Cancelled", order.getStatus() );
     }
 
     @Test
     public void testFulfillOrder () {
         final Order order = new Order();
-        order.fulfillOrder();
-        assertEquals( "In Progress", order.viewOrderStatus() );
-    }
-
-    @Test
-    public void testNotifyCustomer () {
-        final Order order = new Order();
-        order.notifyCustomer();
-        assertEquals( "Complete", order.viewOrderStatus() );
+        order.createOrder();
+        assertEquals( "Created", order.getStatus() );
     }
 
     @Test
@@ -172,7 +165,7 @@ public class OrderTest {
         assertEquals( 0, new Order().getRecipes().size() );
         assertEquals( 0, new Order().getPrice().intValue() );
         assertEquals( 0, new Order().getPayment().intValue() );
-        assertEquals( "Placed", new Order().viewOrderStatus() );
+        assertEquals( "Placed", new Order().getStatus() );
     }
 
     @Test
@@ -188,10 +181,10 @@ public class OrderTest {
         final Order order2 = new Order();
         order2.setId( order1.getId() );
         order2.setPayment( order1.getPayment() );
-        order2.setPrice( order1.getPrice() );
+        order2.setPrice();
 
         // added
-        order2.setStatus( order1.viewOrderStatus() );
+        order2.setStatus( order1.getStatus() );
         assertTrue( order1.equals( order2 ) );
     }
 

@@ -10,9 +10,9 @@ import edu.ncsu.csc.CoffeeMaker.models.Order;
 import edu.ncsu.csc.CoffeeMaker.repositories.OrderRepository;
 
 /**
- * The RecipeService is used to handle CRUD operations on the Recipe model. In
+ * The OrderService is used to handle CRUD operations on the Recipe model. In
  * addition to all functionality from `Service`, we also have functionality for
- * retrieving a single Recipe by name.
+ * retrieving a single Order by id.
  *
  * @author Kai Presler-Marshall
  *
@@ -22,8 +22,8 @@ import edu.ncsu.csc.CoffeeMaker.repositories.OrderRepository;
 public class OrderService extends Service<Order, Long> {
 
     /**
-     * RecipeRepository, to be autowired in by Spring and provide CRUD
-     * operations on Recipe model.
+     * OrderRepository, to be autowired in by Spring and provide CRUD operations
+     * on Order model.
      */
     @Autowired
     private OrderRepository orderRepository;
@@ -34,11 +34,11 @@ public class OrderService extends Service<Order, Long> {
     }
 
     /**
-     * Find a recipe with the provided name
+     * Find a order with the provided name
      *
-     * @param name
-     *            Name of the recipe to find
-     * @return found recipe, null if none
+     * @param id
+     *            id of the order to find
+     * @return found order, null if none
      */
     @Override
     public Order findById ( final Long id ) {
