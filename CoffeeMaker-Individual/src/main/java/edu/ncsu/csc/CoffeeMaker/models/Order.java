@@ -208,8 +208,6 @@ public class Order extends DomainObject {
 
     /**
      * Sets the price of the order
-     *
-     * @return price the price
      */
     public void setPrice () {
         int orderPrice = 0;
