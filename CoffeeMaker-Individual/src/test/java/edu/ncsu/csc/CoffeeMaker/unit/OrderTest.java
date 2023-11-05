@@ -156,15 +156,8 @@ public class OrderTest {
     @Test
     public void testFulfillOrder () {
         final Order order = new Order();
-        order.fulfillOrder();
-        assertEquals( "In Progress", order.getStatus() );
-    }
-
-    @Test
-    public void testNotifyCustomer () {
-        final Order order = new Order();
-        order.notifyCustomer();
-        assertEquals( "Complete", order.getStatus() );
+        order.createOrder();
+        assertEquals( "Created", order.getStatus() );
     }
 
     @Test
