@@ -16,7 +16,7 @@ import javax.validation.constraints.Min;
 /**
  * Order for the coffee maker. Order is tied to the database using Hibernate
  * libraries.See OrderRepository and Order Service for the other two pieces used
- * for database support.**
+ * for database support.
  *
  * @author Kai Presler-Marshall
  */
@@ -24,7 +24,7 @@ import javax.validation.constraints.Min;
 @Table ( name = "`order`" )
 public class Order extends DomainObject {
 
-    /** Order id. */
+    /** Order's id. */
     @Id
     @GeneratedValue
     private Long               id;
@@ -69,6 +69,13 @@ public class Order extends DomainObject {
 
     }
 
+    /**
+     * Checks if the provided payment is valid for this order
+     *
+     * @param payment
+     *            the payment to check
+     * @return true if the payment is valid
+     */
     public boolean checkPaymentValidity ( final Integer payment ) {
         if ( payment < getPrice() ) {
             return false;
@@ -76,19 +83,42 @@ public class Order extends DomainObject {
         return true;
     }
 
+    /**
+     * Returns the Order's id
+     *
+     * @return the id
+     */
     @Override
     public Long getId () {
         return id;
     }
 
+    /**
+     * Sets the Order's id
+     *
+     * @param id
+     *            the id to set
+     */
     public void setId ( final Long id ) {
         this.id = id;
     }
 
+    /**
+     * Returns the recipes in the order
+     *
+     * @return the list of recipes
+     */
     public List<Recipe> getRecipes () {
         return recipes;
     }
 
+    /**
+     * Deletes one instance of a recipe from the Order
+     *
+     * @param recipe
+     *            the recipe to delete
+     * @return true if the recipe is successfully deleted
+     */
     public boolean deleteOneRecipe ( final Recipe recipe ) {
         for ( final Recipe r : recipes ) {
             if ( r.equals( recipe ) ) {
@@ -100,6 +130,12 @@ public class Order extends DomainObject {
 
     }
 
+    /**
+     * Deletes all instances of a recipe from the Order
+     *
+     * @param recipe
+     *            the recipe to delete
+     */
     public void deleteAllOfOne ( final Recipe recipe ) {
         if ( recipe.getName() == null || recipe.getName().length() == 0 ) {
             return;
@@ -114,20 +150,45 @@ public class Order extends DomainObject {
 
     }
 
+    /**
+     * Adds the passed in number of instances of a recipe to the Order
+     *
+     * @param recipe
+     *            the recipe to add
+     * @param quantity
+     *            the number of instances of the recipe to add
+     */
     public void addRecipes ( final Recipe recipe, final int quantity ) {
         for ( int i = 0; i < quantity; i++ ) {
             recipes.add( recipe );
         }
     }
 
+    /**
+     * Adds a single instance of a recipe to the Order
+     *
+     * @param recipe
+     *            the recipe to add
+     */
     public void addRecipe ( final Recipe recipe ) {
         recipes.add( recipe );
     }
 
+    /**
+     * Returns the payment of the Order
+     *
+     * @return the payment
+     */
     public Integer getPayment () {
         return payment;
     }
 
+    /**
+     * Sets the payment of the Order
+     *
+     * @param payment
+     *            the payment to set
+     */
     public void setPayment ( final Integer payment ) {
         if ( !checkPaymentValidity( payment ) ) {
             throw new IllegalArgumentException( "Payment is not sufficient" );
@@ -136,10 +197,20 @@ public class Order extends DomainObject {
 
     }
 
+    /**
+     * Returns the price of the order
+     *
+     * @return the price
+     */
     public Integer getPrice () {
         return price;
     }
 
+    /**
+     * Sets the price of the order
+     *
+     * @return price the price
+     */
     public void setPrice () {
         int orderPrice = 0;
         for ( final Recipe r : recipes ) {
@@ -149,23 +220,36 @@ public class Order extends DomainObject {
 
     }
 
+    /**
+     * Returns the status of the order
+     *
+     * @return status the status
+     */
     public String getStatus () {
         return status;
     }
 
+    /**
+     * Sets the status of the order
+     *
+     * @param status
+     *            the status to set
+     */
     public void setStatus ( final String status ) {
         this.status = status;
 
     }
 
-    public void fulfillOrder () {
-        setStatus( "In Progress" );
+    /**
+     * Updates the order status for a created order.
+     */
+    public void createOrder () {
+        setStatus( "Created" );
     }
 
-    public void notifyCustomer () {
-        setStatus( "Complete" );
-    }
-
+    /**
+     * Updates the order status for a cancelled order.
+     */
     public void cancelOrder () {
         setStatus( "Cancelled" );
     }

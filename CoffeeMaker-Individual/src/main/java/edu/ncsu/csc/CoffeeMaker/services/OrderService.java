@@ -36,8 +36,8 @@ public class OrderService extends Service<Order, Long> {
     /**
      * Find a order with the provided name
      *
-     * @param name
-     *            Name of the order to find
+     * @param id
+     *            id of the order to find
      * @return found order, null if none
      */
     @Override

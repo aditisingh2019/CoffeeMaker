@@ -36,8 +36,8 @@ public class UserService extends Service<User, Long> {
     /**
      * Find a user with the provided name
      *
-     * @param name
-     *            Name of the user to find
+     * @param id
+     *            id of the user to find
      * @return found user, null if none
      */
     @Override
