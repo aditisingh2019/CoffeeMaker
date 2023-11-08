@@ -222,17 +222,39 @@ public class Inventory extends DomainObject {
     public boolean useIngredients ( Order o ) {
 
         if ( enoughIngredients( o ) ) {
+        	System.out.println("Length of Order is: " + o.getRecipes().size());
             for ( Recipe r : o.getRecipes() ) {
-                for ( Ingredient ingr : r.getIngredients() ) {
-                    int idx = getIngredientIndex( ingr.getName() );
-                    this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
-                }
+            	System.out.println("This is recipe name" + r.getName());
+            	useRecipe(r);
+            	
+            	
+//                for ( Ingredient ingr : r.getIngredients() ) {
+//                	System.out.println("LOOOOOOK HERE "+ingr.getName() +"    "+ ingr.getAmount().toString());
+//                    int idx = getIngredientIndex( ingr.getName() );
+//                    this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
+//                }
             }
             return true;
         }
         else {
             return false;
         }
+    }
+    
+    public void useRecipe ( final Recipe r ) {
+
+       
+            for ( final Ingredient ingr : r.getIngredients() ) {
+            	System.out.println("LOOOOOOK HERE " + ingr.getName() +"    "+ ingr.getAmount().toString());
+                final int idx = getIngredientIndex( ingr.getName() );
+                this.ingredients.get( idx ).setAmount( this.ingredients.get( idx ).getAmount() - ingr.getAmount() );
+            }
+
+            //return true;
+        
+        
+            //return false;
+        
     }
 
     /**

@@ -104,9 +104,9 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/vieworder", "/vieworder.html" } )
-    public String viewOrderPage ( final Model model ) {
-        return "vieworder";
+    @GetMapping ( { "/fulfillorder", "/fulfillorder.html" } )
+    public String fulfillOrderPage ( final Model model ) {
+        return "fulfillorder";
     }
 
     

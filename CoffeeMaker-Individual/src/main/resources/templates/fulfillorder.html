@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Staff</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" href="css/app.css" />
+</head>
+
+<body>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('ordersCtrl', function ($scope, $http, $q,) {
+
+			$scope.orders = [];
+			$scope.updateOrders = function () {
+				$http.get("/api/v1/orders").then(function (response) {
+					$scope.orders = response.data;
+					console.log($scope.orders);
+				}, function (rejection) {
+
+					console.error("Error while getting orders");
+				})
+
+				console.log($scope.orders);
+			}
+
+
+			$scope.fulfillOrder = function (id) {
+				console.log("Attemping to fullfill order");
+				console.log(id);
+				$http.put("/api/v1/orders/" + id).then(
+					function (response) {
+						console.log(response);
+						$scope.submissionSuccess = true;
+						$scope.updateOrders();
+					},
+					function (rejection) {
+						if (rejection.status == 404) {
+							console.error('No Order selected ');
+						}
+						else if (rejection.status == 409) {
+							console.error('Not enough Inventory to create Order');
+						}
+
+
+						//console.error('Error while creating Order');
+						console.log(rejection);
+
+						$scope.submissionSuccess = false;
+
+						// Update order list
+						$http.get("/api/v1/orders").then(function (response) {
+							$scope.orders = response.data;
+						});
+					}
+				);
+			}
+
+			$scope.updateOrders();
+
+		});
+
+
+
+	</script>
+
+	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="ordersCtrl as ctrl">
+		<h1>Fulfill Orders</h1>
+
+		<div>
+			<li ng-repeat="order in orders">
+				<label>
+					<span style="font-size: 1.2em;">{{order.id}}</span>
+					
+
+					<button type="button" ng-click="fulfillOrder(order.id)">Create</button>
+
+				</label>
+			</li>
+
+			<div ng-if="submissionSuccess">Order created successfully</div>
+
+		</div>
+
+		<br /><a href="/staff">Home</a>
+	</div>
+
+
+
+</body>
+
+</html>
