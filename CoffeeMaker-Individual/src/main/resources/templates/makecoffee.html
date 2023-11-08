@@ -86,6 +86,7 @@
 					$scope.submissionFailureRecipe = true;
 				}
 				else {
+					console.log($scope.order);
 					$http.post("/api/v1/orders/", $scope.order).then(
 						function (response) {
 
