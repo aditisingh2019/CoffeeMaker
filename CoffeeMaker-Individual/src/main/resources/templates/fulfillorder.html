@@ -17,11 +17,8 @@
 			$scope.orders = [];
 			$scope.updateOrders = function () {
 				$http.get("/api/v1/orders").then(function (response) {
-					if($scope.orders.status != "Created" ||$scope.orders.status != "Cancelled" ){
-						$scope.orders = response.data;
-						console.log($scope.orders);
-					}
-					
+					$scope.orders = response.data;
+					console.log($scope.orders);
 				}, function (rejection) {
 
 					console.error("Error while getting orders");
@@ -78,20 +75,12 @@
 			<li ng-repeat="order in orders">
 				<label>
 					<span style="font-size: 1.2em;">{{order.id}}</span>
-					<input type="radio" ng-model="$parent.id" name="id"
-						value="{{order.id}}" required="true" />
+					
+
+					<button type="button" ng-click="fulfillOrder(order.id)">Create</button>
+
 				</label>
 			</li>
-			
-			
-							
-			<div>
-				<input type="button" value="Create" ng-click="fulfillorder()"
-					class="btn btn-warning btn-sm" />
-			</div>
-			
-			
-			
 
 			<div ng-if="submissionSuccess">Order successfully created</div>
 
