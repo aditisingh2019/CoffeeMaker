@@ -104,14 +104,13 @@ public class APIOrderController extends APIController {
     @PutMapping ( BASE_PATH + "/orders/{id}" )
     public ResponseEntity createOrder ( @PathVariable ( "id" ) final Long id ) {
         final Order order = service.findById( id );
-        System.out.println("Order details:" + order.getRecipes().toString() + "LENGTH OF RECIPE" + order.getRecipes().size());
-        System.out.println("ID: " + id);
         if ( order == null ) {
             return new ResponseEntity( errorResponse( "No order selected" ), HttpStatus.NOT_FOUND );
         }
 
         final Inventory inventory = inventoryService.getInventory();
-        if (inventory.useIngredients( order )) {
+        if ( inventory.enoughIngredients( order ) ) {
+            inventory.useIngredients( order );
             inventoryService.save( inventory );
             order.setStatus( "Created" );
             service.save( order );
