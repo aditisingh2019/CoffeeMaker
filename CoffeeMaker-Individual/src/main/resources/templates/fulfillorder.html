@@ -17,8 +17,11 @@
 			$scope.orders = [];
 			$scope.updateOrders = function () {
 				$http.get("/api/v1/orders").then(function (response) {
-					$scope.orders = response.data;
-					console.log($scope.orders);
+					if($scope.orders.status != "Created" ||$scope.orders.status != "Cancelled" ){
+						$scope.orders = response.data;
+						console.log($scope.orders);
+					}
+					
 				}, function (rejection) {
 
 					console.error("Error while getting orders");
@@ -33,8 +36,9 @@
 				console.log(id);
 				$http.put("/api/v1/orders/" + id).then(
 					function (response) {
-						console.log(response);
+						//console.log(response);
 						$scope.submissionSuccess = true;
+						
 						$scope.updateOrders();
 					},
 					function (rejection) {
@@ -52,9 +56,9 @@
 						$scope.submissionSuccess = false;
 
 						// Update order list
-						$http.get("/api/v1/orders").then(function (response) {
-							$scope.orders = response.data;
-						});
+						//$http.get("/api/v1/orders").then(function (response) {
+						//	$scope.orders = response.data;
+						//});
 					}
 				);
 			}
@@ -74,14 +78,22 @@
 			<li ng-repeat="order in orders">
 				<label>
 					<span style="font-size: 1.2em;">{{order.id}}</span>
-					
-
-					<button type="button" ng-click="fulfillOrder(order.id)">Create</button>
-
+					<input type="radio" ng-model="$parent.id" name="id"
+						value="{{order.id}}" required="true" />
 				</label>
 			</li>
+			
+			
+							
+			<div>
+				<input type="button" value="Create" ng-click="fulfillorder()"
+					class="btn btn-warning btn-sm" />
+			</div>
+			
+			
+			
 
-			<div ng-if="submissionSuccess">Order created successfully</div>
+			<div ng-if="submissionSuccess">Order successfully created</div>
 
 		</div>
 
