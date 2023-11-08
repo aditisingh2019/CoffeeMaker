@@ -1,21 +1,72 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Staff</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-	<h1>Staff Role</h1>
-	<h2>Commands</h2>
-	<ul>
-		<li><a href="inventory.html">Update Inventory</a></li>
-		<li><a href="recipe.html">Add a Recipe</a></li>
-		<li><a href="editrecipe.html">Edit Recipe</a></li>
-		<li><a href="deleterecipe.html">Delete Recipe</a></li>
-		<li><a href="fulfillorder.html">View Orders</a></li>
-		
-		<br /> <a href="/index">Logout</a>
 
-	</ul>
+<head>
+	<title>Staff</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			text-align: center;
+			font-family: Arial, sans-serif;
+		}
+
+		h1 {
+			font-size: 24px;
+			font-family: Arial, sans-serif;
+		}
+
+		h2 {
+			font-size: 20px;
+			font-family: Arial, sans-serif;
+		}
+
+		.button-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 20px;
+		}
+
+		.button-container a {
+			display: block;
+			margin: 10px;
+			padding: 10px 20px;
+			background-color: #654321;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			border: none;
+			border-radius: 5px;
+
+		}
+
+		.logout-button {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			padding: 10px 20px;
+			background-color: #A52A2A;
+			color: white;
+			text-decoration: none;
+			border: none;
+			border-radius: 5px;
+		}
+		
+		
+	</style>
+</head>
+
+<body>
+	<img src="logo.png" alt="Logo Icon">
+	<h1>Welcome to Brew Haven</h1>
+	<div class="button-container">
+		<a href="inventory.html">Update Inventory</a>
+		<a href="recipe.html">Add a Recipe</a>
+		<a href="editrecipe.html">Edit Recipe</a>
+		<a href="deleterecipe.html">Delete Recipe</a>
+		<a ref="fulfillorder.html">View Orders</a>
+	</div>
+	<a href="/index" class="logout-button">Logout</a>
 </body>
+
 </html>
