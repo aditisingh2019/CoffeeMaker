@@ -99,30 +99,20 @@ public class APIOrderController extends APIController {
 	 */
 	@PutMapping(BASE_PATH + "/orders/{id}")
 	public ResponseEntity createOrder(@PathVariable("id") final Long id) {
-		System.out.print("********************************hi1\n");
 		final Order order = service.findById(id);
-		System.out.print("********************************hi2\n");
 		if (order == null) {
-			System.out.print("********************************hi3\n");
 			return new ResponseEntity(errorResponse("No order selected"), HttpStatus.NOT_FOUND);
 		}
 
 		final Inventory inventory = inventoryService.getInventory();
-		System.out.print("********************************hi4\n");
 		if (inventory.enoughIngredients(order)) {
-			System.out.print("********************************hi5\n");
 			inventory.useIngredients(order);
-			System.out.print("********************************h6\n");
 			inventoryService.save(inventory);
-			System.out.print("********************************hi7\n");
 			order.setStatus("Created");
-			System.out.print("********************************hi8\n");
 			service.save(order);
-			System.out.print("********************************hi9\n");
 			return new ResponseEntity<String>(order.getId() + " successfully created", HttpStatus.OK);
 		}
 		order.setStatus("Cancelled");
-		System.out.print("********************************hi10\n");
 		service.save(order);
 		return new ResponseEntity("Not enough inventory. " + order.getId() + " cancelled.", HttpStatus.CONFLICT);
 	}
