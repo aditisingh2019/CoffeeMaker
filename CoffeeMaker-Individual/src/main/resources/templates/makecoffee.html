@@ -1,68 +1,220 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>View Recipes</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" href="css/bootstrap.css" />
-<link rel="stylesheet" href="css/app.css" />
+	<title>Place an Order</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" href="css/app.css" />
+	<style>
+		.alert-box {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 250px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: red;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box2 {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 200px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: green;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box button {
+			background-color: white;
+			border: 1px solid black;
+			border-radius: 2px;
+			padding: 5px 10px;
+			cursor: pointer;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+	</style>
 </head>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
 <body>
+
+
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 
 		var app = angular.module('myApp', []);
-		app.controller('recipesCtrl', function($scope, $http, $q) {
-			$http.get("/api/v1/recipes").then(function(response) {
-				$scope.recipes = response.data;
+		app.controller('recipesCtrl', function ($scope, $http, $q) {
+			$http.get("/api/v1/recipes").then(function (response) {
+				$scope.availableRecipes = response.data;
+				console.log(response.data);
 			});
 
-			$scope.make = function() {
-				var amtPaid = $scope.amtPaid;
-				var name = $scope.name;
-				$scope.submissionFailure = false;
+			$scope.isNull = false;
+			$scope.totalAmount = 0;
+			$scope.amtPaid = 0;
+			$scope.recipeAmount = 0;
+			$scope.recipePrices = {};
+
+
+			$scope.order = {
+				recipes: [],
+				payment: 0,
+				price: 0
+			};
+
+
+
+			$scope.placeOrder = function () {
+
+				$scope.submissionFailurePayment = false;
 				$scope.submissionSuccess = false;
-				$http.post("/api/v1/makecoffee/" + name, amtPaid).then(
-						function(response) {
-							$scope.change = response.data.message;
+				$scope.submissionFailureRecipe = false;
+				$scope.order.payment = $scope.amtPaid;
+				$scope.order.price = $scope.totalAmount;
+				console.log($scope.order.payment);
+				if ($scope.order.payment < $scope.totalAmount) {
+					$scope.submissionFailurePayment = true;
+				}
+				if ($scope.order.recipes.length <= 0) {
+					$scope.submissionFailureRecipe = true;
+				}
+				else {
+					$http.post("/api/v1/orders/", $scope.order).then(
+						function (response) {
+
+							$scope.change = $scope.order.payment - $scope.totalAmount;
+							console.log($scope.order);
+							//console.log($scope.order.payment);
 							$scope.submissionSuccess = true;
-						}, function(errResponse) {
+
+
+
+						}, function (errResponse) {
 							console.log(errResponse);
 							$scope.submissionFailure = true;
-							$scope.error = "Error while making recipe";
+							$scope.error = "Error while placing an order";
 						});
+				}
+
+
+
 
 			}
+
+
+			$scope.calculateTotal = function () {
+				var total = 0;
+				$scope.order.recipes = $scope.availableRecipes.filter(function (recipe) {
+					//$scope.order.recipes.push(recipe.selected);
+					return recipe.selected;
+				});
+				//console.log("Recipes for the Order:", recipes);
+				$scope.order.recipes.forEach(function (recipe) {
+					total = total + $scope.recipePrices[recipe.id];
+				});
+				//console.log(total);
+				//return total;
+				if (total == null || total == NaN || isNaN(total)){
+					$scope.isNull = true;
+				}
+				$scope.totalAmount = total;
+				//$scope.order.price = total;
+
+			};
+
+			$scope.updateRecipeAmount = function (recipe, amount) {
+				
+				if (amount >= 1 && amount != null) {
+					$scope.recipePrices[recipe.id] = amount * recipe.price;
+				}
+				//alert("Amount Updated");
+				console.log($scope.recipePrices)
+			}
+
+
+
+
 		});
 
 		/*]]>*/
 	</script>
 
-	<div layout:fragment="content" class="generic-container ng-cloak"
-		ng-app="myApp" ng-controller="recipesCtrl">
+	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="recipesCtrl">
 		<h1>Coffee Recipes</h1>
 		<div>
 			<ul>
-				<li ng-repeat="recipe in recipes"><label>{{recipe.name}}
-						<input type="radio" ng-model="$parent.name" name="name"
-						value="{{recipe.name}}" required="true" />
-				</label></li>
+				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
+						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
+						<input type="number" ng-model="recipeAmount" min = "1"
+							ng-change="updateRecipeAmount(recipe, recipeAmount)" />
+						<!--
+						<button ng-click = "updateRecipeAmount(recipe, recipeAmount)">Update Amount </button>
+						-->
+					</label></li>
 			</ul>
-			<br /> <label for="amtPaid">Enter payment</label> <input type="text"
-				ng-model="amtPaid" name="amtPaid" required="true" /> <br /> <input
-				type="submit" ng-click="make()" value="Make Coffee"
+
+			<button class="btn btn-primary btn-sm" ng-click="calculateTotal()">Preview Order </button>
+
+			
+			<div ng-show="isNull">
+				<div class="alert-box">
+					<h5>Error!</h5>
+					<p>Selected Recipes must be at least "1" unit. Try Again!</p>
+					<hr color="black">
+
+					<button onclick="window.location.href='makecoffee.html';">Okay</button>
+				</div>
+			</div>
+			
+			<h5>Subtotal: ${{ totalAmount }}</h5>
+
+			<br />
+
+			<br /> <label for="payment">Enter payment</label> <input type="number" ng-model="amtPaid" name="payment"
+				required="true" /> <br /> <input type="submit" ng-click="placeOrder()" value="Place Order"
 				class="btn btn-primary btn-sm" /> <br />
 
-			<div ng-show="submissionSuccess" class="success">Coffee was
-				made. Your change is {{change}}.</div>
 
-			<div ng-show="submissionFailure">An error occurred: {{error}}</div>
+			<div ng-show="submissionFailurePayment">
+				<div class="alert-box">
+					<h5>Error!</h5>
+					<p>Payment insufficient! Try Again</p>
+					<hr color="black">
 
+					<button onclick="window.location.href='makecoffee.html';">Okay</button>
+				</div>
+			</div>
+			<div ng-show="submissionFailureRecipe">
+				<div class="alert-box">
+					<h5>Error!</h5>
+					<p>Select at least one recipe</p>
+					<hr color="black">
+					<button onclick="window.location.href='makecoffee.html';">Okay</button>
+				</div>
+			</div>
+
+			<div ng-show="submissionSuccess">
+				<div class="alert-box2">
+					<h3>Receipt</h3>
+					<h5>Success! Order Saved</h5>
+					<p>Order was succesfully saved.</p><br>
+					<p> Available Change : ${{change}} </p>
+					<hr color="black">
+					<button onclick="window.location.href='customer.html';">Done</button>
+				</div>
+			</div>
 			<br /> <a href="/customer">Home</a>
 		</div>
 
 	</div>
 
 </body>
+
 </html>
