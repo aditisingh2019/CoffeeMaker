@@ -30,114 +30,119 @@ import edu.ncsu.csc.CoffeeMaker.services.OrderService;
  * @author Aditi Singh
  *
  */
-@SuppressWarnings ( { "unchecked", "rawtypes" } )
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
 public class APIOrderController extends APIController {
 
-    /**
-     * OrderService object, to be autowired in by Spring to allow for
-     * manipulating the Order model
-     */
-    @Autowired
-    private OrderService     service;
+	/**
+	 * OrderService object, to be autowired in by Spring to allow for manipulating
+	 * the Order model
+	 */
+	@Autowired
+	private OrderService service;
 
-    /**
-     * InventoryService object, to be autowired in by Spring to allow for
-     * manipulating the Inventory model
-     */
-    @Autowired
-    private InventoryService inventoryService;
+	/**
+	 * InventoryService object, to be autowired in by Spring to allow for
+	 * manipulating the Inventory model
+	 */
+	@Autowired
+	private InventoryService inventoryService;
 
-    /**
-     * REST API method to provide GET access to all orders in the system
-     *
-     * @return JSON representation of all ordera
-     */
-    @GetMapping ( BASE_PATH + "/orders" )
-    public List<Order> getOrders () {
-        return service.findAll();
-    }
+	/**
+	 * REST API method to provide GET access to all orders in the system
+	 *
+	 * @return JSON representation of all ordera
+	 */
+	@GetMapping(BASE_PATH + "/orders")
+	public List<Order> getOrders() {
+		return service.findAll();
+	}
 
-    /**
-     * REST API method to provide GET access to a specific orders, as indicated
-     * by the path variable provided (the name of the recipe desired)
-     *
-     * @param id
-     *            order id
-     * @return response to the request
-     */
-    @GetMapping ( BASE_PATH + "/orders/{id}" )
-    public ResponseEntity getOrder ( @PathVariable ( "id" ) final Long id ) {
-        final Order order = service.findById( id );
-        return null == order
-                ? new ResponseEntity( errorResponse( "No order found with id: " + id ), HttpStatus.NOT_FOUND )
-                : new ResponseEntity( order, HttpStatus.OK );
-    }
+	/**
+	 * REST API method to provide GET access to a specific orders, as indicated by
+	 * the path variable provided (the name of the recipe desired)
+	 *
+	 * @param id order id
+	 * @return response to the request
+	 */
+	@GetMapping(BASE_PATH + "/orders/{id}")
+	public ResponseEntity getOrder(@PathVariable("id") final Long id) {
+		final Order order = service.findById(id);
+		return null == order ? new ResponseEntity(errorResponse("No order found with id: " + id), HttpStatus.NOT_FOUND)
+				: new ResponseEntity(order, HttpStatus.OK);
+	}
 
-    /**
-     * REST API method to allow creating a Order from the CoffeeMaker's
-     * Inventory, by making a PUT request to the API endpoint and indicating the
-     * order to be updated (as a path variable)
-     *
-     * @param order
-     *            The order we need to add
-     * @return Success if the order could be added
-     */
-    @PostMapping ( BASE_PATH + "/orders" )
-    public ResponseEntity placeOrder ( @RequestBody final Order order ) {
+	/**
+	 * REST API method to allow creating a Order from the CoffeeMaker's Inventory,
+	 * by making a PUT request to the API endpoint and indicating the order to be
+	 * updated (as a path variable)
+	 *
+	 * @param order The order we need to add
+	 * @return Success if the order could be added
+	 */
+	@PostMapping(BASE_PATH + "/orders")
+	public ResponseEntity placeOrder(@RequestBody final Order order) {
 
-        final Order o = new Order( order.getRecipes(), order.getPayment() );
+		final Order o = new Order(order.getRecipes(), order.getPayment());
 
-        service.save( o );
+		service.save(o);
 
-        return new ResponseEntity( successResponse( o.getId() + " successfully placed" ), HttpStatus.OK );
-    }
+		return new ResponseEntity(successResponse(o.getId() + " successfully placed"), HttpStatus.OK);
+	}
 
-    /**
-     * REST API method to provide PUT access to a specific orders, as indicated
-     * by the path variable provided (the id of the order desired)
-     *
-     * @param id
-     *            order id
-     * @return response to the request
-     */
-    @PutMapping ( BASE_PATH + "/orders/{id}" )
-    public ResponseEntity createOrder ( @PathVariable ( "id" ) final Long id ) {
-        final Order order = service.findById( id );
-        if ( order == null ) {
-            return new ResponseEntity( errorResponse( "No order selected" ), HttpStatus.NOT_FOUND );
-        }
+	/**
+	 * REST API method to provide PUT access to a specific orders, as indicated by
+	 * the path variable provided (the id of the order desired)
+	 *
+	 * @param id order id
+	 * @return response to the request
+	 */
+	@PutMapping(BASE_PATH + "/orders/{id}")
+	public ResponseEntity createOrder(@PathVariable("id") final Long id) {
+		System.out.print("********************************hi1\n");
+		final Order order = service.findById(id);
+		System.out.print("********************************hi2\n");
+		if (order == null) {
+			System.out.print("********************************hi3\n");
+			return new ResponseEntity(errorResponse("No order selected"), HttpStatus.NOT_FOUND);
+		}
 
-        final Inventory inventory = inventoryService.getInventory();
-        if ( inventory.enoughIngredients( order ) ) {
-            inventory.useIngredients( order );
-            inventoryService.save( inventory );
-            order.setStatus( "Created" );
-            service.save( order );
-            return new ResponseEntity<String>( order.getId() + " successfully created", HttpStatus.OK );
-        }
-        order.setStatus( "Cancelled" );
-        service.save( order );
-        return new ResponseEntity( "Not enough inventory. " + order.getId() + " cancelled.", HttpStatus.CONFLICT );
-    }
+		final Inventory inventory = inventoryService.getInventory();
+		System.out.print("********************************hi4\n");
+		if (inventory.enoughIngredients(order)) {
+			System.out.print("********************************hi5\n");
+			inventory.useIngredients(order);
+			System.out.print("********************************h6\n");
+			inventoryService.save(inventory);
+			System.out.print("********************************hi7\n");
+			order.setStatus("Created");
+			System.out.print("********************************hi8\n");
+			service.save(order);
+			System.out.print("********************************hi9\n");
+			return new ResponseEntity<String>(order.getId() + " successfully created", HttpStatus.OK);
+		}
+		order.setStatus("Cancelled");
+		System.out.print("********************************hi10\n");
+		service.save(order);
+		return new ResponseEntity("Not enough inventory. " + order.getId() + " cancelled.", HttpStatus.CONFLICT);
+	}
 
-    /**
-     * REST API method to provide PUT access to a specific orders, as indicated
-     * by the path variable provided (the name of the recipe desired)
-     *
-     * @param id
-     *            order id
-     * @return response to the request
-     */
-    @DeleteMapping ( BASE_PATH + "/orders/{id}" )
-    public ResponseEntity deleteOrder ( @PathVariable ( "id" ) final Long id ) {
-        final Order order = service.findById( id );
-        if ( null == order ) {
-            return new ResponseEntity( errorResponse( "No order found for id " + id ), HttpStatus.NOT_FOUND );
-        }
-        service.delete( order );
+	/**
+	 * REST API method to provide PUT access to a specific orders, as indicated by
+	 * the path variable provided (the name of the recipe desired)
+	 *
+	 * @param id order id
+	 * @return response to the request
+	 */
+	@DeleteMapping(BASE_PATH + "/orders/{id}")
+	public ResponseEntity deleteOrder(@PathVariable("id") final Long id) {
+		final Order order = service.findById(id);
+		if (null == order) {
+			return new ResponseEntity(errorResponse("No order found for id " + id), HttpStatus.NOT_FOUND);
+		}
+		service.delete(order);
 
-        return new ResponseEntity( successResponse( id + " was deleted successfully" ), HttpStatus.OK );
-    }
+		return new ResponseEntity(successResponse(id + " was deleted successfully"), HttpStatus.OK);
+	}
 
 }
