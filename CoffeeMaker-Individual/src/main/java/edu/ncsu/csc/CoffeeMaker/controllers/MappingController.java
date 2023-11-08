@@ -121,16 +121,16 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /makecoffee, the MakeCoffeeController will return
-     * /src/main/resources/templates/makecoffee.html.
+     * On a GET request to /placeorder, the MakeCoffeeController will return
+     * /src/main/resources/templates/placeorder.html.
      *
      * @param model
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/makecoffee", "/makecoffee.html" } )
-    public String makeCoffeeForm ( final Model model ) {
-        return "makecoffee";
+    @GetMapping ( { "/placeorder", "/placeorder.html" } )
+    public String placeOrderForm ( final Model model ) {
+        return "placeorder";
     }
 
     /**
@@ -144,6 +144,19 @@ public class MappingController {
     @GetMapping ( { "/orderstatus", "/orderstatus.html" } )
     public String orderstatusPage ( final Model model ) {
         return "orderstatus";
+    }
+
+    /**
+     * On a GET request to /fulfillOrder, the MakeCoffeeController will return
+     * /src/main/resources/templates/fulfillorder.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/fulfillorder", "/fulfillorder.html" } )
+    public String fulfillOrderPage ( final Model model ) {
+        return "fulfillorder";
     }
 
 }
