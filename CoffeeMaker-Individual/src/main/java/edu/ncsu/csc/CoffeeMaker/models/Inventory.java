@@ -234,6 +234,7 @@ public class Inventory extends DomainObject {
             return false;
         }
     }
+    
 
     /**
      * Returns a string describing the current contents of the inventory.
