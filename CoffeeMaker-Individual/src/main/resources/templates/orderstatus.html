@@ -1,15 +1,206 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>Customer</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Order Status</title>
+	<style>
+		input.ng-valid {
+			background-color: lightgreen;
+		}
+
+		input.ng-dirty.ng-invalid-required,
+		input.ng-dirty.ng-invalid-number {
+			background-color: red;
+		}
+
+		input.ng-dirty.ng-invalid-min {
+			background-color: yellow;
+		}
+
+		.order-status {
+			font-size: 18px;
+			font-family: Arial, sans-serif;
+			border: 2px solid;
+			padding: 10px;
+			border-radius: 5px;
+			width: 200px;
+			text-align: center;
+		}
+
+		.order-status-inprogress {
+			background-color: yellow;
+			color: black;
+		}
+
+		.order-status-completed {
+			background-color: lightgreen;
+			color: black;
+		}
+
+		.order-status-cancelled {
+			background-color: red;
+			color: white;
+		}
+	</style>
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" href="css/app.css" />
 </head>
+
 <body>
-	<h1>Order Status works!</h1>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
 
-	<ul>
-		<br /> <a href="/customer">Home</a>
+	<script>
+		/*<![CDATA[*/
+		var app = angular.module('myApp', []);
+		app.controller('orderStatusCtrl', function ($scope, $http, $q) {
+			console.log("Hit!");
+			$scope.orders = [];
+			var orderIdToView = "";
+			$scope.recipesInOrder = {};
+			$scope.selectedOrderStatus = "";
 
-	</ul>
+
+
+
+			$scope.getOrders = function () {
+				// in the future, change to a specific customers
+				$http.get("/api/v1/orders").then(function (response) {
+					$scope.orders = response.data;
+
+					console.log($scope.orders);
+
+				}, function (rejection) {
+					console.error("Error while getting orders");
+				})
+			}
+
+			$scope.selectOrder = function (orderId) {
+
+				$scope.recipesInOrder = {};
+				$scope.orderIdToView = orderId;
+				console.log("Order ID to View: " + $scope.orderIdToView);
+
+				$http.get("/api/v1/orders/" + $scope.orderIdToView).then(function (response) {
+
+					console.log(response.data);
+
+					$scope.selectedOrderStatus = response.data.status;
+
+					for (var i = 0; i < response.data.recipes.length; i++) {
+
+
+						var recipeName = response.data.recipes[i].name;
+						console.log(recipeName);
+
+
+						// Check if the recipe name exists as a key in the hashmap
+						if ($scope.recipesInOrder[recipeName] !== undefined) {
+							// Increment the amount if the recipe name already exists
+							$scope.recipesInOrder[recipeName] += 1;
+						} else {
+							// Add the recipe name with the amount if it doesn't exist in the hashmap
+							console.log("Did not find current recipe");
+							$scope.recipesInOrder[recipeName] = 1;
+
+						}
+
+						console.log($scope.recipesInOrder);
+
+
+
+					}
+
+				}, function (rejection) {
+					console.error("Error while getting Order Information");
+				})
+
+			}
+
+			$scope.getOrders();
+
+
+
+
+			$scope.reset = function () {
+				$scope.getOrders();
+
+				if (undefined != $scope.pickRecipe) {
+					$scope.pickRecipe.$setPristine();
+				}
+
+			}
+
+
+			$scope.submit = function () {
+				$scope.reset();
+			}
+
+
+		});
+		/*]]>*/
+	</script>
+
+
+
+	<div ng-app="myApp" class="generic-container ng-cloak" ng-controller="orderStatusCtrl as ctrl">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="lead">View Order Status</span>
+			</div>
+
+			<div class="formcontainer">
+				<form ng-submit="submit()" name="orderStatus" class="form-horizontal">
+					<div style="padding-bottom: 5px;">
+						<span class="lead">Select an Order to View</span>
+					</div>
+
+
+					<div class="row" ng-repeat="order in orders">
+						<label style="padding-left: 30px;">
+							<input type="radio" ng-model="$parent.selectedOrder" ng-click="selectOrder(order.id)"
+								value="{{order.id}}">
+							{{order.id}}
+						</label>
+
+
+					</div>
+
+					<br>
+					<div>
+						<span class="lead">View Status</span>
+						<div ng-repeat="(recipe, count) in recipesInOrder">
+							<p>{{ recipe }}: {{ count }}</p>
+						</div>
+
+
+						<div>
+							<div class="order-status" ng-show="selectedOrder" ng-class="'order-status-' + selectedOrderStatus.toLowerCase().split(' ').join('')">
+								Order Status: {{ selectedOrderStatus }}
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-actions floatRight">
+								<input type="submit" value="Done" class="btn btn-primary btn-sm"
+									ng-disabled="orderStatus.$invalid" />
+							</div>
+						</div>
+
+				</form>
+
+
+
+			</div>
+			<div ng-show="success">Recipe Successfully Updated</div>
+			<div ng-show="failure">Error while updating recipe.</div>
+		</div>
+	</div>
+
+	<a href="/index">Home</a>
+	</div>
+
+
+
 </body>
+
 </html>

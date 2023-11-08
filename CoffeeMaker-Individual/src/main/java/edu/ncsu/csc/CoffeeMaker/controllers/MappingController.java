@@ -26,8 +26,7 @@ public class MappingController {
     public String index ( final Model model ) {
         return "index";
     }
-    
-    
+
     /**
      * On a GET request to /staff, the StaffController will return
      * /src/main/resources/templates/staff.html.
@@ -36,11 +35,10 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/staff", "/staff.html" } )
+    @GetMapping ( { "/staff", "staff.html" } )
     public String staffPage ( final Model model ) {
         return "staff";
     }
-
 
     /**
      * On a GET request to /recipe, the RecipeController will return
@@ -95,7 +93,7 @@ public class MappingController {
     public String inventoryForm ( final Model model ) {
         return "inventory";
     }
-    
+
     /**
      * On a GET request to /vieworder, the EditRecipeController will return
      * /src/main/resources/templates/editrecipe.html.
@@ -109,10 +107,6 @@ public class MappingController {
         return "vieworder";
     }
 
-    
-    
-    
-    
     /**
      * On a GET request to /staff, the CustomerController will return
      * /src/main/resources/templates/staff.html.
@@ -121,12 +115,11 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/customer", "/customer.html" } )
+    @GetMapping ( { "/customer", "customer.html" } )
     public String customerPage ( final Model model ) {
         return "customer";
     }
-    
-    
+
     /**
      * On a GET request to /makecoffee, the MakeCoffeeController will return
      * /src/main/resources/templates/makecoffee.html.
@@ -139,8 +132,7 @@ public class MappingController {
     public String makeCoffeeForm ( final Model model ) {
         return "makecoffee";
     }
-    
-    
+
     /**
      * On a GET request to /orderstatus, the MakeCoffeeController will return
      * /src/main/resources/templates/makecoffee.html.
