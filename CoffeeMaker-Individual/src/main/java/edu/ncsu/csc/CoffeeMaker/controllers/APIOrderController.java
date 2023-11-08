@@ -114,15 +114,35 @@ public class APIOrderController extends APIController {
 
         final Inventory inventory = inventoryService.getInventory();
         if ( inventory.enoughIngredients( order ) ) {
-            inventory.useIngredients( order );
-            inventoryService.save( inventory );
-            order.setStatus( "Created" );
-            service.save( order );
-            return new ResponseEntity<String>( order.getId() + " successfully created", HttpStatus.OK );
+            // if status is placed, change to in progress and use ingredients
+            // and
+            // save
+            // else if status is in progress, change status to created
+            if ( order.getStatus().equals( "Placed" ) ) {
+                inventory.useIngredients( order );
+                inventoryService.save( inventory );
+                order.setStatus( "In progress" );
+
+                service.save( order );
+                return new ResponseEntity( successResponse( "Order " + order.getId() + " is in progress" ),
+                        HttpStatus.OK );
+            }
+            else if ( order.getStatus().equals( "In progress" ) ) {
+                order.setStatus( "Ready for pickup" );
+
+                service.save( order );
+                return new ResponseEntity( successResponse( "Order " + order.getId() + " is ready for pickup" ),
+                        HttpStatus.OK );
+            }
+
         }
-        order.setStatus( "Cancelled" );
-        service.save( order );
-        return new ResponseEntity( "Not enough inventory. " + order.getId() + " cancelled.", HttpStatus.CONFLICT );
+        else {
+            order.setStatus( "Cancelled" );
+            service.save( order );
+            return new ResponseEntity( "Not enough inventory. " + order.getId() + " cancelled.", HttpStatus.CONFLICT );
+        }
+
+        return new ResponseEntity( "Erorr with finding order", HttpStatus.CONFLICT );
     }
 
     /**
