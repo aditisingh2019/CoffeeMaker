@@ -1,6 +1,6 @@
 body, #mainWrapper {
 	height: 70%;
-	background-color: rgb(245, 245, 245);
+	background-color: rgb(255, 227, 200);
 }
 
 body, .form-control {
@@ -17,9 +17,12 @@ body, .form-control {
 }
 
 .formcontainer {
-	background-color: #DAE8E8;
+	background-color: rgb(255,255,255);
 	padding: 20px;
+    align-self: center;
+    width: 60%; /* Adjust the width to your preference */
 }
+	
 
 .tablecontainer {
 	padding-left: 20px;
@@ -31,10 +34,10 @@ body, .form-control {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	padding: 20px;
-	background-color: #EAE7E7;
+	background-color: #FFFFFF;
 	border: 1px solid #ddd;
-	border-radius: 4px;
-	box-shadow: 0 0 30px black;
+	border-radius: 2px;
+	align-self: center;
 }
 
 .custom-width {

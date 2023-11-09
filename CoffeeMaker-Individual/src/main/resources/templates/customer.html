@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+</div>
+<title>Customer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<head>
+	<title>Customer</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			text-align: center;
+			font-family: Arial, sans-serif;
+		}
+
+		h1 {
+			font-size: 24px;
+			font-family: Arial, sans-serif;
+			margin-top: 50px;
+		}
+
+		h2 {
+			font-size: 20px;
+			font-family: Arial, sans-serif;
+		}
+
+		.button-container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: 20px;
+		}
+
+		.button-container a {
+			display: block;
+			margin: 10px;
+			padding: 10px 20px;
+			background-color: #654321;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			border: none;
+			border-radius: 5px;
+
+		}
+
+		.logout-button {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			padding: 10px 20px;
+			background-color: #A52A2A;
+			color: white;
+			text-decoration: none;
+			border: none;
+			border-radius: 5px;
+		}
+
+		.button-box {
+			background-color: #FFF5E1;
+			border: 2px solid #654321;
+			border-radius: 10px;
+			padding: 20px;
+			width: fit-content;
+			margin: 20px auto;
+			text-align: center;
+		}
+
+		.button-box-text {
+			font-size: 18px;
+			margin-top: 10px;
+			font-weight: bold;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<img src="logo.png" alt="Logo Icon">
+	<h1>Welcome to Brew Haven</h1>
+
+	<div class="button-box">
+		<div class="button-box-text">
+			<p>Staff</p>
+		</div>
+		<div class="button-container">
+			<a href="placeorder.html">Place Order</a>
+			<a href="orderstatus.html">View Order Status</a>
+		</div>
+
+
+	</div>
+
+
+	<a href="/index" class="logout-button">Logout</a>
+</body>
+
+</html>
