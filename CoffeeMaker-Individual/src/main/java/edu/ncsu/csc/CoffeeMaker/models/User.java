@@ -198,4 +198,13 @@ public class User extends DomainObject {
 		orders.remove(order);
 	}
 
+	/**
+	 * Adds an order to the list of orders of the specified user
+	 *
+	 * @param order
+	 */
+	public void addOrder(Order order) {
+		orders.add(order);
+	}
+
 }
