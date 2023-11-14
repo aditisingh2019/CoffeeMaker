@@ -69,6 +69,21 @@ public class APIUserController extends APIController {
 	}
 
 	/**
+	 * REST API method to allow creating a User by making a POST request to the API
+	 * endpoint and indicating the order to be updated (as a path variable)
+	 *
+	 * @param order The user we need to add
+	 * @return Success if the order could be added
+	 */
+	@PostMapping(BASE_PATH + "/users")
+	public ResponseEntity addUser(@RequestBody final User user) {
+
+		final User u = new User(user.getId(), user.getUserName(), user.getPasswordHash());
+		userService.save(user);
+		return new ResponseEntity(successResponse(u.getId() + " successfully placed"), HttpStatus.OK);
+	}
+
+	/**
 	 * REST API method to allow a user to place an Order from the CoffeeMaker's
 	 * Inventory, by making a POST request to the API endpoint and indicating the
 	 * order to be updated (as a path variable)
