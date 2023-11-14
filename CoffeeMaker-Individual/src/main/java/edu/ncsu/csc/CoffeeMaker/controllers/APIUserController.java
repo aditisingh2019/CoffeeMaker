@@ -26,83 +26,93 @@ import edu.ncsu.csc.CoffeeMaker.services.UserService;
  * @author Aditi Singh
  *
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings ( { "unchecked", "rawtypes" } )
 @RestController
 public class APIUserController extends APIController {
 
-	/**
-	 * UserService object, to be autowired in by Spring to allow for manipulating
-	 * the User model
-	 */
-	@Autowired
-	private UserService userService;
+    /**
+     * UserService object, to be autowired in by Spring to allow for
+     * manipulating the User model
+     */
+    @Autowired
+    private UserService  userService;
 
-	@Autowired
-	private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-	/**
-	 * REST API method to provide GET access to a specific users, as indicated by
-	 * the path variable provided (the name of the user desired)
-	 *
-	 * @param id user id
-	 * @return response to the request
-	 */
-	@GetMapping(BASE_PATH + "/users/{id}")
-	public ResponseEntity getUser(@PathVariable("id") final Long id) {
-		final User user = userService.findById(id);
-		return null == user ? new ResponseEntity(errorResponse("No user found with id: " + id), HttpStatus.NOT_FOUND)
-				: new ResponseEntity(user, HttpStatus.OK);
-	}
+    /**
+     * REST API method to provide GET access to a specific users, as indicated
+     * by the path variable provided (the name of the user desired)
+     *
+     * @param id
+     *            user id
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/users/{id}" )
+    public ResponseEntity getUser ( @PathVariable ( "id" ) final Long id ) {
+        final User user = userService.findById( id );
+        return null == user
+                ? new ResponseEntity( errorResponse( "No user found with id: " + id ), HttpStatus.NOT_FOUND )
+                : new ResponseEntity( user, HttpStatus.OK );
+    }
 
-	/**
-	 * REST API method to provide GET access to a specific user's orders, as
-	 * indicated by the path variable provided (the name of the user desired)
-	 *
-	 * @param id user id
-	 * @return response to the request
-	 */
-	@GetMapping(BASE_PATH + "/users/{id}/orders")
-	public ResponseEntity getUserOrders(@PathVariable("id") final Long id) {
-		final User user = userService.findById(id);
-		return null == user ? new ResponseEntity(errorResponse("No user found with id: " + id), HttpStatus.NOT_FOUND)
-				: new ResponseEntity(user.getOrders(), HttpStatus.OK);
-	}
+    /**
+     * REST API method to provide GET access to a specific user's orders, as
+     * indicated by the path variable provided (the name of the user desired)
+     *
+     * @param id
+     *            user id
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/users/{id}/orders" )
+    public ResponseEntity getUserOrders ( @PathVariable ( "id" ) final Long id ) {
+        final User user = userService.findById( id );
+        return null == user
+                ? new ResponseEntity( errorResponse( "No user found with id: " + id ), HttpStatus.NOT_FOUND )
+                : new ResponseEntity( user.getOrders(), HttpStatus.OK );
+    }
 
-	/**
-	 * REST API method to allow creating a User by making a POST request to the API
-	 * endpoint and indicating the order to be updated (as a path variable)
-	 *
-	 * @param order The user we need to add
-	 * @return Success if the order could be added
-	 */
-	@PostMapping(BASE_PATH + "/users")
-	public ResponseEntity addUser(@RequestBody final User user) {
+    /**
+     * REST API method to allow creating a User by making a POST request to the
+     * API endpoint and indicating the order to be updated (as a path variable)
+     *
+     * @param order
+     *            The user we need to add
+     * @return Success if the order could be added
+     */
+    @PostMapping ( BASE_PATH + "/users" )
+    public ResponseEntity addUser ( @RequestBody final User user ) {
 
-		final User u = new User(user.getId(), user.getUserName(), user.getPasswordHash());
-		userService.save(user);
-		return new ResponseEntity(successResponse(u.getId() + " successfully placed"), HttpStatus.OK);
-	}
+        // final User u = new User(user.getId(), user.getUserName(),
+        // user.getPasswordHash());
+        final User u = new User( user.getUserName(), user.getPasswordHash() );
 
-	/**
-	 * REST API method to allow a user to place an Order from the CoffeeMaker's
-	 * Inventory, by making a POST request to the API endpoint and indicating the
-	 * order to be updated (as a path variable)
-	 *
-	 * @param order The order we need to add
-	 * @return Success if the order could be added
-	 */
-	@PostMapping(BASE_PATH + "/users/{userID}/orders")
-	public ResponseEntity placeUsersOrder(@RequestBody final Order order, @PathVariable("userID") final Long userID) {
+        userService.save( user );
+        return new ResponseEntity( successResponse( u.getId() + " successfully placed" ), HttpStatus.OK );
+    }
 
-		final User user = userService.findById(userID);
-		if (null == user) {
-			return new ResponseEntity(errorResponse("No user found with id: " + userID), HttpStatus.NOT_FOUND);
-		}
-		final Order o = new Order(order.getRecipes(), order.getPayment(), order.getPrice());
-		user.addOrder(order);
-		orderService.save(order);
-		userService.save(user);
-		return new ResponseEntity(successResponse(o.getId() + " successfully placed"), HttpStatus.OK);
-	}
+    /**
+     * REST API method to allow a user to place an Order from the CoffeeMaker's
+     * Inventory, by making a POST request to the API endpoint and indicating
+     * the order to be updated (as a path variable)
+     *
+     * @param order
+     *            The order we need to add
+     * @return Success if the order could be added
+     */
+    @PostMapping ( BASE_PATH + "/users/{userID}/orders" )
+    public ResponseEntity placeUsersOrder ( @RequestBody final Order order,
+            @PathVariable ( "userID" ) final Long userID ) {
+
+        final User user = userService.findById( userID );
+        if ( null == user ) {
+            return new ResponseEntity( errorResponse( "No user found with id: " + userID ), HttpStatus.NOT_FOUND );
+        }
+        final Order o = new Order( order.getRecipes(), order.getPayment(), order.getPrice() );
+        user.addOrder( order );
+        orderService.save( order );
+        userService.save( user );
+        return new ResponseEntity( successResponse( o.getId() + " successfully placed" ), HttpStatus.OK );
+    }
 
 }
