@@ -147,6 +147,19 @@ public class MappingController {
     }
 
     /**
+     * On a GET request to /registry, the MakeCoffeeController will return
+     * /src/main/resources/templates/registry.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/registry", "/registry.html" } )
+    public String registration ( final Model model ) {
+        return "registry";
+    }
+
+    /**
      * On a GET request to /fulfillOrder, the MakeCoffeeController will return
      * /src/main/resources/templates/fulfillorder.html.
      *

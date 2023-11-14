@@ -39,6 +39,21 @@
 			cursor: pointer;
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
+
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.div1{
+			width: 90%;
+			height: 90%;
+			overflow: auto;
+		}
 	</style>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -122,7 +137,7 @@
 				});
 				//console.log(total);
 				//return total;
-				if (total == null || total == NaN || isNaN(total)){
+				if (total == null || total == NaN || isNaN(total)) {
 					$scope.isNull = true;
 				}
 				$scope.totalAmount = total;
@@ -131,7 +146,7 @@
 			};
 
 			$scope.updateRecipeAmount = function (recipe, amount) {
-				
+
 				if (amount >= 1 && amount != null) {
 					$scope.recipePrices[recipe.id] = amount * recipe.price;
 				}
@@ -148,12 +163,12 @@
 	</script>
 
 	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="recipesCtrl">
-		<h1>Coffee Recipes</h1>
-		<div>
+		<h1 align="center">Coffee Recipes</h1>
+		<div class = "div1">
 			<ul>
 				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
 						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
-						<input type="number" ng-model="recipeAmount" min = "1"
+						<input type="number" ng-model="recipeAmount" min="1"
 							ng-change="updateRecipeAmount(recipe, recipeAmount)" />
 						<!--
 						<button ng-click = "updateRecipeAmount(recipe, recipeAmount)">Update Amount </button>
@@ -163,7 +178,7 @@
 
 			<button class="btn btn-primary btn-sm" ng-click="calculateTotal()">Preview Order </button>
 
-			
+
 			<div ng-show="isNull">
 				<div class="alert-box">
 					<h5>Error!</h5>
@@ -173,7 +188,7 @@
 					<button onclick="window.location.href='makecoffee.html';">Okay</button>
 				</div>
 			</div>
-			
+
 			<h5>Subtotal: ${{ totalAmount }}</h5>
 
 			<br />
