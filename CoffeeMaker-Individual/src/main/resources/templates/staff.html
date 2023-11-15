@@ -72,8 +72,13 @@
 				var searchParams = new URLSearchParams(window.location.search);
 				return searchParams.get(param);
 			}
-			var username = $scope.getCurrentUser('user');
-			console.log(username);
+			var id = $scope.getCurrentUser('user');
+			console.log(id);
+			
+			$http.get("/api/v1/users/"+ id).then(function (response) {
+				$scope.user = response.data;
+				console.log("Check User:", $scope.user);
+			});
 
 
 		});
@@ -86,7 +91,7 @@
 <body>
 	<img src="logo.png" alt="Logo Icon">
 	<h1>Welcome to Brew Haven</h1>
-	<p>Hey There,<span th:text="${username}">User</span>! </p>
+	<p>Hey There, {{user.userName}}! </p>
 
 	<div class="button-container">
 		<a href="inventory.html">Update Inventory</a>
