@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class User extends DomainObject {
 
-    /** User's id. */
+    /** User id */
     @Id
     @GeneratedValue
     private Long              id;
@@ -31,11 +31,11 @@ public class User extends DomainObject {
     private final List<Order> orders;
 
     /** User's username for authentication. */
-    public String             userName;
+    private String            userName;
     /** User's password for authentication. */
-    public String             passwordHash;
+    private String            passwordHash;
     /** User's type for permissions. */
-    public String             userType;
+    private String            userType;
 
     /**
      * Constructs an instance of a User.
@@ -48,10 +48,10 @@ public class User extends DomainObject {
      *            the password of the USer
      */
     public User () {
-        setId( id );
-        setUserName( userName );
-        setPasswordHash( passwordHash );
-        setUserType( "None" );
+        // setId( id );
+        // setUserName( userName );
+        // setPasswordHash( passwordHash );
+        // setUserType( "None" );
         this.orders = new ArrayList<Order>();
     }
 
@@ -66,17 +66,18 @@ public class User extends DomainObject {
      *            the password of the USer
      */
     public User ( final long id, final String userName, final String passwordHash ) {
-        setId( id );
+        // setId( id );
         setUserName( userName );
         setPasswordHash( passwordHash );
         setUserType( "None" );
         this.orders = new ArrayList<Order>();
     }
 
-    public User ( final String userName2, final String passwordHash2 ) {
+    public User ( final List<Order> orders, final String userName2, final String passwordHash2 ) {
         setUserName( userName2 );
         setPasswordHash( passwordHash2 );
-        this.orders = new ArrayList<Order>();
+        setUserType( "None" );
+        this.orders = orders;
 
     }
 
@@ -91,10 +92,10 @@ public class User extends DomainObject {
     }
 
     /**
-     * Sets the User's id.
+     * Set the ID of the user (Used by Hibernate)
      *
      * @param id
-     *            the id to set
+     *            the ID
      */
     public void setId ( final Long id ) {
         this.id = id;

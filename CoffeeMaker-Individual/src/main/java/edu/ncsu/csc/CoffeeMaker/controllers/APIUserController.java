@@ -1,5 +1,7 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,12 +85,10 @@ public class APIUserController extends APIController {
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity addUser ( @RequestBody final User user ) {
 
-        // final User u = new User(user.getId(), user.getUserName(),
-        // user.getPasswordHash());
-        final User u = new User( user.getUserName(), user.getPasswordHash() );
+        final User u = new User( user.getOrders(), user.getUserName(), user.getPasswordHash() );
 
-        userService.save( user );
-        return new ResponseEntity( successResponse( u.getId() + " successfully placed" ), HttpStatus.OK );
+        userService.save( u );
+        return new ResponseEntity( successResponse( " successfully added user with id " + u.getId() ), HttpStatus.OK );
     }
 
     /**
@@ -113,6 +113,16 @@ public class APIUserController extends APIController {
         orderService.save( order );
         userService.save( user );
         return new ResponseEntity( successResponse( o.getId() + " successfully placed" ), HttpStatus.OK );
+    }
+
+    /**
+     * REST API method to provide GET access to all users in the system
+     *
+     * @return JSON representation of all users
+     */
+    @GetMapping ( BASE_PATH + "/users" )
+    public List<User> getAllUsers () {
+        return userService.findAll();
     }
 
 }

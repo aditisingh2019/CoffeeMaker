@@ -60,11 +60,6 @@ public class UserTest {
     }
 
     @Test
-    public void testUserId () {
-        assertEquals( 1L, user.getId().longValue() );
-    }
-
-    @Test
     public void testUserName () {
         assertEquals( "JohnDoe", user.getUserName() );
         user.setUserName( "JaneSmith" );
