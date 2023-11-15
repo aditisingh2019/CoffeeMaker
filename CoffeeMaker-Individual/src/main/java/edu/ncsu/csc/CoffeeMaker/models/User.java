@@ -73,10 +73,10 @@ public class User extends DomainObject {
         this.orders = new ArrayList<Order>();
     }
 
-    public User ( final List<Order> orders, final String userName2, final String passwordHash2 ) {
+    public User ( final List<Order> orders, final String userName2, final String passwordHash2, final String type ) {
         setUserName( userName2 );
         setPasswordHash( passwordHash2 );
-        setUserType( "None" );
+        setUserType( type );
         this.orders = orders;
 
     }

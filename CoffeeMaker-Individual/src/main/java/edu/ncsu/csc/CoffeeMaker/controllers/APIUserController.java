@@ -87,7 +87,7 @@ public class APIUserController extends APIController {
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity addUser ( @RequestBody final User user ) {
 
-        final User u = new User( user.getOrders(), user.getUserName(), user.getPasswordHash() );
+        final User u = new User( user.getOrders(), user.getUserName(), user.getPasswordHash(), user.getUserType() );
 
         userService.save( u );
         return new ResponseEntity( successResponse( " successfully added user with id " + u.getId() ), HttpStatus.OK );
