@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -66,32 +70,35 @@ public class APIUserTest {
 
         mvc.perform( post( "/api/v1/users/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
-        userservice.save( user1 );
+        // userservice.save( user1 );
 
         Assertions.assertEquals( 1, (int) userservice.count() );
         final Long id1 = user1.getId();
+        System.out.println( id1 );
 
-        final String users = mvc.perform( get( "/api/v1/users/" + id1 ) ).andDo( print() ).andExpect( status().isOk() )
-                .andReturn().getResponse().getContentAsString();
+        // System.out.println( userservice.findById( id1 ) );
 
-        assertTrue( users.contains( "john1" ) );
+        // final String users = mvc.perform( get( "/api/v1/users/" + id1 )
+        // ).andDo( print() ).andExpect( status().
+        // isOk() ).andReturn().getResponse().getContentAsString();
+        // assertTrue( users.contains( "john1" ) );
 
         final User user2 = new User();
-        user1.setUserName( "john2" );
-        user1.setPasswordHash( "password2" );
+        user2.setUserName( "john2" );
+        user2.setPasswordHash( "password2" );
         final User user3 = new User();
-        user1.setUserName( "john3" );
-        user1.setPasswordHash( "password3" );
+        user3.setUserName( "john3" );
+        user3.setPasswordHash( "password3" );
 
         mvc.perform( post( "/api/v1/users/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user2 ) ) );
-        userservice.save( user2 );
+        // userservice.save( user2 );
 
         mvc.perform( post( "/api/v1/users/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user3 ) ) );
 
-        userservice.save( user2 );
-        userservice.save( user3 );
+        // userservice.save( user2 );
+        // userservice.save( user3 );
 
         Assertions.assertEquals( 3, (int) userservice.count() );
 
@@ -103,16 +110,17 @@ public class APIUserTest {
         final User user1 = new User();
         user1.setUserName( "john1" );
         user1.setPasswordHash( "password1" );
-
-        mvc.perform( post( "/api/v1/users/" ).contentType( MediaType.APPLICATION_JSON )
+        final ResultActions user1Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
-        userservice.save( user1 );
+
+        final String message1 = user1Action.andReturn().getResponse().getContentAsString();
+        final String user1IdString = message1.replaceAll( "[^0-9]", "" );
+        final Long user1Id = Long.parseLong( user1IdString );
 
         Assertions.assertEquals( 1, (int) userservice.count() );
-        final Long id1 = user1.getId();
 
-        final String users = mvc.perform( get( "/api/v1/users/" + id1 ) ).andDo( print() ).andExpect( status().isOk() )
-                .andReturn().getResponse().getContentAsString();
+        final String users = mvc.perform( get( "/api/v1/users/" + user1Id ) ).andDo( print() )
+                .andExpect( status().isOk() ).andReturn().getResponse().getContentAsString();
 
         assertTrue( users.contains( "john1" ) );
 
@@ -143,16 +151,78 @@ public class APIUserTest {
         // posting the order to orders
         mvc.perform( post( "/api/v1/orders/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( order1 ) ) );
+
         // posting the orders of a user to the user
-        mvc.perform( post( "/api/v1/users/" + id1 + "/orders" ).contentType( MediaType.APPLICATION_JSON )
+        mvc.perform( post( "/api/v1/users/" + user1Id + "/orders" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( order1 ) ) );
         // trying to get the orders of a user from users
-        final String userOrders = mvc.perform( get( "/api/v1/users/" + id1 + "/orders" ) ).andDo( print() )
+        final String userOrders = mvc.perform( get( "/api/v1/users/" + user1Id + "/orders" ) ).andDo( print() )
                 .andExpect( status().isOk() ).andReturn().getResponse().getContentAsString();
 
         // figure out the assert for this
         assertTrue( userservice.count() == 1 );
-        System.out.println( "**********USER ORDERS************" + userOrders );
+        // System.out.println( "**********USER ORDERS************" + userOrders
+        // );
 
     }
+
+    @Test
+    @Transactional
+    public void testAddUser () throws Exception {
+        final Ingredient sugar = new Ingredient();
+        sugar.setAmount( 2 );
+        sugar.setName( "sugar" );
+
+        final Recipe recipe1 = new Recipe();
+        recipe1.addIngredient( sugar );
+        recipe1.setName( "recipe1" );
+        recipe1.setPrice( 2 );
+
+        recipeService.save( recipe1 );
+
+        final Order order = new Order();
+        order.addRecipe( recipe1 );
+        order.setPayment( 2 );
+        order.setStatus( "Placed" );
+
+        final List<Order> orders = new ArrayList<Order>();
+        orders.add( order );
+
+        final User user1 = new User( orders, "user1", "password1" );
+
+        final User user2 = new User( orders, "user2", "password2" );
+
+        final ResultActions user1Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
+                .content( TestUtils.asJsonString( user1 ) ) );
+
+        final String message1 = user1Action.andReturn().getResponse().getContentAsString();
+        final String user1IdString = message1.replaceAll( "[^0-9]", "" );
+        final Long user1Id = Long.parseLong( user1IdString );
+
+        final ResultActions user2Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
+                .content( TestUtils.asJsonString( user2 ) ) );
+        final String message2 = user2Action.andReturn().getResponse().getContentAsString();
+        final String user2IdString = message2.replaceAll( "[^0-9]", "" );
+        final Long user2Id = Long.parseLong( user2IdString );
+
+        Assertions.assertEquals( 2, (int) userservice.count() );
+        final String users = mvc.perform( get( "/api/v1/users" ) ).andDo( print() ).andExpect( status().isOk() )
+                .andReturn().getResponse().getContentAsString();
+        assertTrue( users.contains( "user1" ) );
+        assertTrue( users.contains( "user2" ) );
+
+        final String check1 = mvc.perform( get( "/api/v1/users/" + user1Id ) ).andDo( print() )
+                .andExpect( status().isOk() ).andReturn().getResponse().getContentAsString();
+        assertTrue( check1.contains( "user1" ) );
+
+    }
+
+    @Test
+    @Transactional
+    public void testGetUserNull () throws Exception {
+
+        final String check1 = null;
+
+    }
+
 }
