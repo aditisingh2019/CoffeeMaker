@@ -45,4 +45,18 @@ public class UserService extends Service<User, Long> {
         return userRepository.findById( id ).get();
     }
 
+    /**
+     * Finds an user object with the provided user name. Spring will generate
+     * code to make this happen.
+     *
+     * @param username
+     *            String user name of an user
+     * @return Found user, null if none.
+     */
+    public User findByUsername ( final String username ) {
+
+        return userRepository.findByUsername( username );
+
+    }
+
 }

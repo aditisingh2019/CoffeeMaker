@@ -31,11 +31,11 @@ public class User extends DomainObject {
     private final List<Order> orders;
 
     /** User's username for authentication. */
-    private String            userName;
+    private String            username;
     /** User's password for authentication. */
-    private String            passwordHash;
+    private String            password;
     /** User's type for permissions. */
-    private String            userType;
+    private String            role;
 
     /**
      * Constructs an instance of a User.
@@ -67,16 +67,16 @@ public class User extends DomainObject {
      */
     public User ( final long id, final String userName, final String passwordHash ) {
         // setId( id );
-        setUserName( userName );
-        setPasswordHash( passwordHash );
-        setUserType( "None" );
+        setUsername( userName );
+        setPassword( passwordHash );
+        setRole( "None" );
         this.orders = new ArrayList<Order>();
     }
 
     public User ( final List<Order> orders, final String userName2, final String passwordHash2, final String type ) {
-        setUserName( userName2 );
-        setPasswordHash( passwordHash2 );
-        setUserType( type );
+        setUsername( userName2 );
+        setPassword( passwordHash2 );
+        setRole( type );
 
         this.orders = orders;
 
@@ -107,8 +107,8 @@ public class User extends DomainObject {
      *
      * @return the userName
      */
-    public String getUserName () {
-        return userName;
+    public String getUsername () {
+        return username;
     }
 
     /**
@@ -117,8 +117,8 @@ public class User extends DomainObject {
      * @param userName
      *            the userName to set
      */
-    public void setUserName ( final String userName ) {
-        this.userName = userName;
+    public void setUsername ( final String userName ) {
+        this.username = userName;
     }
 
     /**
@@ -126,8 +126,8 @@ public class User extends DomainObject {
      *
      * @return the passwordHash
      */
-    public String getPasswordHash () {
-        return passwordHash;
+    public String getPassword () {
+        return password;
     }
 
     /**
@@ -136,8 +136,8 @@ public class User extends DomainObject {
      * @param passwordHash
      *            the passwordHash to set
      */
-    public void setPasswordHash ( final String passwordHash ) {
-        this.passwordHash = passwordHash;
+    public void setPassword ( final String password ) {
+        this.password = password;
     }
 
     /**
@@ -160,7 +160,7 @@ public class User extends DomainObject {
      *            the new password to set this user to
      */
     public void resetPassword ( final String newPassword ) {
-        setPasswordHash( newPassword );
+        setPassword( newPassword );
     }
 
     /**
@@ -172,8 +172,8 @@ public class User extends DomainObject {
      *            the new password to update the user's profile
      */
     public void updateProfile ( final String userName, final String newPassword ) {
-        this.userName = userName;
-        this.passwordHash = newPassword;
+        this.username = userName;
+        this.password = newPassword;
     }
 
     /**
@@ -182,8 +182,8 @@ public class User extends DomainObject {
      * @param type
      *            the type to set
      */
-    public void setUserType ( final String type ) {
-        this.userType = type;
+    public void setRole ( final String role ) {
+        this.role = role;
     }
 
     /**
@@ -191,8 +191,8 @@ public class User extends DomainObject {
      *
      * @return the user type
      */
-    public String getUserType () {
-        return this.userType;
+    public String getRole () {
+        return this.role;
     }
 
     /**
