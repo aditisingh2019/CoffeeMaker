@@ -26,6 +26,8 @@ import edu.ncsu.csc.CoffeeMaker.services.UserService;
  * @author Kai Presler-Marshall
  * @author Michelle Lemons
  * @author Aditi Singh
+ * @author Harshita Gupta
+ * @author Sumaita Rahman
  *
  */
 @SuppressWarnings ( { "unchecked", "rawtypes" } )
@@ -85,8 +87,7 @@ public class APIUserController extends APIController {
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity addUser ( @RequestBody final User user ) {
 
-        final User u = new User( user.getOrders(), user.getUserName(), user.getPasswordHash() );
-
+        final User u = new User( user.getOrders(), user.getUserName(), user.getPasswordHash(), user.getUserType() );
         userService.save( u );
         return new ResponseEntity( successResponse( " successfully added user with id " + u.getId() ), HttpStatus.OK );
     }
@@ -100,7 +101,8 @@ public class APIUserController extends APIController {
      *            The order we need to add
      * @return Success if the order could be added
      */
-    @PostMapping ( BASE_PATH + "/users/{userID}/orders" )
+    @PostMapping ( BASE_PATH + "/users/{userID}/orders/" )
+
     public ResponseEntity placeUsersOrder ( @RequestBody final Order order,
             @PathVariable ( "userID" ) final Long userID ) {
 

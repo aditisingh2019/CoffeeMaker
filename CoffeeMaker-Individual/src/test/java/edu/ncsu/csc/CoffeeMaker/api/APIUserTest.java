@@ -188,9 +188,10 @@ public class APIUserTest {
         final List<Order> orders = new ArrayList<Order>();
         orders.add( order );
 
-        final User user1 = new User( orders, "user1", "password1" );
+        final User user1 = new User( orders, "user1", "password1", "Customer" );
 
-        final User user2 = new User( orders, "user2", "password2" );
+        final User user2 = new User( orders, "user2", "password2", "Customer" );
+
 
         final ResultActions user1Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
@@ -214,14 +215,6 @@ public class APIUserTest {
         final String check1 = mvc.perform( get( "/api/v1/users/" + user1Id ) ).andDo( print() )
                 .andExpect( status().isOk() ).andReturn().getResponse().getContentAsString();
         assertTrue( check1.contains( "user1" ) );
-
-    }
-
-    @Test
-    @Transactional
-    public void testGetUserNull () throws Exception {
-
-        final String check1 = null;
 
     }
 

@@ -72,7 +72,17 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 		/*<![CDATA[*/
 
 		var app = angular.module('userApp', []);
-		app.controller('userCtrl', function ($scope) {
+		app.controller('userCtrl', function ($scope, $http) {
+			
+			
+			$scope.user = {
+				orders: [],
+				userName: "",
+				passwordHash: "",
+				userType : "",
+				id : 0
+				
+			};
 
 
 			$scope.createUser = function () {
@@ -81,10 +91,28 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				var userType = document.getElementById('usertype').value;
 				var username = document.getElementById('username').value;
 				var password = document.getElementById('password').value;
-
+				
+				console.log($scope.user);
+				
+				$scope.user.userName = document.getElementById('username').value;
+				$scope.user.passwordHash = document.getElementById('password').value;
+				$scope.user.userType = document.getElementById('usertype').value;
 				console.log(userType);
 				console.log(username);
 				console.log(password);
+				
+				$http.post("/api/v1/users", $scope.user).then(
+						function (response) {
+
+							$scope.submissionSuccess = true;
+
+
+
+						}, function (errResponse) {
+							console.log(errResponse);
+							$scope.submissionFailure = true;
+							$scope.error = "Error while creating an user";
+						});
 
 
 			}

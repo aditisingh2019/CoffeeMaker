@@ -56,9 +56,43 @@
 	</style>
 </head>
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<body ng-app="userApp" ng-controller="userCtrl">
+
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+
+		var app = angular.module('userApp', []);
+		app.controller('userCtrl', function ($scope, $http, $q) {
+			
+
+			$scope.getCurrentUser = function (param) {
+				var searchParams = new URLSearchParams(window.location.search);
+				return searchParams.get(param);
+			}
+			var id = $scope.getCurrentUser('user');
+			console.log(id);
+			
+			$http.get("/api/v1/users/"+ id).then(function (response) {
+				$scope.user = response.data;
+				console.log("Check User:", $scope.user);
+			});
+
+
+		});
+
+
+
+		/*]]>*/
+	</script>
+
 <body>
 	<img src="logo.png" alt="Logo Icon">
 	<h1>Welcome to Brew Haven</h1>
+	<p>Hey There, {{user.userName}}! </p>
+
 	<div class="button-container">
 		<a href="inventory.html">Update Inventory</a>
 		<a href="recipe.html">Add a Recipe</a>

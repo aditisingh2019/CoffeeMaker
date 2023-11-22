@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Temorary Login</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" href="css/app.css" />
+	<style>
+		.alert-box {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 250px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: red;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box2 {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 200px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: green;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box button {
+			background-color: white;
+			border: 1px solid black;
+			border-radius: 2px;
+			padding: 5px 10px;
+			cursor: pointer;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.div1 {
+			width: 90%;
+			height: 90%;
+			overflow: auto;
+		}
+	</style>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<body>
+
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+
+		var app = angular.module('myApp', []);
+		app.controller('usersCtrl', function ($scope, $http, $q, $window) {
+			$http.get("/api/v1/users").then(function (response) {
+				$scope.currentUsers = response.data;
+				console.log(response.data);
+			});
+
+
+			$scope.login = function () {
+				var selectedUser = $scope.currentUsers.find(user => user.selected);
+				if (selectedUser.userType === "customer") {
+					$window.location.href = '/customer?user=' + selectedUser.id;
+				}
+				else if (selectedUser.userType === "staff") {
+					$window.location.href = '/staff?user=' + selectedUser.id;
+
+				}
+				else {
+					alert('Must select an user');
+				}
+			}
+
+
+
+
+
+		});
+
+		/*]]>*/
+	</script>
+
+	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="usersCtrl">
+		<h1 align="center">Users</h1>
+		<div class="div1">
+			<ul>
+				<li ng-repeat="user in currentUsers"><label>{{user.userName}}
+						<input type="checkbox" ng-model="user.selected" name="name" value="{{user.userName}}" />
+
+					</label></li>
+			</ul>
+
+			<button ng-click="login()">Login</button>
+
+
+		</div>
+
+
+</body>
+
+</html>

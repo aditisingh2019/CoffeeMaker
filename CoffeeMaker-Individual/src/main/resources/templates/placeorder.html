@@ -65,12 +65,29 @@
 		/*<![CDATA[*/
 
 		var app = angular.module('myApp', []);
-		app.controller('recipesCtrl', function ($scope, $http, $q) {
+		app.controller('recipesCtrl', function ($scope, $http, $q, $window) {
 			$http.get("/api/v1/recipes").then(function (response) {
 				$scope.availableRecipes = response.data;
 				console.log(response.data);
 			});
+			$scope.getCurrentUser = function (param) {
+				var searchParams = new URLSearchParams(window.location.search);
+				return searchParams.get(param);
+			}
+			var uid = $scope.getCurrentUser('user');
+			$scope.userId = uid;
 
+			console.log("Check id", uid);
+			
+			
+				//( BASE_PATH + "/users/{id}" )
+				$http.get("/api/v1/users/"+ uid).then(function (response) {
+				$scope.user = response.data;
+				console.log("Check User:",response.data);
+			});
+				
+
+			
 			$scope.isNull = false;
 			$scope.totalAmount = 0;
 			$scope.amtPaid = 0;
@@ -102,7 +119,8 @@
 				}
 				else {
 					console.log($scope.order);
-					$http.post("/api/v1/orders/", $scope.order).then(
+					//BASE_PATH + "/users/{userID}/orders"
+					$http.post("/api/v1/users/"+$scope.userId+"/orders/", $scope.order).then(
 						function (response) {
 
 							$scope.change = $scope.order.payment - $scope.totalAmount;

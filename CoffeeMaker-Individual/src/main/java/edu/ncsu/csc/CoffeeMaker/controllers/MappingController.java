@@ -3,6 +3,7 @@ package edu.ncsu.csc.CoffeeMaker.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Controller class for the URL mappings for CoffeeMaker. The controller returns
@@ -36,7 +37,9 @@ public class MappingController {
      * @return contents of the page
      */
     @GetMapping ( { "/staff", "staff.html" } )
-    public String staffPage ( final Model model ) {
+    public String staffPage ( @RequestParam ( name = "user", required = false ) final String username,
+            final Model model ) {
+        model.addAttribute( "username", username );
         return "staff";
     }
 
@@ -116,7 +119,9 @@ public class MappingController {
      * @return contents of the page
      */
     @GetMapping ( { "/customer", "customer.html" } )
-    public String customerPage ( final Model model ) {
+    public String customerPage ( @RequestParam ( name = "user", required = false ) final String username,
+            final Model model ) {
+        model.addAttribute( "username", username );
         return "customer";
     }
 
@@ -170,6 +175,11 @@ public class MappingController {
     @GetMapping ( { "/fulfillorder", "/fulfillorder.html" } )
     public String fulfillOrderPage ( final Model model ) {
         return "fulfillorder";
+    }
+
+    @GetMapping ( { "/tempLogin", "/tempLogin.html" } )
+    public String tempLogin ( final Model model ) {
+        return "tempLogin";
     }
 
 }
