@@ -88,7 +88,6 @@ public class APIUserController extends APIController {
     public ResponseEntity addUser ( @RequestBody final User user ) {
 
         final User u = new User( user.getOrders(), user.getUserName(), user.getPasswordHash(), user.getUserType() );
-
         userService.save( u );
         return new ResponseEntity( successResponse( " successfully added user with id " + u.getId() ), HttpStatus.OK );
     }
@@ -103,6 +102,7 @@ public class APIUserController extends APIController {
      * @return Success if the order could be added
      */
     @PostMapping ( BASE_PATH + "/users/{userID}/orders/" )
+
     public ResponseEntity placeUsersOrder ( @RequestBody final Order order,
             @PathVariable ( "userID" ) final Long userID ) {
 

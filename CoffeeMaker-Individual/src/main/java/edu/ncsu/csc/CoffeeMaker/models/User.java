@@ -77,6 +77,7 @@ public class User extends DomainObject {
         setUserName( userName2 );
         setPasswordHash( passwordHash2 );
         setUserType( type );
+
         this.orders = orders;
 
     }

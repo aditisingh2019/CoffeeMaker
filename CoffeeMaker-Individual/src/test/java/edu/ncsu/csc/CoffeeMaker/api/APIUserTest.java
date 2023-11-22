@@ -192,6 +192,7 @@ public class APIUserTest {
 
         final User user2 = new User( orders, "user2", "password2", "Customer" );
 
+
         final ResultActions user1Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
 
