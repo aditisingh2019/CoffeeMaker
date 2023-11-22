@@ -27,4 +27,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     Optional<User> findById ( Long id );
 
+    /**
+     * Finds a user object with the provided username. Spring will generate code
+     * to make this happen.
+     *
+     * @param username
+     *            user name of the user
+     * @return User Found user, null if none.
+     */
+
+    User findByUsername ( String username );
+
 }

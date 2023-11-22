@@ -77,9 +77,9 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			
 			$scope.user = {
 				orders: [],
-				userName: "",
-				passwordHash: "",
-				userType : "",
+				username: "",
+				password: "",
+				role : "",
 				id : 0
 				
 			};
@@ -94,9 +94,9 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				
 				console.log($scope.user);
 				
-				$scope.user.userName = document.getElementById('username').value;
-				$scope.user.passwordHash = document.getElementById('password').value;
-				$scope.user.userType = document.getElementById('usertype').value;
+				$scope.user.username = document.getElementById('username').value;
+				$scope.user.password = document.getElementById('password').value;
+				$scope.user.role = document.getElementById('usertype').value;
 				console.log(userType);
 				console.log(username);
 				console.log(password);
@@ -128,8 +128,8 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			<select id="usertype" name="usertype">
 				<option value="select">Select</option>
 
-				<option value="customer">Customer</option>
-				<option value="staff">Staff</option>
+				<option value="CUSTOMER">Customer</option>
+				<option value="STAFF">Staff</option>
 
 			</select>
 			<label for="username">Username</label>

@@ -65,8 +65,8 @@ public class APIUserTest {
     @Transactional
     public void testGetUser () throws Exception {
         final User user1 = new User();
-        user1.setUserName( "john1" );
-        user1.setPasswordHash( "password1" );
+        user1.setUsername( "john1" );
+        user1.setPassword( "password1" );
 
         mvc.perform( post( "/api/v1/users/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
@@ -84,11 +84,11 @@ public class APIUserTest {
         // assertTrue( users.contains( "john1" ) );
 
         final User user2 = new User();
-        user2.setUserName( "john2" );
-        user2.setPasswordHash( "password2" );
+        user2.setUsername( "john2" );
+        user2.setPassword( "password2" );
         final User user3 = new User();
-        user3.setUserName( "john3" );
-        user3.setPasswordHash( "password3" );
+        user3.setUsername( "john3" );
+        user3.setPassword( "password3" );
 
         mvc.perform( post( "/api/v1/users/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user2 ) ) );
@@ -108,8 +108,8 @@ public class APIUserTest {
     @Transactional
     public void testGetUserOrders () throws Exception {
         final User user1 = new User();
-        user1.setUserName( "john1" );
-        user1.setPasswordHash( "password1" );
+        user1.setUsername( "john1" );
+        user1.setPassword( "password1" );
         final ResultActions user1Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
 
@@ -153,7 +153,7 @@ public class APIUserTest {
                 .content( TestUtils.asJsonString( order1 ) ) );
 
         // posting the orders of a user to the user
-        mvc.perform( post( "/api/v1/users/" + user1Id + "/orders" ).contentType( MediaType.APPLICATION_JSON )
+        mvc.perform( post( "/api/v1/users/" + user1Id + "/orders/" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( order1 ) ) );
         // trying to get the orders of a user from users
         final String userOrders = mvc.perform( get( "/api/v1/users/" + user1Id + "/orders" ) ).andDo( print() )
@@ -191,7 +191,6 @@ public class APIUserTest {
         final User user1 = new User( orders, "user1", "password1", "Customer" );
 
         final User user2 = new User( orders, "user2", "password2", "Customer" );
-
 
         final ResultActions user1Action = mvc.perform( post( "/api/v1/users" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( user1 ) ) );
