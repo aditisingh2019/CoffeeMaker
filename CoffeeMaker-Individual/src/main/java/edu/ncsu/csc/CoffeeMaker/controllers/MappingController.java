@@ -1,9 +1,9 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Controller class for the URL mappings for CoffeeMaker. The controller returns
@@ -36,9 +36,11 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/staff", "staff.html" } )
-    public String staffPage ( @RequestParam ( name = "user", required = false ) final String username,
-            final Model model ) {
+    @GetMapping ( { "/staff/home", "staff.html" } )
+    public String staffPage ( final Authentication authentication, final Model model ) {
+
+        final String username = authentication.getName();
+
         model.addAttribute( "username", username );
         return "staff";
     }
@@ -51,7 +53,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/recipe", "/recipe.html" } )
+    @GetMapping ( { "/staff/recipe", "/recipe.html" } )
     public String addRecipePage ( final Model model ) {
         return "recipe";
     }
@@ -64,7 +66,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/deleterecipe", "/deleterecipe.html" } )
+    @GetMapping ( { "/staff/deleterecipe", "/deleterecipe.html" } )
     public String deleteRecipeForm ( final Model model ) {
         return "deleterecipe";
     }
@@ -77,7 +79,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/editrecipe", "/editrecipe.html" } )
+    @GetMapping ( { "/staff/editrecipe", "/editrecipe.html" } )
     public String editRecipeForm ( final Model model ) {
         return "editrecipe";
     }
@@ -92,7 +94,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/inventory", "/inventory.html" } )
+    @GetMapping ( { "/staff/inventory", "/inventory.html" } )
     public String inventoryForm ( final Model model ) {
         return "inventory";
     }
@@ -105,7 +107,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/vieworder", "/vieworder.html" } )
+    @GetMapping ( { "/staff/vieworder", "/vieworder.html" } )
     public String viewOrderPage ( final Model model ) {
         return "vieworder";
     }
@@ -118,9 +120,10 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/customer", "customer.html" } )
-    public String customerPage ( @RequestParam ( name = "user", required = false ) final String username,
-            final Model model ) {
+    @GetMapping ( { "/customer/home", "customer.html" } )
+    public String customerPage ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+
         model.addAttribute( "username", username );
         return "customer";
     }
@@ -133,7 +136,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/placeorder", "/placeorder.html" } )
+    @GetMapping ( { "/customer/placeorder", "placeorder.html" } )
     public String placeOrderForm ( final Model model ) {
         return "placeorder";
     }
@@ -146,7 +149,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/orderstatus", "/orderstatus.html" } )
+    @GetMapping ( { "/customer/orderstatus", "/orderstatus.html" } )
     public String orderstatusPage ( final Model model ) {
         return "orderstatus";
     }
@@ -172,7 +175,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/fulfillorder", "/fulfillorder.html" } )
+    @GetMapping ( { "/staff/fulfillorder", "/fulfillorder.html" } )
     public String fulfillOrderPage ( final Model model ) {
         return "fulfillorder";
     }
@@ -180,6 +183,11 @@ public class MappingController {
     @GetMapping ( { "/tempLogin", "/tempLogin.html" } )
     public String tempLogin ( final Model model ) {
         return "tempLogin";
+    }
+
+    @GetMapping ( { "/login", "/login.html" } )
+    public String login ( final Model model ) {
+        return "login";
     }
 
 }

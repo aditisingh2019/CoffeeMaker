@@ -17,8 +17,8 @@
 			background-color: yellow;
 		}
 	</style>
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/app.css" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
 </head>
 
 <body>
@@ -292,7 +292,7 @@
 			<div ng-show="failure">Error while adding recipe.</div>
 		</div>
 
-		<a href="/staff">Home</a>
+		<a href="/staff/home">Home</a>
 	</div>
 
 

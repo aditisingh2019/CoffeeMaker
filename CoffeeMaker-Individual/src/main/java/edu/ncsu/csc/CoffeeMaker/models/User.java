@@ -82,6 +82,15 @@ public class User extends DomainObject {
 
     }
 
+    public User ( final String userName2, final String passwordHash2, final String type ) {
+        setUsername( userName2 );
+        setPassword( passwordHash2 );
+        setRole( type );
+
+        this.orders = new ArrayList<Order>();
+
+    }
+
     /**
      * Returns the User's id.
      *

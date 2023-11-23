@@ -91,16 +91,20 @@
 <body>
 	<img src="logo.png" alt="Logo Icon">
 	<h1>Welcome to Brew Haven</h1>
-	<p>Hey There, {{user.userName}}! </p>
+	<h2>Hey there, <span th:text="${username}"></span>!</h2>
 
 	<div class="button-container">
-		<a href="inventory.html">Update Inventory</a>
-		<a href="recipe.html">Add a Recipe</a>
-		<a href="editrecipe.html">Edit Recipe</a>
-		<a href="deleterecipe.html">Delete Recipe</a>
-		<a href="fulfillorder.html">View Orders</a>
+		<a href="/staff/inventory">Update Inventory</a>
+		<a href="/staff/recipe">Add a Recipe</a>
+		<a href="/staff/editrecipe">Edit Recipe</a>
+		<a href="/staff/deleterecipe">Delete Recipe</a>
+		<a href="/staff/fulfillorder">View Orders</a>
 	</div>
-	<a href="/index" class="logout-button">Logout</a>
+	
+	
+	<form th:action="@{/logout}" method="post" >
+    	<input  class="logout-button"  type="submit" value="Logout" />
+	</form>
 </body>
 
 </html>

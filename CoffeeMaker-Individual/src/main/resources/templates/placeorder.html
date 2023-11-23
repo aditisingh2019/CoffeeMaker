@@ -4,8 +4,8 @@
 <head>
 	<title>Place an Order</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/app.css" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<style>
 		.alert-box {
 			border: 2px outset black;
@@ -244,7 +244,7 @@
 					<button onclick="window.location.href='customer.html';">Done</button>
 				</div>
 			</div>
-			<br /> <a href="/customer">Home</a>
+			<br /> <a href="/customer/home">Home</a>
 		</div>
 
 	</div>

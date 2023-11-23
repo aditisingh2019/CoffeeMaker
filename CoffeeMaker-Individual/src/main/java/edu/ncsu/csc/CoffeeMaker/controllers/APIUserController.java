@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,8 +87,10 @@ public class APIUserController extends APIController {
      */
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity addUser ( @RequestBody final User user ) {
-
-        final User u = new User( user.getOrders(), user.getUsername(), user.getPassword(), user.getRole() );
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        System.out.println( "USER FROM FRONT END" + user.toString() );
+        final User u = new User( user.getUsername(), encoder.encode( user.getPassword() ), user.getRole() );
+        System.out.println( "USER FROM BACK END" + u.toString() );
         userService.save( u );
         return new ResponseEntity( successResponse( " successfully added user with id " + u.getId() ), HttpStatus.OK );
     }
