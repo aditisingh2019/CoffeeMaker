@@ -1,9 +1,13 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import edu.ncsu.csc.CoffeeMaker.models.User;
+import edu.ncsu.csc.CoffeeMaker.services.UserService;
 
 /**
  * Controller class for the URL mappings for CoffeeMaker. The controller returns
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class MappingController {
+    @Autowired
+    private UserService userService;
 
     /**
      * On a GET request to /index, the IndexController will return
@@ -137,7 +143,10 @@ public class MappingController {
      * @return contents of the page
      */
     @GetMapping ( { "/customer/placeorder", "placeorder.html" } )
-    public String placeOrderForm ( final Model model ) {
+    public String placeOrderForm ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+        final User user = userService.findByUsername( username );
+        model.addAttribute( "userId", user.getId() );
         return "placeorder";
     }
 
@@ -149,8 +158,12 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/customer/orderstatus", "/orderstatus.html" } )
-    public String orderstatusPage ( final Model model ) {
+    @GetMapping ( { "/customer/orderstatus", "orderstatus.html" } )
+    public String orderstatusPage ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+        final User user = userService.findByUsername( username );
+        model.addAttribute( "userId", user.getId() );
+        System.out.println( user.getId() );
         return "orderstatus";
     }
 

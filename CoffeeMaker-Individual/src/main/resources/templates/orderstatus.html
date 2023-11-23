@@ -51,22 +51,35 @@
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
 
-	<script>
-		/*<![CDATA[*/
+	<script th:inline="javascript">
+		
+    	
+
 		var app = angular.module('myApp', []);
-		app.controller('orderStatusCtrl', function ($scope, $http, $q) {
-			console.log("Hit!");
+		var userId = /*[[${userId}]]*/ null;
+		app.controller('orderStatusCtrl', function ($scope, $http, $q, $window, $element) {
+			
+   		   
+
+    		// Assign the value to $scope.userId
+    		$scope.userId = userId;
+    		console.log("User ID: " + $scope.userId);
 			$scope.orders = [];
 			var orderIdToView = "";
 			$scope.recipesInOrder = {};
 			$scope.selectedOrderStatus = "";
+           
 
 
 
+
+			
+			$scope.mapping = "/api/v1/users/" + userId + "/orders";
+			console.log($scope.mapping);
 
 			$scope.getOrders = function () {
 				// in the future, change to a specific customers
-				$http.get("/api/v1/orders").then(function (response) {
+				$http.get($scope.mapping).then(function (response) {
 					$scope.orders = response.data;
 
 					console.log($scope.orders);
@@ -144,8 +157,13 @@
 
 
 
-	<div ng-app="myApp" class="generic-container ng-cloak" ng-controller="orderStatusCtrl as ctrl">
+
+	<div ng-app="myApp" class="generic-container ng-cloak" ng-controller="orderStatusCtrl as ctrl" >
+		
+	
 		<div class="panel panel-default">
+			
+			
 			<div class="panel-heading">
 				<span class="lead">View Order Status</span>
 			</div>
