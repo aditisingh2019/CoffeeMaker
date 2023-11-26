@@ -1,16 +1,149 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
+
 <head>
-<title>Welcome to the CSC326 CoffeeMaker</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Welcome to the CSC326 CoffeeMaker</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #FFF5E1;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		.header {
+			background-color: #FFF5E1;
+			padding: 10px;
+			text-align: center;
+			color: black;
+			padding-top: 30px;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.header a {
+			color: black;
+			text-decoration: none;
+			margin: 0 15px;
+		}
+		
+		.header:hover a {
+			color: white;
+			text-decoration: none;
+			margin: 0 15px;
+		}
+
+
+		.container {
+			padding: 20px;
+		}
+
+		h1 {
+			text-align: center;
+			font-family: "Lucida Handwriting", cursive;
+		}
+
+		h2 {
+			text-align: center;
+			font-family: Arial, Helvetica, sans-serif;
+
+
+		}
+
+		.container img {
+			width: 100%;
+			height: 400px;
+			object-fit: cover;
+			display: block;
+		}
+
+		.two-column-layout {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+
+		.two-column-layout>* {
+			flex: 0 0 48%;
+			margin-bottom: 20px;
+		}
+
+		.two-column-layout img {
+			width: 400px;
+			height: auto;
+			margin: 0 auto;
+			display: block;
+		}
+
+		.two-column-layout p {
+			text-align: center;
+			margin: 0 auto;
+			display: block;
+		}
+
+		button {
+			background-color: #5C3F32;
+			color: white;
+			height: 80px;
+            border-radius: 10px; /* Make the button rounded */
+            border: none;
+            padding: 0 20px; /* Add padding to the button */
+            font-size: 18px; /* Adjust the font size of the text */
+            cursor: pointer;
+		}
+
+		button:hover {
+			background-color: #ffff;
+			color: #5C3F32;
+		}
+	</style>
 </head>
+
 <body>
-	<h1>Coffee Maker</h1>
-	<h2>Available Options</h2>
-	<ul>
-		<li><a href="staff.html">Staff Role</a></li>
-		<li><a href="customer.html">Customer Role</a></li>
-	
-	</ul>
+
+	<div class="header">
+		<a href="staff.html">Staff Role</a>
+		<a href="customer.html">Customer Role</a>
+		<a href="registry.html">Register</a>
+		<a href="tempLogin.html">Temporary Login</a>
+	</div>
+
+	<div class="container">
+
+		<h1>Welcome to Brew Haven Coffee</h1>
+		<a href="#"><img src="coffee_beans.png" alt="Coffee Beans"></a>
+		<h1>Our Story</h1>
+		<div class="two-column-layout">
+
+			<a href="#"><img src="logo.png" alt="Logo"></a>
+
+			<p><br><br><br>As a group of hard-working, Computer Science students, we often found ourselves craving
+				authentic coffee
+				on
+				campus. However, our options were typically limited. As a result, we built Brew Haven, an online
+				interface
+				that
+				brings the ambiance of a coffee shop to the comfort of your computer. Customers are able to log into
+				their
+				accounts using our seamless website to order delicious drinks and view the status of their orders. Staff
+				members
+				are able to log in and create recipes for customers, providing them with delicious drinks based on the
+				available
+				inventory. Our interface helps connect college students to affordable coffee options.</p>
+
+			<button type="button">Login as a Customer</button>
+			<button type="button">Login as a Staff</button>
+		</div>
+
+
+
+
+	</div>
+
+
+
 </body>
+
 </html>
