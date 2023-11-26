@@ -4,8 +4,8 @@
 <head>
 	<title>Place an Order</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/app.css" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<style>
 		.alert-box {
 			border: 2px outset black;
@@ -70,18 +70,15 @@
 				$scope.availableRecipes = response.data;
 				console.log(response.data);
 			});
-			$scope.getCurrentUser = function (param) {
-				var searchParams = new URLSearchParams(window.location.search);
-				return searchParams.get(param);
-			}
-			var uid = $scope.getCurrentUser('user');
-			$scope.userId = uid;
 
-			console.log("Check id", uid);
+			 
+       		 $scope.userId = /*[[${userId}]]*/
+
+			console.log("Check id", $scope.userId);
 			
 			
 				//( BASE_PATH + "/users/{id}" )
-				$http.get("/api/v1/users/"+ uid).then(function (response) {
+				$http.get("/api/v1/users/"+ $scope.userId).then(function (response) {
 				$scope.user = response.data;
 				console.log("Check User:",response.data);
 			});
@@ -179,7 +176,6 @@
 
 		/*]]>*/
 	</script>
-
 	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="recipesCtrl">
 		<h1 align="center">Coffee Recipes</h1>
 		<div class = "div1">
@@ -244,7 +240,7 @@
 					<button onclick="window.location.href='customer.html';">Done</button>
 				</div>
 			</div>
-			<br /> <a href="/customer">Home</a>
+			<br /> <a href="/customer/home">Home</a>
 		</div>
 
 	</div>

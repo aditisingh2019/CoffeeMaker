@@ -3,8 +3,8 @@
 
 <head>
     <title>Inventory</title>
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/app.css" />
+ 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
     <style>
         input.ng-valid {
             background-color: lightgreen;
@@ -134,7 +134,7 @@
         <div ng-show="failure" class="error-message">Error while updating inventory.</div>
     </div>
 
-    <a href="/staff">Home</a>
+    <a href="/staff/home">Home</a>
 </div>
 
 </body>
