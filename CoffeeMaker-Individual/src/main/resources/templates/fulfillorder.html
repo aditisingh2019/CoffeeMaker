@@ -4,8 +4,8 @@
 <head>
 	<title>Staff</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/app.css" />
+ 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
 </head>
 
 <body>
@@ -15,31 +15,42 @@
 		app.controller('ordersCtrl', function ($scope, $http, $q,) {
 
 			$scope.orders = [];
+			$scope.ordersIncomplete = [];
+			//$scope.showNotifyButton = false;
+
 			$scope.updateOrders = function () {
 				$http.get("/api/v1/orders").then(function (response) {
-					if($scope.orders.status != "Created" ||$scope.orders.status != "Cancelled" ){
-						$scope.orders = response.data;
-						console.log($scope.orders);
-					}
-					
+					$scope.orders = response.data;
+
+					$scope.ordersIncomplete = $scope.orders.filter(function (order) {
+						return order.status !== "Ready for pickup";
+					});
+
+
+					 $scope.ordersIncomplete.forEach(function(order) {
+                        order.showNotifyButton = false;
+                    });
+
+
 				}, function (rejection) {
-
 					console.error("Error while getting orders");
-				})
+				});
+			};
 
-				console.log($scope.orders);
-			}
+			$scope.updateOrders();
 
 
 			$scope.fulfillOrder = function (id) {
 				console.log("Attemping to fullfill order");
 				console.log(id);
 				$http.put("/api/v1/orders/" + id).then(
-					function (response) {
-						//console.log(response);
-						$scope.submissionSuccess = true;
-						
-						$scope.updateOrders();
+					function (success) {
+						console.log("Going into API function");
+
+						 $scope.ordersIncomplete.find(function(order) {
+                            return order.id === id;
+                        }).showNotifyButton = true;
+
 					},
 					function (rejection) {
 						if (rejection.status == 404) {
@@ -49,7 +60,8 @@
 							console.error('Not enough Inventory to create Order');
 						}
 
-
+						console.log("Going into rejection status");
+						console.log(rejection.status);
 						//console.error('Error while creating Order');
 						console.log(rejection);
 
@@ -63,7 +75,44 @@
 				);
 			}
 
-			$scope.updateOrders();
+
+			$scope.notifyCustomer = function (id) {
+				$http.put("/api/v1/orders/" + id).then(
+					function (success) {
+						console.log("Going into notify function");
+						$scope.submissionSuccess = true;
+
+						
+					},
+					function (rejection) {
+						if (rejection.status == 404) {
+							console.error('No Order selected ');
+						}
+						else if (rejection.status == 409) {
+							console.error('Not enough Inventory to create Order');
+						}
+
+						console.log("Going into rejection status");
+						console.log(rejection.status);
+						//console.error('Error while creating Order');
+						console.log(rejection);
+
+						$scope.submissionSuccess = false;
+
+						// Update order list
+						//$http.get("/api/v1/orders").then(function (response) {
+						//	$scope.orders = response.data;
+						//});
+					}
+				);
+				 $scope.ordersIncomplete = $scope.ordersIncomplete.filter(function(order) {
+                    return order.id !== id;
+                });
+
+                console.log("Notifying the customer for order ID: " + id);
+			};
+
+			//$scope.updateOrders();
 
 		});
 
@@ -75,29 +124,24 @@
 		<h1>Fulfill Orders</h1>
 
 		<div>
-			<li ng-repeat="order in orders">
+			<li ng-repeat="order in ordersIncomplete">
 				<label>
 					<span style="font-size: 1.2em;">{{order.id}}</span>
-					<input type="radio" ng-model="$parent.id" name="id"
-						value="{{order.id}}" required="true" />
+
+
+					<button type="button" ng-click="fulfillOrder(order.id)">Create</button>
+					<button type="button" ng-show="order.showNotifyButton" ng-click="notifyCustomer(order.id)">Notify
+						Customer</button>
+
+
 				</label>
 			</li>
-			
-			
-							
-			<div>
-				<input type="button" value="Create" ng-click="fulfillorder()"
-					class="btn btn-warning btn-sm" />
-			</div>
-			
-			
-			
 
 			<div ng-if="submissionSuccess">Order successfully created</div>
 
 		</div>
 
-		<br /><a href="/staff">Home</a>
+		<br /><a href="/staff/home">Home</a>
 	</div>
 
 

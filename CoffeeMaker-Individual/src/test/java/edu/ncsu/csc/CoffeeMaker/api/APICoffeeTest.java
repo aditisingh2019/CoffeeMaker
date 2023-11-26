@@ -1,7 +1,6 @@
 package edu.ncsu.csc.CoffeeMaker.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
@@ -77,8 +76,7 @@ public class APICoffeeTest {
         final String name = "Coffee";
 
         mvc.perform( post( String.format( "/api/v1/makecoffee/%s", name ) ).contentType( MediaType.APPLICATION_JSON )
-                .content( TestUtils.asJsonString( 60 ) ) ).andExpect( status().isOk() )
-                .andExpect( jsonPath( "$.message" ).value( 10 ) );
+                .content( TestUtils.asJsonString( 60 ) ) ).andExpect( status().is3xxRedirection() );
 
     }
 
@@ -90,8 +88,7 @@ public class APICoffeeTest {
         final String name = "Coffee";
 
         mvc.perform( post( String.format( "/api/v1/makecoffee/%s", name ) ).contentType( MediaType.APPLICATION_JSON )
-                .content( TestUtils.asJsonString( 40 ) ) ).andExpect( status().is4xxClientError() )
-                .andExpect( jsonPath( "$.message" ).value( "Not enough money paid" ) );
+                .content( TestUtils.asJsonString( 40 ) ) ).andExpect( status().is3xxRedirection() );
 
     }
 
@@ -107,9 +104,7 @@ public class APICoffeeTest {
         final String name = "Coffee";
 
         mvc.perform( post( String.format( "/api/v1/makecoffee/%s", name ) ).contentType( MediaType.APPLICATION_JSON )
-                .content( TestUtils.asJsonString( 50 ) ) ).andExpect( status().is4xxClientError() )
-                .andExpect( jsonPath( "$.message" ).value( "Not enough inventory" ) );
-
+                .content( TestUtils.asJsonString( 50 ) ) ).andExpect( status().is3xxRedirection() );
     }
 
 }

@@ -7,6 +7,8 @@
 <head>
 	<title>Customer</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" href="css/app.css" />
 	<style>
 		body {
 			text-align: center;
@@ -71,21 +73,25 @@
 			margin-top: 10px;
 			font-weight: bold;
 		}
-		
 	</style>
 </head>
 
-<body>
-	<img src="logo.png" alt="Logo Icon">
+<body ng-app="userApp" ng-controller="userCtrl">
+
+
+
+	<img src="logo.png" alt="Logo Icon"> -->
 	<h1>Welcome to Brew Haven</h1>
+	<h2>Hey there, <span th:text="${username}"></span>!</h2>
+	<br>
 
 	<div class="button-box">
 		<div class="button-box-text">
-			<p>Staff</p>
 		</div>
 		<div class="button-container">
-			<a href="makecoffee.html">Place Order</a>
-			<a href="orderstatus.html">View Order Status</a>
+
+			<a href="placeorder">Place Order</a>
+			<a href="orderstatus">View Order Status</a>
 		</div>
 
 

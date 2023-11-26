@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<!--Sources:
+https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
+
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Registration</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
+    <style>
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #f5dbb5, #ffceb5);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#mainWrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.formcontainer {
+    background-color: rgb(255, 255, 255);
+    padding: 30px;
+    width: 80%;
+    max-width: 400px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label,
+button {
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.8em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-top: 15px;
+    font-size: 1.2em;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+}
+
+button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1.2em;
+    text-align: center;
+    text-decoration: none;
+    background-color: rgb(8, 213, 1);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(46, 180, 18);
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2em;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+    </style>
+
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<body ng-app="userApp" ng-controller="userCtrl">
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+
+		var app = angular.module('userApp', []);
+		app.controller('userCtrl', function ($scope, $http) {
+			
+			
+			$scope.user = {
+				orders: [],
+				username: "",
+				password: "",
+				role : ""
+				
+			};
+
+
+			$scope.createUser = function () {
+				document.getElementById('registration')
+
+				var userType = document.getElementById('usertype').value;
+				var username = document.getElementById('username').value;
+				var password = document.getElementById('password').value;
+				
+				console.log($scope.user);
+				
+				$scope.user.username = document.getElementById('username').value;
+				$scope.user.password = document.getElementById('password').value;
+				$scope.user.role = document.getElementById('usertype').value;
+				console.log(userType);
+				console.log(username);
+				console.log(password);
+				
+				$http.post("/api/v1/users", $scope.user).then(
+						function (response) {
+
+							$scope.submissionSuccess = true;
+
+
+
+						}, function (errResponse) {
+							console.log(errResponse);
+							$scope.submissionFailure = true;
+							$scope.error = "Error while creating an user";
+						});
+
+
+			}
+		});
+	/*]]>*/
+	</script>
+
+	<div class="formcontainer">
+		<h1 align="center">Register</h1>
+
+		<form id="regisration">
+			<label for="usertype">User Type</label>
+			<select id="usertype" name="usertype">
+				<option value="select">Select</option>
+
+				<option value="CUSTOMER">Customer</option>
+				<option value="STAFF">Staff</option>
+
+			</select>
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" placeholder="Enter your username">
+
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password" placeholder="Create a password">
+
+
+
+			<button type="submit" ng-click="createUser()"> Register </button>
+		</form>
+		<h3>Already have an account?</h5>
+		<a href="customer.html">Sign In!</a><br>
+		<a href="/index">Home</a>
+
+	</div>
+
+
+
+
+</body>
+
+</html>

@@ -4,8 +4,8 @@
 <head>
 	<title>Place an Order</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/app.css" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<style>
 		.alert-box {
 			border: 2px outset black;
@@ -39,6 +39,21 @@
 			cursor: pointer;
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
+
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.div1{
+			width: 90%;
+			height: 90%;
+			overflow: auto;
+		}
 	</style>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -50,12 +65,26 @@
 		/*<![CDATA[*/
 
 		var app = angular.module('myApp', []);
-		app.controller('recipesCtrl', function ($scope, $http, $q) {
+		app.controller('recipesCtrl', function ($scope, $http, $q, $window) {
 			$http.get("/api/v1/recipes").then(function (response) {
 				$scope.availableRecipes = response.data;
 				console.log(response.data);
 			});
 
+			 
+       		 $scope.userId = /*[[${userId}]]*/
+
+			console.log("Check id", $scope.userId);
+			
+			
+				//( BASE_PATH + "/users/{id}" )
+				$http.get("/api/v1/users/"+ $scope.userId).then(function (response) {
+				$scope.user = response.data;
+				console.log("Check User:",response.data);
+			});
+				
+
+			
 			$scope.isNull = false;
 			$scope.totalAmount = 0;
 			$scope.amtPaid = 0;
@@ -87,7 +116,8 @@
 				}
 				else {
 					console.log($scope.order);
-					$http.post("/api/v1/orders/", $scope.order).then(
+					//BASE_PATH + "/users/{userID}/orders"
+					$http.post("/api/v1/users/"+$scope.userId+"/orders/", $scope.order).then(
 						function (response) {
 
 							$scope.change = $scope.order.payment - $scope.totalAmount;
@@ -122,7 +152,7 @@
 				});
 				//console.log(total);
 				//return total;
-				if (total == null || total == NaN || isNaN(total)){
+				if (total == null || total == NaN || isNaN(total)) {
 					$scope.isNull = true;
 				}
 				$scope.totalAmount = total;
@@ -131,7 +161,7 @@
 			};
 
 			$scope.updateRecipeAmount = function (recipe, amount) {
-				
+
 				if (amount >= 1 && amount != null) {
 					$scope.recipePrices[recipe.id] = amount * recipe.price;
 				}
@@ -146,14 +176,13 @@
 
 		/*]]>*/
 	</script>
-
 	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="recipesCtrl">
-		<h1>Coffee Recipes</h1>
-		<div>
+		<h1 align="center">Coffee Recipes</h1>
+		<div class = "div1">
 			<ul>
 				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
 						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
-						<input type="number" ng-model="recipeAmount" min = "1"
+						<input type="number" ng-model="recipeAmount" min="1"
 							ng-change="updateRecipeAmount(recipe, recipeAmount)" />
 						<!--
 						<button ng-click = "updateRecipeAmount(recipe, recipeAmount)">Update Amount </button>
@@ -163,7 +192,7 @@
 
 			<button class="btn btn-primary btn-sm" ng-click="calculateTotal()">Preview Order </button>
 
-			
+
 			<div ng-show="isNull">
 				<div class="alert-box">
 					<h5>Error!</h5>
@@ -173,7 +202,7 @@
 					<button onclick="window.location.href='makecoffee.html';">Okay</button>
 				</div>
 			</div>
-			
+
 			<h5>Subtotal: ${{ totalAmount }}</h5>
 
 			<br />
@@ -211,7 +240,7 @@
 					<button onclick="window.location.href='customer.html';">Done</button>
 				</div>
 			</div>
-			<br /> <a href="/customer">Home</a>
+			<br /> <a href="/customer/home">Home</a>
 		</div>
 
 	</div>

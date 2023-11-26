@@ -56,17 +56,55 @@
 	</style>
 </head>
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<body ng-app="userApp" ng-controller="userCtrl">
+
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+
+		var app = angular.module('userApp', []);
+		app.controller('userCtrl', function ($scope, $http, $q) {
+			
+
+			$scope.getCurrentUser = function (param) {
+				var searchParams = new URLSearchParams(window.location.search);
+				return searchParams.get(param);
+			}
+			var id = $scope.getCurrentUser('user');
+			console.log(id);
+			
+			$http.get("/api/v1/users/"+ id).then(function (response) {
+				$scope.user = response.data;
+				console.log("Check User:", $scope.user);
+			});
+
+
+		});
+
+
+
+		/*]]>*/
+	</script>
+
 <body>
 	<img src="logo.png" alt="Logo Icon">
 	<h1>Welcome to Brew Haven</h1>
+	<h2>Hey there, <span th:text="${username}"></span>!</h2>
+
 	<div class="button-container">
-		<a href="inventory.html">Update Inventory</a>
-		<a href="recipe.html">Add a Recipe</a>
-		<a href="editrecipe.html">Edit Recipe</a>
-		<a href="deleterecipe.html">Delete Recipe</a>
-		<a ref="vieworder.html">View Orders</a>
+		<a href="/staff/inventory">Update Inventory</a>
+		<a href="/staff/recipe">Add a Recipe</a>
+		<a href="/staff/editrecipe">Edit Recipe</a>
+		<a href="/staff/deleterecipe">Delete Recipe</a>
+		<a href="/staff/fulfillorder">View Orders</a>
 	</div>
-	<a href="/index" class="logout-button">Logout</a>
+	
+	
+	<form th:action="@{/logout}" method="post" >
+    	<input  class="logout-button"  type="submit" value="Logout" />
+	</form>
 </body>
 
 </html>
