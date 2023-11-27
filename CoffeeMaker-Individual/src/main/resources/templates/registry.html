@@ -9,117 +9,161 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 	<title>Registration</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-   	<link th:href="@{/css/app.css}" rel="stylesheet" />
-    <style>
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: linear-gradient(to bottom right, #f5dbb5, #ffceb5);
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<style>
+		body {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			background: linear-gradient(to bottom right, #f5dbb5, #ffceb5);
+			font-family: 'Arial', sans-serif;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
-#mainWrapper {
-    width: 100%;
-    text-align: center;
-}
+		#mainWrapper {
+			width: 100%;
+			text-align: center;
+		}
 
-.formcontainer {
-    background-color: rgb(255, 255, 255);
-    padding: 30px;
-    width: 80%;
-    max-width: 400px;
-    margin: 20px auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+		.formcontainer {
+			background-color: rgb(255, 255, 255);
+			padding: 30px;
+			width: 80%;
+			max-width: 400px;
+			margin: 20px auto;
+			border-radius: 10px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
 
-label,
-button {
-    color: #333;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 1.8em;
-}
+		label,
+		button {
+			color: #333;
+			text-align: center;
+			text-transform: uppercase;
+			font-size: 1.8em;
+		}
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+		form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
 
-label {
-    margin-top: 15px;
-    font-size: 1.2em;
-}
+		label {
+			margin-top: 15px;
+			font-size: 1.2em;
+		}
 
-input,
-select {
-    width: 100%;
-    padding: 12px;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    border: 1px solid #aaa;
-    border-radius: 6px;
-}
+		input,
+		select {
+			width: 100%;
+			padding: 12px;
+			margin-top: 8px;
+			margin-bottom: 16px;
+			box-sizing: border-box;
+			border: 1px solid #aaa;
+			border-radius: 6px;
+		}
 
-button {
-    display: inline-block;
-    padding: 12px 24px;
-    font-size: 1.2em;
-    text-align: center;
-    text-decoration: none;
-    background-color: rgb(8, 213, 1);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-    cursor: pointer;
-}
+		button {
+			display: inline-block;
+			padding: 12px 24px;
+			font-size: 1.2em;
+			text-align: center;
+			text-decoration: none;
+			background-color: rgb(8, 213, 1);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			transition: background-color 0.3s;
+			cursor: pointer;
+		}
 
-button:hover {
-    background-color: rgb(46, 180, 18);
-}
+		button:hover {
+			background-color: rgb(46, 180, 18);
+		}
 
-a {
-    text-decoration: none;
-    color: #333;
-    font-size: 1.2em;
-}
+		a {
+			text-decoration: none;
+			color: #333;
+			font-size: 1.2em;
+		}
 
-a:hover {
-    text-decoration: underline;
-}
-    </style>
+		a:hover {
+			text-decoration: underline;
+		}
+
+		.alert-box {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 250px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: red;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box2 {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 200px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: green;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+	</style>
 
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
-<body ng-app="userApp" ng-controller="userCtrl">
+<body ng-app="userApp">
 
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 
 		var app = angular.module('userApp', []);
 		app.controller('userCtrl', function ($scope, $http) {
-			
-			
+
+			$http.get("/api/v1/users/").then(function (response) {
+				$scope.currentUsers = response.data;
+				console.log("Check User:", $scope.currentUsers);
+
+
+			});
+
+
+
 			$scope.user = {
 				orders: [],
 				username: "",
 				password: "",
-				role : ""
-				
+				role: ""
+
 			};
 
+
+			$scope.usernameCheck = function (username) {
+				var userExists = $scope.currentUsers.find(function (user) {
+					return user.username === username;
+				});
+				if (userExists) {
+					return false;
+				}
+				else {
+					return true;
+				}
+			}
 
 			$scope.createUser = function () {
 				document.getElementById('registration')
@@ -127,49 +171,90 @@ a:hover {
 				var userType = document.getElementById('usertype').value;
 				var username = document.getElementById('username').value;
 				var password = document.getElementById('password').value;
-				
-				console.log($scope.user);
-				
+
+
 				$scope.user.username = document.getElementById('username').value;
 				$scope.user.password = document.getElementById('password').value;
 				$scope.user.role = document.getElementById('usertype').value;
-				console.log(userType);
-				console.log(username);
-				console.log(password);
-				
-				$http.post("/api/v1/users", $scope.user).then(
-						function (response) {
 
-							$scope.submissionSuccess = true;
+				console.log($scope.user);
 
 
+				$scope.staffSuccess = false;
+				$scope.customerSuccess = false;
+				$scope.errorid = false;
+				$scope.errorname = false;
 
-						}, function (errResponse) {
-							console.log(errResponse);
-							$scope.submissionFailure = true;
-							$scope.error = "Error while creating an user";
-						});
+				if ($scope.usernameCheck(username)) {
+
+					if (userType === "STAFF") {
+						var staffid = document.getElementById('staffid').value;
+						if (staffid === "F23IntakeNCSU1887") {
+							$http.post("/api/v1/users", $scope.user).then(
+								function (response) {
+
+									$scope.staffSuccess = true;
+
+
+
+								}, function (errResponse) {
+									console.log(errResponse);
+									$scope.error = "Error while creating an user";
+								});
+						}
+						else {
+							$scope.errorid = true;
+						}
+					}
+					else if (userType === "CUSTOMER") {
+						$http.post("/api/v1/users", $scope.user).then(
+							function (response) {
+
+								$scope.staffSuccess = true;
+
+
+
+							}, function (errResponse) {
+								console.log(errResponse);
+								$scope.error = "Error while creating an user";
+							});
+					}
+
+				}
+				else {
+					$scope.errorname = true;
+				}
 
 
 			}
+
+
+
 		});
 	/*]]>*/
 	</script>
 
-	<div class="formcontainer">
+	<div class="formcontainer" ng-controller="userCtrl">
 		<h1 align="center">Register</h1>
 
 		<form id="regisration">
 			<label for="usertype">User Type</label>
-			<select id="usertype" name="usertype">
+			<select id="usertype" name="usertype" ng-model="userType">
+
 				<option value="select">Select</option>
 
 				<option value="CUSTOMER">Customer</option>
 				<option value="STAFF">Staff</option>
 
 			</select>
+
+			<div id="idField" ng-if="userType === 'STAFF'">
+				<label for="staffid">Staff ID</label>
+				<input type="text" id="staffid" name="staffid" ng-model="staffId" placeholder="Enter provided staff ID">
+			</div>
+
 			<label for="username">Username</label>
-			<input type="text" id="username" name="username" placeholder="Enter your username">
+			<input type="text" id="username" name="username" placeholder="Create your username">
 
 			<label for="password">Password</label>
 			<input type="password" id="password" name="password" placeholder="Create a password">
@@ -178,12 +263,45 @@ a:hover {
 
 			<button type="submit" ng-click="createUser()"> Register </button>
 		</form>
-		<h3>Already have an account?</h5>
+
+
+		<div ng-show="errorname">
+			<div class="alert-box">
+				<h3>Error!</h3>
+				<p>Username already exists. Please Try Again with a different one!</p>
+				<hr color="black">
+				<button onclick="window.location.href='registry.html';">Okay</button>
+			</div>
+		</div>
+		<div ng-show="errorid">
+			<div class="alert-box">
+				<h3>Error!</h3>
+				<p>Invalid Staff ID Entered. Please Try Again!</p>
+				<hr color="black">
+				<button onclick="window.location.href='registry.html';">Okay</button>
+			</div>
+		</div>
+		<div ng-show="staffSuccess">
+			<div class="alert-box2">
+				<h3>Success!</h3>
+				<p>Successfully registered user as staff! Go back to the homepage to login</p>
+				<hr color="black">
+				<button onclick="window.location.href='index.html';">Okay</button>
+			</div>
+		</div>
+		<div ng-show="customerSuccess">
+			<div class="alert-box2">
+				<h3>Success!</h3>
+				<p>Successfully registered user as customer! Go back to the homepage to login</p>
+				<hr color="black">
+				<button onclick="window.location.href='index.html';">Okay</button>
+			</div>
+		</div>
+		<h3>Already have an account?</h3>
 		<a href="customer.html">Sign In!</a><br>
 		<a href="/index">Home</a>
 
 	</div>
-
 
 
 
