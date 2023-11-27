@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Staff</title>
+	<title>Manager</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<style>
 		body {
@@ -91,13 +91,12 @@
 <body>
 	<img src="logo.png" alt="Logo Icon">
 	<h1>Welcome to Brew Haven</h1>
-	<h2>Hey there, <span th:text="${username}"></span>!</h2>
+	<h2>Managerial Access</h1>
+	<h3>Hey there, <span th:text="${username}"></span>!</h3>
 
 	<div class="button-container">
-		<a href="/staff/recipe">Add a Recipe</a>
-		<a href="/staff/editrecipe">Edit Recipe</a>
-		<a href="/staff/deleterecipe">Delete Recipe</a>
-		<a href="/staff/fulfillorder">View Orders</a>
+		<a href="/manager/inventory">Update Inventory</a>
+
 	</div>
 	
 	
