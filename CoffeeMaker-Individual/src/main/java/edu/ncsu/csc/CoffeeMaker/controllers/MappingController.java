@@ -100,7 +100,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/staff/inventory", "/inventory.html" } )
+    @GetMapping ( { "/manager/inventory", "/inventory.html" } )
     public String inventoryForm ( final Model model ) {
         return "inventory";
     }
@@ -132,6 +132,22 @@ public class MappingController {
 
         model.addAttribute( "username", username );
         return "customer";
+    }
+
+    /**
+     * On a GET request to /managerhome, the CustomerController will return
+     * /src/main/resources/templates/manager.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/manager/home", "manager.html" } )
+    public String managerPage ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+
+        model.addAttribute( "username", username );
+        return "manager";
     }
 
     /**

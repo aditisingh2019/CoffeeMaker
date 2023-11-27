@@ -219,6 +219,19 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 								$scope.error = "Error while creating an user";
 							});
 					}
+					else if (userType === "MANAGER") {
+						$http.post("/api/v1/users", $scope.user).then(
+							function (response) {
+
+								$scope.staffSuccess = true;
+
+
+
+							}, function (errResponse) {
+								console.log(errResponse);
+								$scope.error = "Error while creating an user";
+							});
+					}
 
 				}
 				else {
@@ -245,6 +258,8 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 
 				<option value="CUSTOMER">Customer</option>
 				<option value="STAFF">Staff</option>
+				<option value="MANAGER">Manager</option>
+				
 
 			</select>
 
