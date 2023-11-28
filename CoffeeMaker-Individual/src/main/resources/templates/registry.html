@@ -13,14 +13,21 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 	<style>
 		body {
 			display: flex;
+			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 			min-height: 100vh;
-			background: linear-gradient(to bottom right, #f5dbb5, #ffceb5);
-			font-family: 'Arial', sans-serif;
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
+		}
+		
+	
+
+		input.ng-dirty.ng-invalid-required {
+			background-color: red;
 		}
 
 		#mainWrapper {
@@ -39,6 +46,10 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+		}
+
+		h1, h2 {
+			color: #5C3F32
 		}
 
 		label,
@@ -122,6 +133,18 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			color: green;
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+
+		#logo-container {
+			text-align: center;
+			width: 500px;
+			height: 400px;
+		}
+		
 	</style>
 
 </head>
@@ -166,11 +189,20 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			}
 
 			$scope.createUser = function () {
+
+
+				$scope.errorEmptyFields = false;
 				document.getElementById('registration')
 
 				var userType = document.getElementById('usertype').value;
 				var username = document.getElementById('username').value;
 				var password = document.getElementById('password').value;
+
+				// Check if username and password are not empty
+				if (username.trim() === '' || password.trim() === '') {
+					$scope.errorEmptyFields = true;
+					return;
+				}
 
 
 				$scope.user.username = document.getElementById('username').value;
@@ -247,8 +279,15 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 	/*]]>*/
 	</script>
 
+	<a href="#" id="logo-container">
+		<img src="logo.png" alt="Logo">
+	</a>
+	<h1 align="center">Brew Haven</h1>
+
+
+
 	<div class="formcontainer" ng-controller="userCtrl">
-		<h1 align="center">Register</h1>
+		<h2 align="center">Register</h2>
 
 		<form id="regisration">
 			<label for="usertype">User Type</label>
@@ -259,7 +298,7 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				<option value="CUSTOMER">Customer</option>
 				<option value="STAFF">Staff</option>
 				<option value="MANAGER">Manager</option>
-				
+
 
 			</select>
 
@@ -278,6 +317,15 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 
 			<button type="submit" ng-click="createUser()"> Register </button>
 		</form>
+
+		<div ng-show="errorEmptyFields">
+			<div class="alert-box">
+				<h3>Error!</h3>
+				<p>Username and password cannot be empty. Please enter both fields!</p>
+				<hr color="black">
+				<button onclick="window.location.href='registry.html';">Okay</button>
+			</div>
+		</div>
 
 
 		<div ng-show="errorname">
@@ -301,20 +349,21 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				<h3>Success!</h3>
 				<p>Successfully registered user as staff! Go back to the homepage to login</p>
 				<hr color="black">
-				<button onclick="window.location.href='index.html';">Okay</button>
+				<button onclick="window.location.href='/#';">Okay</button>
 			</div>
 		</div>
+
 		<div ng-show="customerSuccess">
 			<div class="alert-box2">
 				<h3>Success!</h3>
 				<p>Successfully registered user as customer! Go back to the homepage to login</p>
 				<hr color="black">
-				<button onclick="window.location.href='index.html';">Okay</button>
+				<button onclick="window.location.href='/#';">Okay</button>
 			</div>
 		</div>
 		<h3>Already have an account?</h3>
-		<a href="customer.html">Sign In!</a><br>
-		<a href="/index">Home</a>
+		<a href="login.html">Sign In!</a><br>
+		<a href="/#">Home</a>
 
 	</div>
 

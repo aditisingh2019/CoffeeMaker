@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure ( final HttpSecurity http ) throws Exception {
-        http.authorizeRequests().antMatchers( "/", "/index", "/registry.html", "/api/v1/users/**" ).permitAll()
+        http.authorizeRequests().antMatchers( "/", "/index.html", "/registry.html", "/api/v1/users/**" ).permitAll()
                 .antMatchers( "/manager/**" ).hasAuthority( "MANAGER" ).antMatchers( "/customer/**" )
                 .hasAuthority( "CUSTOMER" ).antMatchers( "/staff/**" ).hasAuthority( "STAFF" ).and().formLogin()
                 .loginPage( "/login" ).successHandler( successHandler() ).permitAll().and().logout()
