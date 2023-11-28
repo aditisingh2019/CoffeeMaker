@@ -1,21 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order History</title>
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-   	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<title>Order History</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<style>
+		.alert-box {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 250px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: red;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box2 {
+			border: 2px outset black;
+			border-radius: 15px;
+			width: 200px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 10px;
+			background-color: white;
+			color: green;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.alert-box button {
+			background-color: white;
+			border: 1px solid black;
+			border-radius: 2px;
+			padding: 5px 10px;
+			cursor: pointer;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.div1 {
+			width: 90%;
+			height: 90%;
+			overflow: auto;
+		}
+
+		.table {
+			width: 100%;
+			margin-bottom: 1rem;
+			color: #212529;
+		}
+
+		.table th,
+		.table td {
+			padding: 0.75rem;
+			vertical-align: top;
+			border-top: 1px solid #dee2e6;
+		}
+
+		.table thead th {
+			vertical-align: bottom;
+			border-bottom: 2px solid #dee2e6;
+		}
+	</style>
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 
 <body>
 
-    <div id="mainWrapper">
-        <h1>Order History</h1>
-    
+	<script th:inline="javascript">
+		var app = angular.module('myApp', []);
+		app.controller('orderHistoryCtrl', function ($scope, $http) {
+			$scope.orders = [];
+			$scope.totalOrderAmount = 0;
 
-    </div>
+			$http.get("/api/v1/orders").then(function (response) {
+				$scope.orders = response.data;
+				$scope.calculateTotal();
+				$scope.createBarChart();
+
+			}, function (error) {
+				console.error("Error fetching data:", error);
+			});
+
+			$scope.calculateTotal = function () {
+				$scope.totalOrderAmount = $scope.orders.reduce(function (total, order) {
+					return total + order.price;
+				}, 0);
+			};
+
+			$scope.createBarChart = function () {
+				let recipeCounts = {};
+				$scope.orders.forEach(order => {
+					order.recipes.forEach(recipe => {
+						recipeCounts[recipe.name] = (recipeCounts[recipe.name] || 0) + 1;
+					});
+				});
+
+				let ctx = document.getElementById('barChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: Object.keys(recipeCounts),
+						datasets: [{
+							label: 'Order Trend',
+							data: Object.values(recipeCounts),
+							backgroundColor: 'rgba(0, 123, 255, 0.5)',
+							borderColor: 'rgba(0, 123, 255, 1)',
+							borderWidth: 1
+						}]
+					},
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero: true
+								}
+							}]
+						}
+					}
+				});
+			};
+		});
+
+	</script>
+
+	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="orderHistoryCtrl">
+		<h1 align="center">Order History</h1>
+		<div class="div1">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Order ID</th>
+						<th>Recipes</th>
+						<th>Order Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="order in orders">
+						<td>{{order.id}}</td>
+						<td>
+							<ul>
+								<li ng-repeat="recipe in order.recipes">{{recipe.name}}</li>
+							</ul>
+						</td>
+						<td>${{order.price}}</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
+						<td><strong>${{totalOrderAmount}}</strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="chart-container" style="position: relative; height:40vh; width:80vw">
+		<canvas id="barChart"></canvas>
+	</div>
 
 </body>
 
