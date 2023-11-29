@@ -87,11 +87,13 @@
 		app.controller('orderHistoryCtrl', function ($scope, $http) {
 			$scope.orders = [];
 			$scope.totalOrderAmount = 0;
+			$scope.inventoryOrderList = [];
 
 			$http.get("/api/v1/orders").then(function (response) {
 				$scope.orders = response.data;
 				$scope.calculateTotal();
 				$scope.createBarChart();
+				$scope.inventoryOrderList = $scope.inventoryOrder($scope.orders);
 
 			}, function (error) {
 				console.error("Error fetching data:", error);
@@ -101,6 +103,28 @@
 				$scope.totalOrderAmount = $scope.orders.reduce(function (total, order) {
 					return total + order.price;
 				}, 0);
+			};
+
+			$scope.inventoryOrder = function (orders) {
+				let ingredientTotals = new Map();
+
+				orders.forEach(order => {
+					order.recipes.forEach(recipe => {
+						recipe.ingredients.forEach(ingredient => {
+							let currentTotal = ingredientTotals.get(ingredient.name) || 0;
+							ingredientTotals.set(ingredient.name, currentTotal + ingredient.amount);
+						});
+					});
+				});
+
+				let ingredientsWithAmounts = Array.from(ingredientTotals.entries()).map(entry => {
+					return {name: entry[0], totalAmount: entry[1]};
+				});
+
+				ingredientsWithAmounts.sort((a, b) => b.totalAmount - a.totalAmount);
+
+				//console.log(ingredientsWithAmounts);
+				return ingredientsWithAmounts;
 			};
 
 			$scope.createBarChart = function () {
@@ -139,9 +163,9 @@
 
 	</script>
 
-	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="orderHistoryCtrl">
-		<h1 align="center">Order History</h1>
-		<div class="div1">
+		<div class="div1" ng-app="myApp" ng-controller="orderHistoryCtrl">
+					<h1 align="center">Order History</h1>
+
 			<table class="table">
 				<thead>
 					<tr>
@@ -166,7 +190,31 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
+			
+			<h1 align = "center"> Inventory To be Ordered </h1>
+			<h3 align = "center"> Instructions for the Manager </h3>
+			<p style="color:red; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: center;">The authority requires the management to keep track of the ingredients that is 
+				being used accross all orders and setting priority to order the ingredients accordingly. It is expected that
+				there will always be stock of the ingredients for the recipes in the menu at the warehouse, just above the store. 
+				If the staff runs out of a certain ingredient at the shop kitchen, the future orders requiring that ingredients will be cancelled
+				and manager(s) will immediately arrange to restock the kitchen from the warehouse inventory. Based 
+				on the usage accross the orders, the list below will give the manager an idea of which ingredient(s) 
+				should be in priority to order. </p>
+			 <table class = "table" >
+        <thead>
+            <tr>
+                <th>Ingredient Name</th>
+                <th>Total Amount Used</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="ingredient in inventoryOrderList">
+                <td>{{ ingredient.name }}</td>
+                <td>{{ ingredient.totalAmount }}</td>
+            </tr>
+        </tbody>
+    </table>
+		
 	</div>
 	<div class="chart-container" style="position: relative; height:40vh; width:80vw">
 		<canvas id="barChart"></canvas>
