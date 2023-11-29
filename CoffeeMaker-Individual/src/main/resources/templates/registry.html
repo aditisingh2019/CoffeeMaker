@@ -206,6 +206,26 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 							$scope.errorid = true;
 						}
 					}
+					if (userType === "MANAGER") {
+						var managerid = document.getElementById('managerid').value;
+						if (managerid === "BeingManager1887F23") {
+							$http.post("/api/v1/users", $scope.user).then(
+								function (response) {
+
+									$scope.staffSuccess = true;
+
+
+
+								}, function (errResponse) {
+									console.log(errResponse);
+									$scope.error = "Error while creating an user";
+								});
+						}
+						else {
+							$scope.errorid = true;
+						}
+					}
+
 					else if (userType === "CUSTOMER") {
 						$http.post("/api/v1/users", $scope.user).then(
 							function (response) {
@@ -267,6 +287,11 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				<label for="staffid">Staff ID</label>
 				<input type="text" id="staffid" name="staffid" ng-model="staffId" placeholder="Enter provided staff ID">
 			</div>
+			
+			<div id="idField2" ng-if="userType === 'MANAGER'">
+				<label for="managerid">Manager ID</label>
+				<input type="text" id="managerid" name="managerid" ng-model="managerId" placeholder="Enter provided manager ID">
+			</div>
 
 			<label for="username">Username</label>
 			<input type="text" id="username" name="username" placeholder="Create your username">
@@ -291,7 +316,7 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 		<div ng-show="errorid">
 			<div class="alert-box">
 				<h3>Error!</h3>
-				<p>Invalid Staff ID Entered. Please Try Again!</p>
+				<p>Invalid ID Entered. Please Try Again!</p>
 				<hr color="black">
 				<button onclick="window.location.href='registry.html';">Okay</button>
 			</div>
@@ -315,6 +340,8 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 		<h3>Already have an account?</h3>
 		<a href="customer.html">Sign In!</a><br>
 		<a href="/index">Home</a>
+		
+		<a href="privacy.html">Privacy policy Page!</a><br>
 
 	</div>
 

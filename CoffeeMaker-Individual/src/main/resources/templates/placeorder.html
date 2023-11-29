@@ -148,7 +148,7 @@
 				});
 				//console.log("Recipes for the Order:", recipes);
 				$scope.order.recipes.forEach(function (recipe) {
-					total = total + $scope.recipePrices[recipe.id];
+					total = total + recipe.price;
 				});
 				//console.log(total);
 				//return total;
@@ -182,8 +182,6 @@
 			<ul>
 				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
 						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
-						<input type="number" ng-model="recipeAmount" min="1"
-							ng-change="updateRecipeAmount(recipe, recipeAmount)" />
 						<!--
 						<button ng-click = "updateRecipeAmount(recipe, recipeAmount)">Update Amount </button>
 						-->

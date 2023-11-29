@@ -106,6 +106,21 @@ public class MappingController {
     }
 
     /**
+     * Handles a GET request for inventory. The GET request provides a view to
+     * the client that includes the list of the past orders anyone has ever
+     * ordered in the it shows the manager the stats of all orders and profit
+     * made
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/manager/orderhistory", "/orderhistory.html" } )
+    public String orderhistory ( final Model model ) {
+        return "orderhistory";
+    }
+
+    /**
      * On a GET request to /vieworder, the EditRecipeController will return
      * /src/main/resources/templates/editrecipe.html.
      *
@@ -217,6 +232,11 @@ public class MappingController {
     @GetMapping ( { "/login", "/login.html" } )
     public String login ( final Model model ) {
         return "login";
+    }
+
+    @GetMapping ( { "/privacy", "privacy.html" } )
+    public String privacy ( final Model model ) {
+        return "privacy";
     }
 
 }
