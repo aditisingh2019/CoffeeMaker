@@ -7,17 +7,25 @@
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<style>
-		body{
-			text-align: center;
-			background-color: #FFF5E1;
+		a:link,
+		a:visited {
+			background-color: #654321;
+			color: white;
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 15px;
 		}
-		hr{
-        height: 1px;
-        background-color: black;
-        border: 1px solid;
-        
-    }
+
+		hr {
+			height: 1px;
+			background-color: black;
+			border: 1px solid;
+
+		}
+
 		.alert-box {
 			border: 2px outset black;
 			border-radius: 15px;
@@ -111,21 +119,27 @@
 			});
 
 			$scope.calculateTotal = function () {
-				$scope.totalOrderAmount = $scope.orders.reduce(function (total, order) {
-					return total + order.price;
-				}, 0);
+				$scope.totalOrderAmount = $scope.orders
+					.filter(function (order) {
+						return (order.status === 'Ready for pickup' ||order.status === 'Picked up' );
+					})
+					.reduce(function (total, order) {
+						return total + order.price;
+					}, 0);
 			};
 
 			$scope.inventoryOrder = function (orders) {
 				let ingredientTotals = new Map();
 
 				orders.forEach(order => {
-					order.recipes.forEach(recipe => {
-						recipe.ingredients.forEach(ingredient => {
-							let currentTotal = ingredientTotals.get(ingredient.name) || 0;
-							ingredientTotals.set(ingredient.name, currentTotal + ingredient.amount);
+					if (order.status === 'Ready for pickup' ||order.status === 'Picked up') {
+						order.recipes.forEach(recipe => {
+							recipe.ingredients.forEach(ingredient => {
+								let currentTotal = ingredientTotals.get(ingredient.name) || 0;
+								ingredientTotals.set(ingredient.name, currentTotal + ingredient.amount);
+							});
 						});
-					});
+					}
 				});
 
 				let ingredientsWithAmounts = Array.from(ingredientTotals.entries()).map(entry => {
@@ -138,12 +152,17 @@
 				return ingredientsWithAmounts;
 			};
 
+
 			$scope.createBarChart = function () {
 				let recipeCounts = {};
 				$scope.orders.forEach(order => {
-					order.recipes.forEach(recipe => {
-						recipeCounts[recipe.name] = (recipeCounts[recipe.name] || 0) + 1;
-					});
+					if (order.status === 'Ready for pickup' || order.status === 'Picked up') {
+ 
+						order.recipes.forEach(recipe => {
+							recipeCounts[recipe.name] = (recipeCounts[recipe.name] || 0) + 1;
+
+						});
+					}
 				});
 
 				let ctx = document.getElementById('barChart').getContext('2d');
@@ -174,63 +193,68 @@
 
 	</script>
 
-		<div class="div1" ng-app="myApp" ng-controller="orderHistoryCtrl">
-					<h1 align="center">Order History</h1>
-					<hr >
-					<h2 align="center">Amount in Sales</h2>
+	<div class="div1" ng-app="myApp" ng-controller="orderHistoryCtrl">
+		<h1 align="center">Order History</h1>
+		<hr>
+		<h2 align="center">Amount in Sales</h2>
 
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Order ID</th>
-						<th>Recipes</th>
-						<th>Order Total</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="order in orders">
-						<td>{{order.id}}</td>
-						<td>
-							<ul>
-								<li ng-repeat="recipe in order.recipes">{{recipe.name}}</li>
-							</ul>
-						</td>
-						<td>${{order.price}}</td>
-					</tr>
-					<tr>
-						<td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
-						<td><strong>${{totalOrderAmount}}</strong></td>
-					</tr>
-				</tbody>
-			</table>
-			<hr>
-			<h2 align = "center"> Inventory To be Ordered </h2>
-			<h3 align = "center"> <u>Instructions for the Manager</u> </h3>
-			<p style="color:red; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: center;">The authority requires the management to keep track of the ingredients that is 
-				being used accross all orders and setting priority to order the ingredients accordingly. It is expected that
-				there will always be stock of the ingredients for the recipes in the menu at the warehouse, just above the store. 
-				If the staff runs out of a certain ingredient at the shop kitchen, the future orders requiring that ingredients will be cancelled
-				and manager(s) will immediately arrange to restock the kitchen from the warehouse inventory. Based 
-				on the usage accross the orders, the list below will give the manager an idea of which ingredient(s) 
-				should be in priority to order for the inventory warehouse. </p>
-			 <table class = "table" >
-        <thead>
-            <tr>
-                <th>Ingredient Name</th>
-                <th>Total Amount Used</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="ingredient in inventoryOrderList">
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.totalAmount }}</td>
-            </tr>
-        </tbody>
-    </table>
-		
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Order ID</th>
+					<th>Recipes</th>
+					<th>Order Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="order in orders" ng-if="order.status === 'Ready for pickup' || order.status === 'Picked up'">
+					<td>{{order.id}}</td>
+					<td>
+						<ul>
+							<li ng-repeat="recipe in order.recipes">{{recipe.name}}</li>
+						</ul>
+					</td>
+					<td>${{order.price}}</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
+					<td><strong>${{totalOrderAmount}}</strong></td>
+				</tr>
+			</tbody>
+		</table>
+		<hr>
+		<h2 align="center"> Inventory To be Ordered </h2>
+		<h3 align="center"> <u>Instructions for the Manager</u> </h3>
+		<p style="color:red; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: center;">The authority
+			requires the management to keep track of the ingredients that is
+			being used accross all orders and setting priority to order the ingredients accordingly. It is expected that
+			there will always be stock of the ingredients for the recipes in the menu at the warehouse, just above the
+			store.
+			If the staff runs out of a certain ingredient at the shop kitchen, the future orders requiring that
+			ingredients will be cancelled
+			and manager(s) will immediately arrange to restock the kitchen from the warehouse inventory. Based
+			on the usage accross the orders, the list below will give the manager an idea of which ingredient(s)
+			should be in priority to order for the inventory warehouse. </p>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Ingredient Name</th>
+					<th>Total Amount Used</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="ingredient in inventoryOrderList">
+					<td>{{ ingredient.name }}</td>
+					<td>{{ ingredient.totalAmount }}</td>
+				</tr>
+			</tbody>
+		</table>
+
 	</div>
 	<div class="chart-container" style="position: relative; height:40vh; width:80vw">
 		<canvas id="barChart"></canvas>
+		<a href="/manager/home">Home</a>
+
 	</div>
 
 </body>

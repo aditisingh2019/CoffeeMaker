@@ -212,7 +212,8 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				console.log($scope.user);
 
 
-				$scope.staffSuccess = false;
+				$scope.staffSuccess = false
+				$scope.managerSuccess = false;
 				$scope.customerSuccess = false;
 				$scope.errorid = false;
 				$scope.errorname = false;
@@ -244,7 +245,7 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 							$http.post("/api/v1/users", $scope.user).then(
 								function (response) {
 
-									$scope.staffSuccess = true;
+									$scope.managerSuccess = true;
 
 
 
@@ -262,7 +263,7 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 						$http.post("/api/v1/users", $scope.user).then(
 							function (response) {
 
-								$scope.staffSuccess = true;
+								$scope.customerSuccess = true;
 
 
 
@@ -293,7 +294,7 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				var registrationForm = document.getElementById('registration');
 				console.log(registrationForm);
 
-				
+
 
 			}
 
@@ -376,6 +377,15 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			<div class="alert-box2">
 				<h3>Success!</h3>
 				<p>Successfully registered user as staff! Go back to the homepage to login</p>
+				<hr color="black">
+				<button onclick="window.location.href='/#';">Okay</button>
+			</div>
+		</div>
+
+		<div ng-show="managerSuccess">
+			<div class="alert-box2">
+				<h3>Success!</h3>
+				<p>Successfully registered user as manager! Go back to the homepage to login</p>
 				<hr color="black">
 				<button onclick="window.location.href='/#';">Okay</button>
 			</div>
