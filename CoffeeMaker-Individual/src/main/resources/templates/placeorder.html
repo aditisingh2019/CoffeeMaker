@@ -260,13 +260,12 @@
 		<h4>Select recipes and quantities from the list below</h4>
 		<div class="div1">
 			<ul>
-				<li ng-repeat="recipe in availableRecipes">
-					<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
-					<span><b>{{recipe.name}}</b></span>
-					<input type="number" ng-model="recipeAmount" min="1" placeholder="Enter Quantity"
-						ng-change="updateRecipeAmount(recipe, recipeAmount)" />
-					</label>
-				</li>
+				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
+						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
+						<!--
+						<button ng-click = "updateRecipeAmount(recipe, recipeAmount)">Update Amount </button>
+						-->
+					</label></li>
 			</ul>
 			<br>
 
