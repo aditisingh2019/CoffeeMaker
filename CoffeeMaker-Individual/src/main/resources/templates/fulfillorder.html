@@ -4,8 +4,8 @@
 <head>
 	<title>Staff</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
- 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-   	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
 </head>
 
 <body style="background-color: #FFF5E1;">
@@ -13,23 +13,25 @@
 	<script>
 		var app = angular.module('myApp', []);
 		app.controller('ordersCtrl', function ($scope, $http, $q,) {
+			$scope.errorMessage = ""
 
 			$scope.orders = [];
 			$scope.ordersIncomplete = [];
-			//$scope.showNotifyButton = false;
+			$scope.notEnoughInventory = false;
 
 			$scope.updateOrders = function () {
 				$http.get("/api/v1/orders").then(function (response) {
 					$scope.orders = response.data;
 
 					$scope.ordersIncomplete = $scope.orders.filter(function (order) {
-						return order.status !== "Ready for pickup";
+						return order.status !== "Ready for pickup" && order.status !== "Picked up" && order.status !== "Cancelled";
+
 					});
 
 
-					 $scope.ordersIncomplete.forEach(function(order) {
-                        order.showNotifyButton = false;
-                    });
+					$scope.ordersIncomplete.forEach(function (order) {
+						order.showNotifyButton = false;
+					});
 
 
 				}, function (rejection) {
@@ -47,9 +49,10 @@
 					function (success) {
 						console.log("Going into API function");
 
-						 $scope.ordersIncomplete.find(function(order) {
-                            return order.id === id;
-                        }).showNotifyButton = true;
+						$scope.ordersIncomplete.find(function (order) {
+							return order.id === id;
+						}).showNotifyButton = true;
+						
 
 					},
 					function (rejection) {
@@ -58,19 +61,23 @@
 						}
 						else if (rejection.status == 409) {
 							console.error('Not enough Inventory to create Order');
+
 						}
+
 
 						console.log("Going into rejection status");
 						console.log(rejection.status);
-						//console.error('Error while creating Order');
 						console.log(rejection);
+						$scope.ordersIncomplete = $scope.ordersIncomplete.filter(function (order) {
+							return order.id !== id;
+						});
+
+
+						$scope.notEnoughInventory = true;
+						$scope.currOrderID = id;
+
 
 						$scope.submissionSuccess = false;
-
-						// Update order list
-						//$http.get("/api/v1/orders").then(function (response) {
-						//	$scope.orders = response.data;
-						//});
 					}
 				);
 			}
@@ -82,37 +89,34 @@
 						console.log("Going into notify function");
 						$scope.submissionSuccess = true;
 
-						
+
 					},
 					function (rejection) {
 						if (rejection.status == 404) {
 							console.error('No Order selected ');
 						}
 						else if (rejection.status == 409) {
+							$scope.notEnoughInventory = true;
 							console.error('Not enough Inventory to create Order');
 						}
 
 						console.log("Going into rejection status");
 						console.log(rejection.status);
-						//console.error('Error while creating Order');
 						console.log(rejection);
 
 						$scope.submissionSuccess = false;
 
-						// Update order list
-						//$http.get("/api/v1/orders").then(function (response) {
-						//	$scope.orders = response.data;
-						//});
 					}
 				);
-				 $scope.ordersIncomplete = $scope.ordersIncomplete.filter(function(order) {
-                    return order.id !== id;
-                });
+				$scope.ordersIncomplete = $scope.ordersIncomplete.filter(function (order) {
+					return order.id !== id;
+				});
 
-                console.log("Notifying the customer for order ID: " + id);
+				console.log("Notifying the customer for order ID: " + id);
 			};
 
-			//$scope.updateOrders();
+
+
 
 		});
 
@@ -137,7 +141,10 @@
 				</label>
 			</li>
 
-			<div ng-if="submissionSuccess">Order successfully created</div>
+			<div ng-if="submissionSuccess" style="font-size: 1.2em; color: green;">Order successfully created</div>
+			<div ng-if="notEnoughInventory" style="font-size: 1.2em; color: red;">Not enough inventory for order {{currOrderID}}</div>
+
+
 
 		</div>
 

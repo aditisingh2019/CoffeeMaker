@@ -47,8 +47,13 @@
 			color: black;
 		}
 
-		.order-status-completed {
+		.order-status-readyforpickup {
 			background-color: lightgreen;
+			color: black;
+		}
+
+		.order-status-pickedup {
+			background-color: dodgerblue;
 			color: black;
 		}
 
@@ -97,9 +102,6 @@
 		var userId = /*[[${userId}]]*/ null;
 		app.controller('orderStatusCtrl', function ($scope, $http, $q, $window, $element) {
 
-
-
-			// Assign the value to $scope.userId
 			$scope.userId = userId;
 			console.log("User ID: " + $scope.userId);
 			$scope.orders = [];
@@ -114,7 +116,6 @@
 			console.log($scope.mapping);
 
 			$scope.getOrders = function () {
-				// in the future, change to a specific customers
 				$http.get($scope.mapping).then(function (response) {
 					$scope.orders = response.data;
 
@@ -171,6 +172,19 @@
 			$scope.getOrders();
 
 
+			$scope.pickupOrder = function () {
+				console.log($scope.orderIdToView);
+				$http.put("/api/v1/orders/" + $scope.orderIdToView).then(
+					function (response) {
+						console.log("Order successfully picked up");
+						$scope.selectedOrderStatus = 'Picked up';
+						$scope.getOrders();
+					},
+					function (rejection) {
+						console.error("Error while updating order status");
+					}
+				);
+			};
 
 
 			$scope.reset = function () {
@@ -231,6 +245,11 @@
 							<div class="order-status" ng-show="selectedOrder"
 								ng-class="'order-status-' + selectedOrderStatus.toLowerCase().split(' ').join('')">
 								Order Status: {{ selectedOrderStatus }}
+
+								<button
+									ng-if="selectedOrderStatus.toLowerCase().split(' ').join('') === 'readyforpickup'"
+									ng-click="pickupOrder()">Pickup</button>
+
 							</div>
 						</div>
 
