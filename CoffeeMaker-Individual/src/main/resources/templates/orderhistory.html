@@ -121,7 +121,7 @@
 			$scope.calculateTotal = function () {
 				$scope.totalOrderAmount = $scope.orders
 					.filter(function (order) {
-						return order.status === 'Ready for pickup';
+						return (order.status === 'Ready for pickup' ||order.status === 'Picked up' );
 					})
 					.reduce(function (total, order) {
 						return total + order.price;
@@ -132,7 +132,7 @@
 				let ingredientTotals = new Map();
 
 				orders.forEach(order => {
-					if (order.status === 'Ready for pickup') {
+					if (order.status === 'Ready for pickup' ||order.status === 'Picked up') {
 						order.recipes.forEach(recipe => {
 							recipe.ingredients.forEach(ingredient => {
 								let currentTotal = ingredientTotals.get(ingredient.name) || 0;
@@ -156,8 +156,8 @@
 			$scope.createBarChart = function () {
 				let recipeCounts = {};
 				$scope.orders.forEach(order => {
-					if (order.status === 'Ready for pickup') {
-
+					if (order.status === 'Ready for pickup' || order.status === 'Picked up') {
+ 
 						order.recipes.forEach(recipe => {
 							recipeCounts[recipe.name] = (recipeCounts[recipe.name] || 0) + 1;
 
@@ -207,7 +207,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="order in orders" ng-if="order.status === 'Ready for pickup'">
+				<tr ng-repeat="order in orders" ng-if="order.status === 'Ready for pickup' || order.status === 'Picked up'">
 					<td>{{order.id}}</td>
 					<td>
 						<ul>
