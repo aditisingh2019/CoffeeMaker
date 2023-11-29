@@ -98,6 +98,11 @@
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
+		h1 {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			color: #5C3F32
+		}
+
 		.div1 {
 			width: 90%;
 			height: 90%;
@@ -125,7 +130,7 @@
 			font-size: 1.5em;
 			padding: 10px;
 		}
-		
+
 		.form {
 			background-color: white;
 			border: none;
@@ -288,13 +293,13 @@
 			<h3 for="payment">Enter payment</h3>
 			<br>
 			<input type="number" ng-model="amtPaid" name="payment" placeholder="Enter payment" required="true" />
-			<br> 
 			<br>
 			<br>
-			
+			<br>
+
 			<button class="place-order-button " ng-click="placeOrder()">Place Order </button>
 
-			<br/>
+			<br />
 
 			<div ng-show="submissionFailurePayment">
 				<div class="alert-box">
@@ -323,10 +328,10 @@
 					<hr color="black">
 					<button onclick="window.location.href='/customer/home';">Done</button>
 				</div>
-				
+
 			</div>
-			<br /> 
-			
+			<br />
+
 			<a href="/customer/home" style="font-size: 1.2em;">Home</a>
 		</div>
 
