@@ -197,13 +197,13 @@
 					$scope.submissionFailureRecipe = true;
 				} else {
 					console.log($scope.order);
-					//BASE_PATH + "/users/{userID}/orders"
+					
 					$http.post("/api/v1/users/" + $scope.userId + "/orders/", $scope.order).then(
 						function (response) {
 
 							$scope.change = $scope.order.payment - $scope.totalAmount;
 							console.log($scope.order);
-							//console.log($scope.order.payment);
+							
 							$scope.submissionSuccess = true;
 
 
@@ -248,7 +248,6 @@
 
 
 		});
-
 		/*]]>*/
 	</script>
 	<a href="#" id="logo-container">
@@ -262,9 +261,7 @@
 			<ul>
 				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
 						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
-						<!--
-						<button ng-click = "updateRecipeAmount(recipe, recipeAmount)">Update Amount </button>
-						-->
+
 					</label></li>
 			</ul>
 			<br>

@@ -37,7 +37,7 @@
 					ingredients: []
 				};
 				if (undefined != $scope.addRecipeForm) {
-					$scope.addRecipeForm.$setPristine(); // reset Form
+					$scope.addRecipeForm.$setPristine(); 
 				}
 			}
 			$http.get("/api/v1/inventory").then(function (response) {
@@ -144,7 +144,7 @@
 
 				};
 				if (undefined != $scope.addRecipeForm) {
-					$scope.addRecipeForm.$setPristine(); // reset Form
+					$scope.addRecipeForm.$setPristine(); 
 				}
 				$http.get("/api/v1/inventory").then(function (response) {
 

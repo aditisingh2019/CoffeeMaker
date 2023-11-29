@@ -41,7 +41,10 @@ public class APIUserController extends APIController {
      */
     @Autowired
     private UserService  userService;
-
+    /**
+     * OrderService object, to be autowired in by Spring to allow for
+     * manipulating the Order model
+     */
     @Autowired
     private OrderService orderService;
 
@@ -81,7 +84,7 @@ public class APIUserController extends APIController {
      * REST API method to allow creating a User by making a POST request to the
      * API endpoint and indicating the order to be updated (as a path variable)
      *
-     * @param order
+     * @param user
      *            The user we need to add
      * @return Success if the order could be added
      */
@@ -102,6 +105,8 @@ public class APIUserController extends APIController {
      *
      * @param order
      *            The order we need to add
+     * @param userID
+     *            The userId we want to add the order to
      * @return Success if the order could be added
      */
     @PostMapping ( BASE_PATH + "/users/{userID}/orders/" )

@@ -14,10 +14,17 @@ import org.springframework.stereotype.Service;
 import edu.ncsu.csc.CoffeeMaker.models.User;
 import edu.ncsu.csc.CoffeeMaker.repositories.UserRepository;
 
+/**
+ * This is a service that helps us authenticate the user and load the correct
+ * details and authenticate that user via username and password
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    /**
+     * This calls the UserRepository instance that Spring autowires as there is
+     * only one and we need to manipulate the user data from the repository.
+     */
     @Autowired
-
     private UserRepository userRepository;
 
     @Override

@@ -67,12 +67,8 @@
 
 
 	<script th:inline="javascript">
-		/*<![CDATA[*/
-
 		var app = angular.module('userApp', []);
 		app.controller('userCtrl', function ($scope, $http, $q) {
-			
-
 			$scope.getCurrentUser = function (param) {
 				var searchParams = new URLSearchParams(window.location.search);
 				return searchParams.get(param);
@@ -84,13 +80,7 @@
 				$scope.user = response.data;
 				console.log("Check User:", $scope.user);
 			});
-
-
 		});
-
-
-
-		/*]]>*/
 	</script>
 
 <body>

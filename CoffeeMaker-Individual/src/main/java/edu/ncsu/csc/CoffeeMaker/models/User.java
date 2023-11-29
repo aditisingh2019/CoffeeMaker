@@ -38,14 +38,7 @@ public class User extends DomainObject {
     private String            role;
 
     /**
-     * Constructs an instance of a User.
-     *
-     * @param id
-     *            the id of the User
-     * @param userName
-     *            the username of the User
-     * @param passwordHash
-     *            the password of the USer
+     * Base constructor
      */
     public User () {
         // setId( id );
@@ -73,6 +66,18 @@ public class User extends DomainObject {
         this.orders = new ArrayList<Order>();
     }
 
+    /**
+     * Constructs an instance of a User.
+     *
+     * @param orders
+     *            the orders of the User
+     * @param userName2
+     *            the username of the User
+     * @param passwordHash2
+     *            the password of the USer
+     * @param type
+     *            the role of the User
+     */
     public User ( final List<Order> orders, final String userName2, final String passwordHash2, final String type ) {
         setUsername( userName2 );
         setPassword( passwordHash2 );
@@ -82,6 +87,17 @@ public class User extends DomainObject {
 
     }
 
+    /**
+     * Constructs an instance of a User.
+     *
+     *
+     * @param userName2
+     *            the username of the User
+     * @param passwordHash2
+     *            the password of the USer
+     * @param type
+     *            the role of the User
+     */
     public User ( final String userName2, final String passwordHash2, final String type ) {
         setUsername( userName2 );
         setPassword( passwordHash2 );
@@ -142,8 +158,8 @@ public class User extends DomainObject {
     /**
      * Sets the User's password.
      *
-     * @param passwordHash
-     *            the passwordHash to set
+     * @param password
+     *            the password to set users password to
      */
     public void setPassword ( final String password ) {
         this.password = password;
@@ -188,8 +204,8 @@ public class User extends DomainObject {
     /**
      * Sets the type of the User.
      *
-     * @param type
-     *            the type to set
+     * @param role
+     *            the type to set user role to
      */
     public void setRole ( final String role ) {
         this.role = role;
@@ -239,6 +255,7 @@ public class User extends DomainObject {
      * Adds an order to the list of orders of the specified user
      *
      * @param order
+     *            The order we are adding to the orders list.
      */
     public void addOrder ( final Order order ) {
         orders.add( order );

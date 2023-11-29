@@ -18,6 +18,10 @@ import edu.ncsu.csc.CoffeeMaker.services.UserService;
  */
 @Controller
 public class MappingController {
+    /**
+     * This is the UserService object that is Autowired by Spring This helps us
+     * manipulate users and get the information for certain pages
+     */
     @Autowired
     private UserService userService;
 
@@ -40,6 +44,9 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
     @GetMapping ( { "/staff/home", "staff.html" } )
@@ -139,6 +146,9 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
     @GetMapping ( { "/customer/home", "customer.html" } )
@@ -155,6 +165,9 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
     @GetMapping ( { "/manager/home", "manager.html" } )
@@ -171,6 +184,9 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
     @GetMapping ( { "/customer/placeorder", "placeorder.html" } )
@@ -187,6 +203,9 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
     @GetMapping ( { "/customer/orderstatus", "orderstatus.html" } )
@@ -224,15 +243,43 @@ public class MappingController {
         return "fulfillorder";
     }
 
+    /**
+     * On a GET request to /tempLogin, the MakeCoffeeController will return
+     * /src/main/resources/templates/tempLogin.html. This was for betatesting
+     * our users in iteration 1
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
     @GetMapping ( { "/tempLogin", "/tempLogin.html" } )
     public String tempLogin ( final Model model ) {
         return "tempLogin";
     }
 
+    /**
+     * On a GET request to /login, the MakeCoffeeController will return
+     * /src/main/resources/templates/login.html. This is the page that every
+     * user has to go through to login
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
     @GetMapping ( { "/login", "/login.html" } )
     public String login ( final Model model ) {
         return "login";
     }
+
+    /**
+     * On a GET request to /privacy, the MakeCoffeeController will return
+     * /src/main/resources/templates/privacy.html. This is the privacyPolicy of
+     * the company where users can go and read
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
 
     @GetMapping ( { "/privacy", "privacy.html" } )
     public String privacy ( final Model model ) {
