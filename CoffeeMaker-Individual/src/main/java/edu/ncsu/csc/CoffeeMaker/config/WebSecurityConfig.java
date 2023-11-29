@@ -24,17 +24,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * Defines which URL paths should be secured and which should not
-	 */
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/index", "/registry.html", "/api/v1/users/**", "/privacy.html")
-				.permitAll().antMatchers("/manager/**").hasAuthority("MANAGER").antMatchers("/customer/**")
-				.hasAuthority("CUSTOMER").antMatchers("/staff/**").hasAuthority("STAFF").and().formLogin()
-				.loginPage("/login").successHandler(successHandler()).permitAll().and().logout().logoutSuccessUrl("/")
-				.permitAll().and().csrf().disable();
-		http.authorizeRequests().anyRequest().authenticated();
-	}
+     * Defines which URL paths should be secured and which should not
+     */
+    @Override
+    protected void configure ( final HttpSecurity http ) throws Exception {
+        http.authorizeRequests().antMatchers( "/", "/index", "/registry.html", "/api/v1/users/**", "/privacy.html" )
+                .permitAll().antMatchers( "/manager/**" ).hasAuthority( "MANAGER" ).antMatchers( "/customer/**" )
+                .hasAuthority( "CUSTOMER" ).antMatchers( "/staff/**" ).hasAuthority( "STAFF" ).and().formLogin()
+                .loginPage( "/login" ).successHandler( successHandler() ).permitAll().and().logout()
+                .logoutSuccessUrl( "/" ).permitAll().and().csrf().disable();
+        http.authorizeRequests().anyRequest().authenticated();
+    }
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
