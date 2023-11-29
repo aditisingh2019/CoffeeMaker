@@ -115,7 +115,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/manager/orderhistory", "/orderhistory.html" } )
+    @GetMapping ( { "/manager/orderhistory", "orderhistory.html" } )
     public String orderhistory ( final Model model ) {
         return "orderhistory";
     }

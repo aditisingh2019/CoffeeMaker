@@ -7,17 +7,18 @@
 	<style>
 		body {
 			text-align: center;
-			font-family: Arial, sans-serif;
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
 		h1 {
 			font-size: 24px;
-			font-family: Arial, sans-serif;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
 		h2 {
 			font-size: 20px;
-			font-family: Arial, sans-serif;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
 		.button-container {
@@ -50,6 +51,10 @@
 			text-decoration: none;
 			border: none;
 			border-radius: 5px;
+		}
+		img {
+			width: 500px;
+			height: 400px;
 		}
 		
 		
@@ -89,7 +94,9 @@
 	</script>
 
 <body>
-	<img src="logo.png" alt="Logo Icon">
+	<a href="#" id="logo-container">
+		<img src="logo.png" alt="Logo">
+	</a>
 	<h1>Welcome to Brew Haven</h1>
 	<h2>Managerial Access</h1>
 	<h3>Hey there, <span th:text="${username}"></span>!</h3>

@@ -23,8 +23,8 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			padding: 0;
 			box-sizing: border-box;
 		}
-		
-	
+
+
 
 		input.ng-dirty.ng-invalid-required {
 			background-color: red;
@@ -48,7 +48,8 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			align-items: center;
 		}
 
-		h1, h2 {
+		h1,
+		h2 {
 			color: #5C3F32
 		}
 
@@ -144,7 +145,6 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 			width: 500px;
 			height: 400px;
 		}
-		
 	</style>
 
 </head>
@@ -290,10 +290,12 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 					$scope.errorname = true;
 				}
 
+				var registrationForm = document.getElementById('registration');
+				console.log(registrationForm);
+
+				
 
 			}
-
-
 
 		});
 	/*]]>*/
@@ -306,10 +308,10 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 
 
 
-	<div class="formcontainer" ng-controller="userCtrl">
+	<div class="formcontainer" ng-controller="userCtrl" ng-form>
 		<h2 align="center">Register</h2>
 
-		<form id="regisration">
+		<form id="registration" name="registrationForm">
 			<label for="usertype">User Type</label>
 			<select id="usertype" name="usertype" ng-model="userType">
 
@@ -326,10 +328,11 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 				<center><label for="staffid">Staff ID</label></center>
 				<input type="text" id="staffid" name="staffid" ng-model="staffId" placeholder="Enter provided staff ID">
 			</div>
-			
+
 			<div id="idField2" ng-if="userType === 'MANAGER'">
-				<label for="managerid">Manager ID</label>
-				<input type="text" id="managerid" name="managerid" ng-model="managerId" placeholder="Enter provided manager ID">
+				<center><label for="managerid">Manager ID</label></center>
+				<input type="text" id="managerid" name="managerid" ng-model="managerId"
+					placeholder="Enter provided manager ID">
 			</div>
 
 			<label for="username">Username</label>
@@ -389,7 +392,7 @@ https://www.w3schools.com/css/tryit.asp?filename=trycss_forms
 		<h3>Already have an account?</h3>
 		<a href="customer.html">Sign In!</a><br>
 		<a href="/index">Home</a>
-		
+
 		<a href="privacy.html">Privacy policy Page!</a><br>
 
 	</div>
