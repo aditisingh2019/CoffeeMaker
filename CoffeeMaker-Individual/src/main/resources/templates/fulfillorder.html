@@ -63,16 +63,12 @@
 							console.error('Not enough Inventory to create Order');
 
 						}
-
-
 						console.log("Going into rejection status");
 						console.log(rejection.status);
 						console.log(rejection);
 						$scope.ordersIncomplete = $scope.ordersIncomplete.filter(function (order) {
 							return order.id !== id;
 						});
-
-
 						$scope.notEnoughInventory = true;
 						$scope.currOrderID = id;
 
@@ -88,8 +84,6 @@
 					function (success) {
 						console.log("Going into notify function");
 						$scope.submissionSuccess = true;
-
-
 					},
 					function (rejection) {
 						if (rejection.status == 404) {
@@ -114,8 +108,6 @@
 
 				console.log("Notifying the customer for order ID: " + id);
 			};
-
-
 
 
 		});
@@ -143,8 +135,6 @@
 
 			<div ng-if="submissionSuccess" style="font-size: 1.2em; color: green;">Order successfully created</div>
 			<div ng-if="notEnoughInventory" style="font-size: 1.2em; color: red;">Not enough inventory for order {{currOrderID}}</div>
-
-
 
 		</div>
 

@@ -39,7 +39,7 @@
 				$http.get("/api/v1/inventory").then(function (response) {
 					$scope.inventory = response.data;
 					for (var i = 0; i < $scope.inventory.length; i++) {
-						$scope.inventory[i].amount = 0; // Initialize amounts to 0
+						$scope.inventory[i].amount = 0; 
 					}
 				}, function (rejection) {
 					console.error("Error while getting Inventory");
@@ -83,7 +83,7 @@
 					$scope.addInventoryForm.$setPristine();
 				}
 				for (var i = 0; i < $scope.inventory.length; i++) {
-					$scope.inventory[i].amount = 0; // Reset amounts to 0
+					$scope.inventory[i].amount = 0; 
 				}
 			}
 		});
