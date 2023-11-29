@@ -4,7 +4,7 @@
 <head>
 	<title>Order Status</title>
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-   	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<style>
 		input.ng-valid {
 			background-color: lightgreen;
@@ -19,14 +19,27 @@
 			background-color: yellow;
 		}
 
+		body {
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+		}
+
+		h1 {
+
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			color: #5C3F32
+		}
+
 		.order-status {
 			font-size: 18px;
-			font-family: Arial, sans-serif;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 			border: 2px solid;
 			padding: 10px;
 			border-radius: 5px;
 			width: 200px;
 			text-align: center;
+			align-items: center;
 		}
 
 		.order-status-inprogress {
@@ -43,6 +56,31 @@
 			background-color: red;
 			color: white;
 		}
+
+		.order-status-placed {
+			background-color: grey;
+			color: white;
+		}
+
+		.view-order-button {
+			padding: 12px 24px;
+			font-size: 1.2em;
+			text-align: center;
+			text-decoration: none;
+			background-color: rgb(8, 213, 1);
+			border-radius: 8px;
+			transition: background-color 0.3s;
+			cursor: pointer;
+		}
+
+		.view-order-button:hover {
+			background-color: rgb(46, 180, 18);
+		}
+
+		img {
+			width: 500px;
+			height: 400px;
+		}
 	</style>
 	<link rel="stylesheet" href="css/bootstrap.css" />
 	<link rel="stylesheet" href="css/app.css" />
@@ -52,28 +90,26 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
 
 	<script th:inline="javascript">
-		
-    	
+
+
 
 		var app = angular.module('myApp', []);
 		var userId = /*[[${userId}]]*/ null;
 		app.controller('orderStatusCtrl', function ($scope, $http, $q, $window, $element) {
-			
-   		   
 
-    		// Assign the value to $scope.userId
-    		$scope.userId = userId;
-    		console.log("User ID: " + $scope.userId);
+
+
+			// Assign the value to $scope.userId
+			$scope.userId = userId;
+			console.log("User ID: " + $scope.userId);
 			$scope.orders = [];
 			var orderIdToView = "";
 			$scope.recipesInOrder = {};
 			$scope.selectedOrderStatus = "";
-           
 
 
 
 
-			
 			$scope.mapping = "/api/v1/users/" + userId + "/orders";
 			console.log($scope.mapping);
 
@@ -100,6 +136,7 @@
 					console.log(response.data);
 
 					$scope.selectedOrderStatus = response.data.status;
+
 
 					for (var i = 0; i < response.data.recipes.length; i++) {
 
@@ -158,15 +195,12 @@
 
 
 
-	<div ng-app="myApp" class="generic-container ng-cloak" ng-controller="orderStatusCtrl as ctrl" >
-		
-	
+	<div ng-app="myApp" class="generic-container formcontainer ng-cloak" ng-controller="orderStatusCtrl as ctrl">
+
+
+		<h1 align="center">View Order Status</h1>
+
 		<div class="panel panel-default">
-			
-			
-			<div class="panel-heading">
-				<span class="lead">View Order Status</span>
-			</div>
 
 			<div class="formcontainer">
 				<form ng-submit="submit()" name="orderStatus" class="form-horizontal">
@@ -194,29 +228,29 @@
 
 
 						<div>
-							<div class="order-status" ng-show="selectedOrder" ng-class="'order-status-' + selectedOrderStatus.toLowerCase().split(' ').join('')">
+							<div class="order-status" ng-show="selectedOrder"
+								ng-class="'order-status-' + selectedOrderStatus.toLowerCase().split(' ').join('')">
 								Order Status: {{ selectedOrderStatus }}
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="form-actions floatRight">
-								<input type="submit" value="Done" class="btn btn-primary btn-sm"
-									ng-disabled="orderStatus.$invalid" />
+
+								<a class="view-order-button" href="/customer/home" style="font-size: 1.2em;">Home</a>
 							</div>
 						</div>
 
+
+
+					</div>
 				</form>
-
-
-
+				<div ng-show="success">Recipe Successfully Updated</div>
+				<div ng-show="failure">Error while updating recipe.</div>
 			</div>
-			<div ng-show="success">Recipe Successfully Updated</div>
-			<div ng-show="failure">Error while updating recipe.</div>
 		</div>
-	</div>
 
-	<a href="/customer/home">Home</a>
+
 	</div>
 
 

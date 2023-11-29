@@ -7,7 +7,16 @@
 	<style>
 		body {
 			text-align: center;
-			font-family: Arial, sans-serif;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
 		}
 
 		h1 {
@@ -89,8 +98,10 @@
 	</script>
 
 <body>
-	<img src="logo.png" alt="Logo Icon">
-	<h1>Welcome to Brew Haven</h1>
+	<a href="#" id="logo-container">
+		<img src="logo.png" alt="Logo">
+	</a>
+	<h1>Welcome to <a>Brew Haven</a></h1>
 	<h2>Hey there, <span th:text="${username}"></span>!</h2>
 
 	<div class="button-container">

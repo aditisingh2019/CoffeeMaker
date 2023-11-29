@@ -5,7 +5,7 @@
 	<title>Place an Order</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-   	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<style>
 		.alert-box {
 			border: 2px outset black;
@@ -40,6 +40,46 @@
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
+		.preview-order-button {
+			padding: 12px 24px;
+			font-size: 1.2em;
+			text-align: center;
+			text-decoration: none;
+			background-color: #5C3F32;
+			color: white;
+			border: #5C3F32;
+			border-radius: 8px;
+			transition: background-color 0.3s;
+			cursor: pointer;
+		}
+
+		.preview-order-button:hover {
+			color: #5C3F32;
+			background-color: white;
+			border: #5C3F32;
+		}
+
+		.place-order-button {
+			padding: 12px 24px;
+			font-size: 1.2em;
+			text-align: center;
+			text-decoration: none;
+			background-color: rgb(8, 213, 1);
+			border-radius: 8px;
+			transition: background-color 0.3s;
+			cursor: pointer;
+		}
+
+
+		.place-order-button:hover {
+			background-color: rgb(46, 180, 18);
+		}
+
+		.split-screen {
+			display: flex;
+			height: 100vh;
+		}
+
 		html,
 		body {
 			height: 100%;
@@ -47,12 +87,53 @@
 			margin: 0;
 			display: flex;
 			justify-content: center;
+			flex-direction: column;
 			align-items: center;
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+
 		}
-		.div1{
+
+		h4 {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		h1 {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			color: #5C3F32
+		}
+
+		.div1 {
 			width: 90%;
 			height: 90%;
 			overflow: auto;
+		}
+
+		ul {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			font-size: 120%
+		}
+
+		li {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			margin-bottom: 10px;
+		}
+
+		img {
+			width: 500px;
+			height: 400px;
+		}
+
+		.preview-total-text {
+			font-size: 1.5em;
+			padding: 10px;
+		}
+
+		.form {
+			background-color: white;
+			border: none;
 		}
 	</style>
 </head>
@@ -71,21 +152,23 @@
 				console.log(response.data);
 			});
 
-			 
-       		 $scope.userId = /*[[${userId}]]*/
 
-			console.log("Check id", $scope.userId);
-			
-			
-				//( BASE_PATH + "/users/{id}" )
-				$http.get("/api/v1/users/"+ $scope.userId).then(function (response) {
+
+
+			$scope.userId = /*[[${userId}]]*/
+
+				console.log("Check id", $scope.userId);
+
+
+			$http.get("/api/v1/users/" + $scope.userId).then(function (response) {
 				$scope.user = response.data;
-				console.log("Check User:",response.data);
+				console.log("Check User:", response.data);
 			});
-				
 
-			
+
+
 			$scope.isNull = false;
+			$scope.previewTotal = false;
 			$scope.totalAmount = 0;
 			$scope.amtPaid = 0;
 			$scope.recipeAmount = 0;
@@ -110,14 +193,12 @@
 				console.log($scope.order.payment);
 				if ($scope.order.payment < $scope.totalAmount) {
 					$scope.submissionFailurePayment = true;
-				}
-				if ($scope.order.recipes.length <= 0) {
+				} else if ($scope.order.recipes.length <= 0) {
 					$scope.submissionFailureRecipe = true;
-				}
-				else {
+				} else {
 					console.log($scope.order);
 					//BASE_PATH + "/users/{userID}/orders"
-					$http.post("/api/v1/users/"+$scope.userId+"/orders/", $scope.order).then(
+					$http.post("/api/v1/users/" + $scope.userId + "/orders/", $scope.order).then(
 						function (response) {
 
 							$scope.change = $scope.order.payment - $scope.totalAmount;
@@ -142,21 +223,18 @@
 
 			$scope.calculateTotal = function () {
 				var total = 0;
+				$scope.previewTotal = true;
 				$scope.order.recipes = $scope.availableRecipes.filter(function (recipe) {
-					//$scope.order.recipes.push(recipe.selected);
 					return recipe.selected;
 				});
-				//console.log("Recipes for the Order:", recipes);
 				$scope.order.recipes.forEach(function (recipe) {
 					total = total + recipe.price;
 				});
-				//console.log(total);
-				//return total;
+
 				if (total == null || total == NaN || isNaN(total)) {
 					$scope.isNull = true;
 				}
 				$scope.totalAmount = total;
-				//$scope.order.price = total;
 
 			};
 
@@ -165,20 +243,22 @@
 				if (amount >= 1 && amount != null) {
 					$scope.recipePrices[recipe.id] = amount * recipe.price;
 				}
-				//alert("Amount Updated");
 				console.log($scope.recipePrices)
 			}
-
-
 
 
 		});
 
 		/*]]>*/
 	</script>
-	<div layout:fragment="content" class="generic-container ng-cloak" ng-app="myApp" ng-controller="recipesCtrl">
-		<h1 align="center">Coffee Recipes</h1>
-		<div class = "div1">
+	<a href="#" id="logo-container">
+		<img src="logo.png" alt="Logo">
+	</a>
+	<h1 align="center">Place an Order</h1>
+	<div layout:fragment="content" class="generic-container form ng-cloak" ng-app="myApp" ng-controller="recipesCtrl">
+		<h3>Coffee Recipes</h3>
+		<h4>Select recipes and quantities from the list below</h4>
+		<div class="div1">
 			<ul>
 				<li ng-repeat="recipe in availableRecipes"><label>{{recipe.name}}
 						<input type="checkbox" ng-model="recipe.selected" name="name" value="{{recipe.name}}" />
@@ -187,9 +267,9 @@
 						-->
 					</label></li>
 			</ul>
+			<br>
 
-			<button class="btn btn-primary btn-sm" ng-click="calculateTotal()">Preview Order </button>
-
+			<button class="preview-order-button " ng-click="calculateTotal()">Preview Order </button>
 
 			<div ng-show="isNull">
 				<div class="alert-box">
@@ -197,18 +277,28 @@
 					<p>Selected Recipes must be at least "1" unit. Try Again!</p>
 					<hr color="black">
 
-					<button onclick="window.location.href='makecoffee.html';">Okay</button>
+					<button onclick="window.location.href='/customer/placeorder';">Okay</button>
 				</div>
 			</div>
 
-			<h5>Subtotal: ${{ totalAmount }}</h5>
+			<span class="preview-total-text" ng-show="previewTotal">Subtotal: ${{ totalAmount }}</span>
+
+
+			<br>
+			<br>
+
 
 			<br />
+			<h3 for="payment">Enter payment</h3>
+			<br>
+			<input type="number" ng-model="amtPaid" name="payment" placeholder="Enter payment" required="true" />
+			<br>
+			<br>
+			<br>
 
-			<br /> <label for="payment">Enter payment</label> <input type="number" ng-model="amtPaid" name="payment"
-				required="true" /> <br /> <input type="submit" ng-click="placeOrder()" value="Place Order"
-				class="btn btn-primary btn-sm" /> <br />
+			<button class="place-order-button " ng-click="placeOrder()">Place Order </button>
 
+			<br />
 
 			<div ng-show="submissionFailurePayment">
 				<div class="alert-box">
@@ -216,7 +306,7 @@
 					<p>Payment insufficient! Try Again</p>
 					<hr color="black">
 
-					<button onclick="window.location.href='makecoffee.html';">Okay</button>
+					<button onclick="window.location.href='/customer/placeorder';">Okay</button>
 				</div>
 			</div>
 			<div ng-show="submissionFailureRecipe">
@@ -224,7 +314,7 @@
 					<h5>Error!</h5>
 					<p>Select at least one recipe</p>
 					<hr color="black">
-					<button onclick="window.location.href='makecoffee.html';">Okay</button>
+					<button onclick="window.location.href='/customer/placeorder';">Okay</button>
 				</div>
 			</div>
 
@@ -235,13 +325,17 @@
 					<p>Order was succesfully saved.</p><br>
 					<p> Available Change : ${{change}} </p>
 					<hr color="black">
-					<button onclick="window.location.href='customer.html';">Done</button>
+					<button onclick="window.location.href='/customer/home';">Done</button>
 				</div>
+
 			</div>
-			<br /> <a href="/customer/home">Home</a>
+			<br />
+
+			<a href="/customer/home" style="font-size: 1.2em;">Home</a>
 		</div>
 
 	</div>
+
 
 </body>
 
