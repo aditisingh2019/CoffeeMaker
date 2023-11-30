@@ -67,7 +67,7 @@
 			border-radius: 5px;
 
 		}
-		
+
 		.button-container a:hover {
 			display: block;
 			margin: 10px;
@@ -111,16 +111,20 @@
 
 		#logo-container {
 			text-align: center;
-			width: 500px;
-			height: 400px;
+		}
+
+		#logo-container img {
+			max-width: 100%;
+			height: auto;
+			width: 200px;
 		}
 	</style>
 </head>
 
 <body ng-app="userApp" ng-controller="userCtrl">
 	<a href="#" id="logo-container">
-		<img src="logo.png" alt="Logo">
-	</a>
+		        <img src="http://localhost:8080/logo.png" alt="Logo">
+		    </a>
 	<h1>Welcome to <a>Brew Haven</a></h1>
 	<h2>Hey there, <span th:text="${username}"></span>!</h2>
 	<br>
