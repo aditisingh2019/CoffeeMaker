@@ -86,14 +86,8 @@ public class APIOrderController extends APIController {
     @PostMapping ( BASE_PATH + "/orders" )
     public ResponseEntity placeOrder ( @RequestBody final Order order ) {
 
-        System.out.println( "*********************************" );
-        System.out.println( order.toString() );
-
         final Order o = new Order( order.getRecipes(), order.getPayment(), order.getPrice() );
-        System.out.println( "New Order" );
-        System.out.println( o.toString() );
         service.save( order );
-
         return new ResponseEntity( successResponse( o.getId() + " successfully placed" ), HttpStatus.OK );
     }
 
@@ -113,7 +107,17 @@ public class APIOrderController extends APIController {
         }
 
         final Inventory inventory = inventoryService.getInventory();
-        if ( inventory.enoughIngredients( order ) ) {
+        if ( order.getStatus().equals( "Ready for pickup" ) ) {
+            // if order is already made and ready for pickup, change to picked
+            // up
+
+            System.out.println( "GOING INTO IF**********" );
+            order.setStatus( "Picked up" );
+            service.save( order );
+            return new ResponseEntity( successResponse( "Order " + order.getId() + " is picked up" ), HttpStatus.OK );
+
+        }
+        else if ( inventory.enoughIngredients( order ) ) {
             // if status is placed, change to in progress and use ingredients
             // and
             // save

@@ -2,31 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Staff</title>
+	<title>Manager</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<style>
 		body {
 			text-align: center;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			min-height: 100vh;
 			background-color: #FFF5E1;
 			font-family: Verdana, Geneva, Tahoma, sans-serif;
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
 		}
 
 		h1 {
 			font-size: 24px;
-			font-family: Arial, sans-serif;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
 		h2 {
 			font-size: 20px;
-			font-family: Arial, sans-serif;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
 		}
 
 		.button-container {
@@ -60,7 +52,6 @@
 			border: none;
 			border-radius: 5px;
 		}
-
 		#logo-container {
 			text-align: center;
 		}
@@ -70,6 +61,8 @@
 			height: auto;
 			width: 200px;
 		}
+		
+		
 	</style>
 </head>
 
@@ -79,50 +72,39 @@
 
 
 	<script th:inline="javascript">
-		/*<![CDATA[*/
-
 		var app = angular.module('userApp', []);
 		app.controller('userCtrl', function ($scope, $http, $q) {
-
-
 			$scope.getCurrentUser = function (param) {
 				var searchParams = new URLSearchParams(window.location.search);
 				return searchParams.get(param);
 			}
 			var id = $scope.getCurrentUser('user');
 			console.log(id);
-
-			$http.get("/api/v1/users/" + id).then(function (response) {
+			
+			$http.get("/api/v1/users/"+ id).then(function (response) {
 				$scope.user = response.data;
 				console.log("Check User:", $scope.user);
 			});
-
-
 		});
-
-
-
-		/*]]>*/
 	</script>
 
-	<body>
-		<a href="#" id="logo-container">
-			        <img src="http://localhost:8080/logo.png" alt="Logo">
-			    </a>
-		<h1>Welcome to <a>Brew Haven</a></h1>
-		<h2>Hey there, <span th:text="${username}"></span>!</h2>
+<body>
+	<a href="#" id="logo-container">
+        <img src="http://localhost:8080/logo.png" alt="Logo">
+    </a>
+	<h1>Welcome to Brew Haven</h1>
+	<h2>Managerial Access</h1>
+	<h3>Hey there, <span th:text="${username}"></span>!</h3>
 
-		<div class="button-container">
-			<a href="/staff/recipe">Add a Recipe</a>
-			<a href="/staff/editrecipe">Edit Recipe</a>
-			<a href="/staff/deleterecipe">Delete Recipe</a>
-			<a href="/staff/fulfillorder">Fulfill Orders</a>
-		</div>
-
-
-		<form th:action="@{/logout}" method="post">
-			<input class="logout-button" type="submit" value="Logout" />
-		</form>
-	</body>
+	<div class="button-container">
+		<a href="/manager/inventory">Update Inventory</a>
+		<a href="/manager/orderhistory">Order history</a>
+	</div>
+	
+	
+	<form th:action="@{/logout}" method="post" >
+    	<input  class="logout-button"  type="submit" value="Logout" />
+	</form>
+</body>
 
 </html>

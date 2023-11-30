@@ -60,29 +60,24 @@ public class UserTest {
     }
 
     @Test
-    public void testUserId () {
-        assertEquals( 1L, user.getId().longValue() );
-    }
-
-    @Test
     public void testUserName () {
-        assertEquals( "JohnDoe", user.getUserName() );
-        user.setUserName( "JaneSmith" );
-        assertEquals( "JaneSmith", user.getUserName() );
+        assertEquals( "JohnDoe", user.getUsername() );
+        user.setUsername( "JaneSmith" );
+        assertEquals( "JaneSmith", user.getUsername() );
     }
 
     @Test
     public void testPasswordHash () {
-        assertEquals( "password", user.getPasswordHash() );
-        user.setPasswordHash( "newPassword" );
-        assertEquals( "newPassword", user.getPasswordHash() );
+        assertEquals( "password", user.getPassword() );
+        user.setPassword( "newPassword" );
+        assertEquals( "newPassword", user.getPassword() );
     }
 
     @Test
-    public void testUserType () {
-        assertEquals( "None", user.getUserType() );
-        user.setUserType( "Admin" );
-        assertEquals( "Admin", user.getUserType() );
+    public void testRole () {
+        assertEquals( "None", user.getRole() );
+        user.setRole( "Admin" );
+        assertEquals( "Admin", user.getRole() );
     }
 
     @Test
@@ -127,13 +122,13 @@ public class UserTest {
     @Test
     public void testResetPassword () {
         user.resetPassword( "newPassword" );
-        assertEquals( "newPassword", user.getPasswordHash() );
+        assertEquals( "newPassword", user.getPassword() );
     }
 
     @Test
     public void testUpdateProfile () {
         user.updateProfile( "JaneSmith", "newPassword" );
-        assertEquals( "JaneSmith", user.getUserName() );
-        assertEquals( "newPassword", user.getPasswordHash() );
+        assertEquals( "JaneSmith", user.getUsername() );
+        assertEquals( "newPassword", user.getPassword() );
     }
 }

@@ -4,17 +4,17 @@
 <head>
 	<title>Edit Recipes</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/app.css" />
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+   	<link th:href="@{/css/app.css}" rel="stylesheet" />
 </head>
 
-<body>
+<body style="background-color: #FFF5E1;">
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
 	<script>
 		var app = angular.module('myApp', []);
 		app.controller('recipesCtrl', function ($scope, $http, $q,) {
 			$scope.selectedRecipe = null;
-			$scope.recipes = []; // Initialize recipes as an empty array
+			$scope.recipes = []; 
 
 			$http.get("/api/v1/recipes").then(function (response) {
 				$scope.recipes = response.data;
@@ -35,7 +35,6 @@
 					alert("Invalid ingredient name, please enter valid ingredient ");
 
 				}
-
 				else {
 					var newIngr = {
 
@@ -197,7 +196,7 @@
 		<div ng-if="!hasRecipes() && !showSuccessPage">
 			<h2>No Recipes Available</h2>
 			<p>There are no recipes to edit.</p>
-			<a href="/staff">Home</a>
+			<a href="/staff/home">Home</a>
 		</div>
 
 		<div ng-if="showSuccessPage && !selectedRecipe" >

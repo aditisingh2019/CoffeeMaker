@@ -1,16 +1,220 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>Welcome to the CSC326 CoffeeMaker</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-	<h1>Coffee Maker</h1>
-	<h2>Available Options</h2>
-	<ul>
-		<li><a href="staff.html">Staff Role</a></li>
-		<li><a href="customer.html">Customer Role</a></li>
+	<title>Welcome to the CSC326 CoffeeMaker</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<style>
+		body,
+		#mainWrapper {
+			height: 100vh;
+			font-family: 'Arial', sans-serif;
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.header {
+			background-color: #5C3F32;
+			padding: 10px;
+			text-align: center;
+			color: white;
+			padding-top: 30px;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		body,
+		.form-control {
+			font-size: 16px;
+		}
+
+		.header a {
+			color: white;
+			text-decoration: none;
+			margin: 0 15px;
+		}
+
+		.header a:hover {
+			color: yellow;
+			text-decoration: none;
+			margin: 0 15px;
+		}
+
+		h1 {
+			text-align: center;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		h1 a {
+			color: #5C3F32;
+			text-decoration: none;
+		}
+
+		h2 {
+			text-align: center;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+
+		}
+
+		.container img {
+			width: 100%;
+			height: 400px;
+			object-fit: cover;
+			display: block;
+		}
+
+		.two-column-layout {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+
+		.two-column-layout>* {
+			flex: 0 0 48%;
+			margin-bottom: 20px;
+		}
+
+		.two-column-layout img {
+			width: 400px;
+			height: auto;
+			margin: 0 auto;
+			display: block;
+		}
+
+		.two-column-layout p {
+			text-align: center;
+			margin: 0 auto;
+			display: block;
+		}
+
+		.btn {
+			background-color: #5C3F32;
+			color: white;
+			text-decoration: none;
+			height: 55px;
+			border-radius: 10px;
+			border: none;
+			padding: 10px 20px;
+			font-size: 18px;
+			cursor: pointer;
+		}
+
+		.btn:hover {
+			background-color: #ffff;
+			color: #5C3F32;
+		}
+
+		.custom-width {
+			width: 80px;
+		}
+
+
+		.floatRight {
+			float: right;
+			margin-right: 18px;
+		}
+
+		.has-error {
+			color: red;
+		}
+
+		.formcontainer {
+			background-color: rgb(255, 255, 255);
+			padding: 20px;
+			align-self: center;
+			width: 60%;
+			margin: 20px auto;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.tablecontainer {
+			padding-left: 20px;
+		}
+
+		.generic-container {
+			width: 80%;
+			margin: 20px auto;
+			padding: 20px;
+			background-color: #FFFFFF;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.custom-width {
+			width: 80px !important;
+		}
+
+		.username.ng-valid,
+		.email.ng-valid {
+			background-color: lightgreen;
+		}
+
+		.username.ng-dirty.ng-invalid-required,
+		.username.ng-dirty.ng-invalid-min,
+		.email.ng-dirty.ng-invalid-required {
+			background-color: #ffcccc;
+		}
+		
+
 	
-	</ul>
+	</style>
+</head>
+
+<body>
+
+	<div class="header">
+		<a href="registry.html">Register</a>
+		<a href="login.html"> Login</a>
+	</div>
+
+	<div class="container">
+
+		<h1>Welcome to <a><em>Brew Haven Coffee</em></a></h1>
+		<a href="#"><img src="coffee_beans.png" alt="Coffee Beans"></a>
+		<h1>Our Story</h1>
+		<div class="two-column-layout">
+			<a href="#"><img src="logo.png" alt="Logo"></a>
+
+			<p><br><br><br>As a group of hard-working, Computer Science students, we often found ourselves craving
+				authentic coffee
+				on
+				campus. However, our options were typically limited. As a result, we built Brew Haven, an online
+				interface
+				that
+				brings the ambiance of a coffee shop to the comfort of your computer. Customers are able to log into
+				their
+				accounts using our seamless website to order delicious drinks and view the status of their orders. Staff
+				members
+				are able to log in and create recipes for customers, providing them with delicious drinks based on the
+				available
+				inventory. Our interface helps connect college students to affordable coffee options.</p>
+
+
+		</div>
+
+		<div style="text-align: center; margin-top: 20px;">
+			<h2>Get started on your coffee experience</h2>
+			<br>
+			<a href="registry.html" class="btn">Create an Account</a>
+			<a href="login.html" class="btn">Login and Start Ordering</a>
+			<br>
+			<br>
+			<br>
+		</div>
+
+	</div>
+
+
+
 </body>
+
 </html>

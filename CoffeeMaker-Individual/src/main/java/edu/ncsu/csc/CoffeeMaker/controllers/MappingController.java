@@ -1,8 +1,13 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import edu.ncsu.csc.CoffeeMaker.models.User;
+import edu.ncsu.csc.CoffeeMaker.services.UserService;
 
 /**
  * Controller class for the URL mappings for CoffeeMaker. The controller returns
@@ -13,6 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class MappingController {
+    /**
+     * This is the UserService object that is Autowired by Spring This helps us
+     * manipulate users and get the information for certain pages
+     */
+    @Autowired
+    private UserService userService;
 
     /**
      * On a GET request to /index, the IndexController will return
@@ -33,10 +44,17 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
-    @GetMapping ( { "/staff", "staff.html" } )
-    public String staffPage ( final Model model ) {
+    @GetMapping ( { "/staff/home", "staff.html" } )
+    public String staffPage ( final Authentication authentication, final Model model ) {
+
+        final String username = authentication.getName();
+
+        model.addAttribute( "username", username );
         return "staff";
     }
 
@@ -48,7 +66,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/recipe", "/recipe.html" } )
+    @GetMapping ( { "/staff/recipe", "/recipe.html" } )
     public String addRecipePage ( final Model model ) {
         return "recipe";
     }
@@ -61,7 +79,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/deleterecipe", "/deleterecipe.html" } )
+    @GetMapping ( { "/staff/deleterecipe", "/deleterecipe.html" } )
     public String deleteRecipeForm ( final Model model ) {
         return "deleterecipe";
     }
@@ -74,7 +92,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/editrecipe", "/editrecipe.html" } )
+    @GetMapping ( { "/staff/editrecipe", "/editrecipe.html" } )
     public String editRecipeForm ( final Model model ) {
         return "editrecipe";
     }
@@ -89,9 +107,24 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/inventory", "/inventory.html" } )
+    @GetMapping ( { "/manager/inventory", "/inventory.html" } )
     public String inventoryForm ( final Model model ) {
         return "inventory";
+    }
+
+    /**
+     * Handles a GET request for inventory. The GET request provides a view to
+     * the client that includes the list of the past orders anyone has ever
+     * ordered in the it shows the manager the stats of all orders and profit
+     * made
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/manager/orderhistory", "orderhistory.html" } )
+    public String orderhistory ( final Model model ) {
+        return "orderhistory";
     }
 
     /**
@@ -102,7 +135,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/vieworder", "/vieworder.html" } )
+    @GetMapping ( { "/staff/vieworder", "/vieworder.html" } )
     public String viewOrderPage ( final Model model ) {
         return "vieworder";
     }
@@ -113,11 +146,36 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
-    @GetMapping ( { "/customer", "customer.html" } )
-    public String customerPage ( final Model model ) {
+    @GetMapping ( { "/customer/home", "customer.html" } )
+    public String customerPage ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+
+        model.addAttribute( "username", username );
         return "customer";
+    }
+
+    /**
+     * On a GET request to /managerhome, the CustomerController will return
+     * /src/main/resources/templates/manager.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
+     * @return contents of the page
+     */
+    @GetMapping ( { "/manager/home", "manager.html" } )
+    public String managerPage ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+
+        model.addAttribute( "username", username );
+        return "manager";
     }
 
     /**
@@ -126,10 +184,16 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
-    @GetMapping ( { "/placeorder", "/placeorder.html" } )
-    public String placeOrderForm ( final Model model ) {
+    @GetMapping ( { "/customer/placeorder", "placeorder.html" } )
+    public String placeOrderForm ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+        final User user = userService.findByUsername( username );
+        model.addAttribute( "userId", user.getId() );
         return "placeorder";
     }
 
@@ -139,11 +203,31 @@ public class MappingController {
      *
      * @param model
      *            underlying UI model
+     * @param authentication
+     *            Authentication object to get the user that was just
+     *            authenticated and get its information.
      * @return contents of the page
      */
-    @GetMapping ( { "/orderstatus", "/orderstatus.html" } )
-    public String orderstatusPage ( final Model model ) {
+    @GetMapping ( { "/customer/orderstatus", "orderstatus.html" } )
+    public String orderstatusPage ( final Authentication authentication, final Model model ) {
+        final String username = authentication.getName();
+        final User user = userService.findByUsername( username );
+        model.addAttribute( "userId", user.getId() );
+        System.out.println( user.getId() );
         return "orderstatus";
+    }
+
+    /**
+     * On a GET request to /registry, the MakeCoffeeController will return
+     * /src/main/resources/templates/registry.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/registry", "/registry.html" } )
+    public String registration ( final Model model ) {
+        return "registry";
     }
 
     /**
@@ -154,9 +238,52 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/fulfillorder", "/fulfillorder.html" } )
+    @GetMapping ( { "/staff/fulfillorder", "/fulfillorder.html" } )
     public String fulfillOrderPage ( final Model model ) {
         return "fulfillorder";
+    }
+
+    /**
+     * On a GET request to /tempLogin, the MakeCoffeeController will return
+     * /src/main/resources/templates/tempLogin.html. This was for betatesting
+     * our users in iteration 1
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/tempLogin", "/tempLogin.html" } )
+    public String tempLogin ( final Model model ) {
+        return "tempLogin";
+    }
+
+    /**
+     * On a GET request to /login, the MakeCoffeeController will return
+     * /src/main/resources/templates/login.html. This is the page that every
+     * user has to go through to login
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/login", "/login.html" } )
+    public String login ( final Model model ) {
+        return "login";
+    }
+
+    /**
+     * On a GET request to /privacy, the MakeCoffeeController will return
+     * /src/main/resources/templates/privacy.html. This is the privacyPolicy of
+     * the company where users can go and read
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+
+    @GetMapping ( { "/privacy", "privacy.html" } )
+    public String privacy ( final Model model ) {
+        return "privacy";
     }
 
 }

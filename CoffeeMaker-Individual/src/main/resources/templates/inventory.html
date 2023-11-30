@@ -2,140 +2,145 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Inventory</title>
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <style>
-        input.ng-valid {
-            background-color: lightgreen;
-        }
+	<title>Inventory</title>
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<style>
+		input.ng-valid {
+			background-color: lightgreen;
+		}
 
-        input.ng-dirty.ng-invalid-required,
-        input.ng-dirty.ng-invalid-number {
-            background-color: red;
-        }
+		input.ng-dirty.ng-invalid-required,
+		input.ng-dirty.ng-invalid-number {
+			background-color: red;
+		}
 
-        input.ng-dirty.ng-invalid-min {
-            background-color: yellow;
-        }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		input.ng-dirty.ng-invalid-min {
+			background-color: yellow;
+		}
+
+		body {
+			background-color: #FFF5E1;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
 </head>
 
 <body>
 
-<script>
-    var app = angular.module('myApp', []);
-    app.controller('inventoryCtrl', function ($scope, $http) {
-        $scope.inventory = [];
-        $scope.tempInventory = [];
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('inventoryCtrl', function ($scope, $http) {
+			$scope.inventory = [];
+			$scope.tempInventory = [];
 
-        $scope.getInventory = function () {
-            $http.get("/api/v1/inventory").then(function (response) {
-                $scope.inventory = response.data;
-                for (var i = 0; i < $scope.inventory.length; i++) {
-                    $scope.inventory[i].amount = 0; // Initialize amounts to 0
-                }
-            }, function (rejection) {
-                console.error("Error while getting Inventory");
-            })
-        }
+			$scope.getInventory = function () {
+				$http.get("/api/v1/inventory").then(function (response) {
+					$scope.inventory = response.data;
+					for (var i = 0; i < $scope.inventory.length; i++) {
+						$scope.inventory[i].amount = 0; 
+					}
+				}, function (rejection) {
+					console.error("Error while getting Inventory");
+				})
+			}
 
-        $scope.getTempInventory = function () {
-            $http.get("/api/v1/inventory").then(function (response) {
-                $scope.tempInventory = response.data;
-            }, function (rejection) {
-                console.error("Error while getting Inventory");
-            })
-        }
+			$scope.getTempInventory = function () {
+				$http.get("/api/v1/inventory").then(function (response) {
+					$scope.tempInventory = response.data;
+				}, function (rejection) {
+					console.error("Error while getting Inventory");
+				})
+			}
 
-        $scope.getInventory();
-        $scope.getTempInventory();
+			$scope.getInventory();
+			$scope.getTempInventory();
 
-        $scope.updateInventory = function () {
-            $scope.success = false;
-            $scope.failure = false;
+			$scope.updateInventory = function () {
+				$scope.success = false;
+				$scope.failure = false;
 
-            $http.put("/api/v1/inventory", $scope.inventory).then(
-                function (response) {
-                    $scope.getInventory();
-                    $scope.getTempInventory();
-                }, function (rejection) {
-                    $scope.failure = true;
-                    $scope.success = false;
-                    console.error("Error while updating Inventory!");
-                });
-            $scope.success = !($scope.failure);
-        }
+				$http.put("/api/v1/inventory", $scope.inventory).then(
+					function (response) {
+						$scope.getInventory();
+						$scope.getTempInventory();
+					}, function (rejection) {
+						$scope.failure = true;
+						$scope.success = false;
+						console.error("Error while updating Inventory!");
+					});
+				$scope.success = !($scope.failure);
+			}
 
-        $scope.submit = function () {
-            $scope.updateInventory();
-            $scope.reset();
-        }
+			$scope.submit = function () {
+				$scope.updateInventory();
+				$scope.reset();
+			}
 
-        $scope.reset = function () {
-            if (undefined != $scope.addInventoryForm) {
-                $scope.addInventoryForm.$setPristine();
-            }
-            for (var i = 0; i < $scope.inventory.length; i++) {
-                $scope.inventory[i].amount = 0; // Reset amounts to 0
-            }
-        }
-    });
-</script>
+			$scope.reset = function () {
+				if (undefined != $scope.addInventoryForm) {
+					$scope.addInventoryForm.$setPristine();
+				}
+				for (var i = 0; i < $scope.inventory.length; i++) {
+					$scope.inventory[i].amount = 0; 
+				}
+			}
+		});
+	</script>
 
-<div class="generic-container ng-cloak" ng-app="myApp" ng-controller="inventoryCtrl as ctrl">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="lead">View Inventory</span>
-        </div>
+	<div class="generic-container ng-cloak" ng-app="myApp" ng-controller="inventoryCtrl as ctrl">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="lead">View Inventory</span>
+			</div>
 
-        <ul>
-            <li ng-repeat="ingredient in tempInventory.ingredients">
-                {{ingredient.name}}: {{ingredient.amount}}
-            </li>
-        </ul>
+			<ul>
+				<li ng-repeat="ingredient in tempInventory.ingredients">
+					{{ingredient.name}}: {{ingredient.amount}}
+				</li>
+			</ul>
 
-        <div class="panel-heading">
-            <span class="lead">Update Inventory Form</span>
-        </div>
-        <div class="formcontainer">
-            <form ng-submit="submit()" name="addInventoryForm" class="form-horizontal">
-                <div class="row" ng-repeat="ingredient in inventory.ingredients">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-2 control-label" ng-attr-for="{{ingredient.name}}">
-                            {{ingredient.name}}
-                        </label>
-                        <div class="col-md-7">
-                            <input type="number" ng-model="ingredient.amount" name="{{ingredient.name}}"
-                                class="{{ingredient.name}} form-control input-sm"
-                                ng-attr-placeholder="Enter amount of {{ingredient.name}}" required="0" min="0" />
-                            <div class="has-error" ng-show="addInventoryForm.$dirty">
-                                <span ng-show="addInventoryForm[ingredient.name].$error.required">This is a required
-                                    field.</span>
-                                <span ng-show="addInventoryForm[ingredient.name].$error.min">Minimum amount is
-                                    0.</span>
-                                <span ng-show="addInventoryForm[ingredient.name].$invalid">This field is
-                                    invalid.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-actions floatRight">
-                        <input type="submit" value="Submit" class="btn btn-primary btn-sm"
-                            ng-disabled="addInventoryForm.$invalid" />
-                        <button type="button" ng-click="reset()" class="btn btn-warning btn-sm">Reset Form</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div ng-show="success" class="success-message">Inventory Successfully Updated</div>
-        <div ng-show="failure" class="error-message">Error while updating inventory.</div>
-    </div>
+			<div class="panel-heading">
+				<span class="lead">Update Inventory Form</span>
+			</div>
+			<div class="formcontainer">
+				<form ng-submit="submit()" name="addInventoryForm" class="form-horizontal">
+					<div class="row" ng-repeat="ingredient in inventory.ingredients">
+						<div class="form-group col-md-12">
+							<label class="col-md-2 control-label" ng-attr-for="{{ingredient.name}}">
+								{{ingredient.name}}
+							</label>
+							<div class="col-md-7">
+								<input type="number" ng-model="ingredient.amount" name="{{ingredient.name}}"
+									class="{{ingredient.name}} form-control input-sm"
+									ng-attr-placeholder="Enter amount of {{ingredient.name}}" required="0" min="0" />
+								<div class="has-error" ng-show="addInventoryForm.$dirty">
+									<span ng-show="addInventoryForm[ingredient.name].$error.required">This is a required
+										field.</span>
+									<span ng-show="addInventoryForm[ingredient.name].$error.min">Minimum amount is
+										0.</span>
+									<span ng-show="addInventoryForm[ingredient.name].$invalid">This field is
+										invalid.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-actions floatRight">
+							<input type="submit" value="Submit" class="btn btn-primary btn-sm"
+								ng-disabled="addInventoryForm.$invalid" />
+							<button type="button" ng-click="reset()" class="btn btn-warning btn-sm">Reset Form</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div ng-show="success" class="success-message">Inventory Successfully Updated</div>
+			<div ng-show="failure" class="error-message">Error while updating inventory.</div>
+		</div>
 
-    <a href="/staff">Home</a>
-</div>
+		<a href="/manager/home">Home</a>
+	</div>
 
 </body>
 
