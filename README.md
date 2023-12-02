@@ -14,14 +14,14 @@ The [Users' Guide](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2
 The [requirements of CoffeeMaker](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/Requirements) describe the functional and non-functional aspects of the system. Constraints on development are also provided.
 
 ## Extra Credit
-We have implemented the following extra credit for this project
+We have implemented the following extra credit for this project:
 ### [Additional User role: Manager](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/blob/main/CoffeeMaker-Individual/src/main/resources/templates/manager.html)
 * The role of a Staff User is split into two separate User roles: Manager and Barista
 * Once authenticated, a Barista may:
     * Add Recipes [[UC8]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC8)
     * Edit Recipes [[UC9]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC9)
     * Delete Recipes [[UC6]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC6)
-    * View and Fullfill Beverage Orders [[UC3]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC3) [[UC4]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC4)
+    * View and Fulfill Beverage Orders [[UC3]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC3) [[UC4]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC4)
 * Once authenticated, a Manager may:
     * Update the Inventory [[UC5]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC5)
     * View the Order History [[UC13]](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/UC13)
