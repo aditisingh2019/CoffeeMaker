@@ -1,6 +1,26 @@
 # csc326-OBP-202-2
+## CoffeeMaker: Role-Based Order System
+CoffeeMaker is a class project for [CSC326 Software Engineering](http://courses.ncsu.edu/csc326) in the [Computer Science Department of NC State University](http://www.csc.ncsu.edu/) and is developed by the Software Engineering students. The goal of CoffeeMaker is to engage with software engineering practices on a significant, relevant, and growing application that includes security and privacy requirements.
+
+CoffeeMaker is an electronic recipe records system that provides customers with a means to place their beverage orders and receive notifications from the staff responsible for preparing beverages. Staff can update information about orders and current inventory including order status, editing, and adding recipes.
+
+## Developer's Guide
+The [Developer's Guide](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/Developer's-Guide) provides an overview of how to set up your system for developing, testing, and running CoffeeMaker.
+
+* [Developer's Guide](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/Developer's-Guide)
+
+## Users' Guide
+The [Users' Guide](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/User's-Guide) provides an overview of how users can interact with the new functionality of the CoffeeMaker system.
+
+* [Users' Guide](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/User's-Guide)
+
+## Requirements
+The [requirements of CoffeeMaker](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/Requirements) describe the functional and non-functional aspects of the system. Constraints on development are also provided.
+
+* [CoffeeMaker Requirements](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/wiki/Requirements)
 
 ## Extra Credit
+We have implemented the following extra credit for this project
 ### [Additional User role: Manager](https://github.ncsu.edu/engr-csc326-fall2023/csc326-OBP-202-2/blob/main/CoffeeMaker-Individual/src/main/resources/templates/manager.html)
 * The role of a Staff User is split into two separate User roles: Manager and Barista
 * Once authenticated, a Barista may:
